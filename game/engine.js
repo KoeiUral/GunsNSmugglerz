@@ -294,7 +294,7 @@ class Engine {
         textFont(ibmFont);
         textAlign(CENTER);
         textSize(200);
-        text("GUNS &\nSMUGGLERz", windowWidth / 2, windowHeight / 2 - 150);
+        text("GUNS N\nSMUGGLERz", windowWidth / 2, windowHeight / 2 - 150);
 
         if ((floor(frameCount / 40)) % 2 == 0) {
             textSize(20);

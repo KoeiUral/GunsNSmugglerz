@@ -1,13 +1,6 @@
 
-const MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
-const MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
-
-const EN_FREQ_LIST = [50, 40, 30, 20, 10, 5, 10, 30];
-const EN_NBR_LIST =  [ 1,  1,  1,  1,  1, 1,  1,  1];
-
-
-let nextLevel = 0;
-let currentLevel = 1;
+let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
+let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
 // Game phases
 const SPLASH = 0;
@@ -15,7 +8,6 @@ const STORY = 1;
 const RUN = 2;
 const DEAD = 3;
 const WIN = 4;
-
 const END_LEVEL = 10;
 
 class Engine {
@@ -35,7 +27,7 @@ class Engine {
 
         this.enemyFreq = 200;
         this.minEnemyNbr = 1;
-        this.maxEnemyNbr = 4;
+        this.maxEnemyNbr = 3;
 
         this.updateFreq = 200;
         this.levelCount = 1;
@@ -225,12 +217,12 @@ class Engine {
         } else if (this.phase === DEAD) {
             this.gui.displayText("GAME OVER", 80, false);
             this.gui.displayText("Score: " + this.gui.hk['Score'].val + " - Level: " + this.levelCount, 40, false);
-            this.gui.displayText("Press F5 to restart", 40, true);
+            this.gui.displayText("Press s to restart or refresh the page", 20, true);
         } else if (this.phase === WIN) {
             this.gui.displayText("STAGE COMPLETE", 80, false);
             this.gui.displayText("You left the bloody pigs behind, good job boy!", 40, false);
             this.gui.displayText("... next stage coming soon ...", 30, false); 
-            this.gui.displayText("Press F5 to restart", 20, true);
+            this.gui.displayText("Press s to restart or refresh the page", 20, true);
         }
 
         // Reset the frame line offset in the gui
@@ -300,7 +292,46 @@ class Engine {
             textSize(20);
             text("- Press SPACE to start -", windowWidth / 2, windowHeight / 2 + 250);
         }
+    }
 
+    reset() {
+        // Clean all arrays
+        this.meteors.splice(0, this.meteors.length);
+        this.enemies.splice(0, this.enemies.length);
+        this.junks.splice(0, this.junks.length);
+        
+        // Reset gui and HK
+        this.gui.reset();
+
+        // Move the ship at the beginning
+        this.ship.reset();
+        this.ship.posX = 20;
+        this.ship.posY = windowHeight / 2;
+
+        // Reset meteors adding parameters
+        for (let i = 0; i < MET_NBR_LIST.length; i++) {
+            MET_NBR_LIST[i] = 1;
+        }
+
+        MET_FREQ_LIST[0] =  60; //[60, 50, 40, 30, 20, 30, 40, 50];
+        MET_FREQ_LIST[1] =  50;
+        MET_FREQ_LIST[2] =  40;
+        MET_FREQ_LIST[3] =  30;
+        MET_FREQ_LIST[4] =  20;
+        MET_FREQ_LIST[5] =  30;
+        MET_FREQ_LIST[6] =  40;
+        MET_FREQ_LIST[7] =  50;
+        
+        this.meteorFreq = MET_FREQ_LIST[0];
+        this.meteorNbr = MET_NBR_LIST[0];
+        this.meteorIndex = 0;
+
+        this.enemyFreq = 200;
+        this.minEnemyNbr = 1;
+        this.maxEnemyNbr = 3;
+
+        this.levelCount = 1;
+        this.phase = SPLASH;
     }
 
 }

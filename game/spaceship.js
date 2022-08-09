@@ -32,6 +32,19 @@ class SpaceShip extends Item {
         this.rearOn = false;
     }
 
+    reset() {
+        this.shots.list.splice(0, this.shots.list.length);
+        this.rearFreq = FIRE_FREQ;
+        this.rearOn = false;
+        this.hp = SHIP_HP;
+        
+        for (let i = 0; i <  this.ops.length; i++) {
+            this.ops[i] = OP_WORK;
+        }
+
+        this.workingOps = [0, 1, 2, 3, 4];
+    }
+
     hit() {
         if (this.immunity <= 0) { 
             this.hp--;

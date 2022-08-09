@@ -42,7 +42,9 @@ function keyPressed() {
         game.gui.consoleBox(introMessage, 200, game.ch, game.cw - 400, 600);
     } else if ((keyCode === 32) && (game.phase == STORY)) { //SPACEBAR
         game.gui.scrollUp();
-    } else if (keyCode === 80) {
+    } else if ((keyCode === 83) && ((game.phase == DEAD) || (game.phase == DEAD))) { // S
+        game.reset();
+    } else if (keyCode === 80) { // P 
         game.pause = (game.pause) ? false : true;
     }
 }

@@ -41,6 +41,16 @@ class Gui {
         this.iconFont = iconFont;
     }
 
+    reset() {
+        for (const key of Object.keys(this.hk)) {
+            this.hk[key].val = guiData[key].val;
+
+            if (this.hk[key].type == 'icon') {
+                this.hk[key].active = 1;
+            }
+        }
+    }
+
     resize (cw, ch) {
         this.w = cw;
         this.h = ch;

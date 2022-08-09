@@ -332,6 +332,9 @@ class Engine {
 
         this.levelCount = 1;
         this.phase = SPLASH;
+
+        // Stop the music
+        gunsEnd.stop();
     }
 
 }

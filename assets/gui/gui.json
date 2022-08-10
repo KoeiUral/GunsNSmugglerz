@@ -1,0 +1,11 @@
+{
+    "Life":   {"type":"prog",  "x":   10, "y":10, "val": 500, "w": 150, "max": 500},
+    "Repair": {"type":"prog",  "x":  250, "y":10, "val":  0,  "w": 150, "max": 400},
+    "Score":  {"type":"flat",  "x":  500, "y":10, "val":  0},
+    "Status": {"type":"flat",  "x":  800, "y":10, "val": ""},
+    "Left":   {"type":"icon",  "x":  900, "y":10, "val": "y", "active": 1},
+    "Up":     {"type":"icon",  "x":  922, "y":10, "val": "Z", "active": 1},
+    "Down":   {"type":"icon",  "x":  944, "y":10, "val": "z", "active": 1},
+    "Right":  {"type":"icon",  "x":  966, "y":10, "val": "Y", "active": 1},
+    "Fire":   {"type":"icon",  "x":  990, "y":10, "val": "[", "active": 1}
+}

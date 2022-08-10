@@ -11,7 +11,7 @@ const WIN = 4;
 const END_LEVEL = 10;
 
 class Engine {
-    constructor(w, h) {
+    constructor(w, h, guiFile) {
         // Hold canvas size
         this.cw = w;
         this.ch = h;
@@ -22,7 +22,7 @@ class Engine {
         this.enemies = [];
         this.junks = [];
         this.bg = new StarsBG(this.cw, this.ch);
-        this.gui = new Gui(this.cw, this.ch);
+        this.gui = new Gui(this.cw, this.ch, guiFile);
 
         this.phase = SPLASH;
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -234,7 +234,7 @@ class Engine {
         this.cw = this.cw * xs;
         this.ch = this.ch * ys;
 
-        this.gui.resize(this.cw, this.ch);
+        this.gui.resize(xs, ys);
         this.bg.resize(xs, ys);
 
         this.ship.resize(xs, ys);
@@ -301,13 +301,14 @@ class Engine {
     displayIntro() {
         fill(255);
         textFont(ibmFont);
-        textAlign(CENTER);
+        textAlign(CENTER, CENTER);
         textSize(150 * this.ch / DEFAULT_H);
-        text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - 150); // TODO: REMOVE MAGIC NUMBER!!!
+        text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - this.ch / 10);
+        let yOffset = 1.5 * textAscent();
 
         if ((floor(frameCount / 40)) % 2 == 0) {
-            textSize(20);
-            text("- Press SPACE to start -", this.cw / 2, this.ch / 2 + 250); // TODO: REMOVE MAGIC NUMBER!!!
+            textSize(20  * this.ch / DEFAULT_H);
+            text("- Press SPACE to start -", this.cw / 2, this.ch / 2 + yOffset);
         }
     }
 

@@ -235,7 +235,7 @@ class Shot extends Item {
     show() {
         textFont(ibmFont);
         textAlign(CENTER, CENTER);
-        textSize(30);
+        textSize(30 * game.ch / DEFAULT_H);
         text("*", this.posX, this.posY);
     }
 }

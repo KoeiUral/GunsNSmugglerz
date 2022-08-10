@@ -28,15 +28,23 @@ function preload() {
     gunsEnd = loadSound('assets/audio/guns_end_s.mp3');
     levelUpSound = loadSound('assets/audio/round_end.wav');
     hitSound = loadSound('assets/audio/death.wav');
+
+    // Create the game engine prealoading the gui.json file
+    game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/gui/gui.json');
+    game.gui.initFonts(ibmFont, arrFont);
 }
 
 function setup() {
-    // let minSize = min(windowWidth, windowHeight);
-    canvas = createCanvas(DEFAULT_W, DEFAULT_H);
+    let maxW = min(windowWidth, DEFAULT_W);
+    let maxH = min(windowHeight, DEFAULT_H);
+    let xScale = maxW / DEFAULT_W;
+    let yScale = maxH / DEFAULT_H;
 
-    // Create the game engine
-    game = new Engine(canvas.width, canvas.height);
-    game.gui.initFonts(ibmFont, arrFont);
+    // Create the P5 Canvas
+    canvas = createCanvas(maxW, maxH);
+
+    // Resize the game wrt default sizes
+    game.resize(xScale, yScale);
 }
 
 function keyPressed() {

@@ -2,21 +2,9 @@ const DEFAULT_W = 1024;
 const DEFAULT_H = 768;
 const DEFAULT_FONT = 20;
 
-const guiData = {
-    Life:   {type:'prog',  x:   10, y:10, val: 500,  w: 150, max: 500},
-    Repair: {type:'prog',  x:  250, y:10, val:   0,  w: 150, max: 400},
-    Score:  {type:'flat',  x:  500, y:10, val:  0},
-    Status: {type:'flat',  x:  800, y:10, val: ''},
-    Left:   {type:'icon',  x:  900, y:10, val: 'y', active: 1},
-    Up:     {type:'icon',  x:  922, y:10, val: 'Z', active: 1},
-    Down:   {type:'icon',  x:  944, y:10, val: 'z', active: 1},
-    Right:  {type:'icon',  x:  966, y:10, val: 'Y', active: 1},
-    Fire:   {type:'icon',  x:  990, y:10, val: '[', active: 1},
-}
-
 class Gui {
-    constructor(width, height) {
-        this.hk = JSON.parse(JSON.stringify(guiData));
+    constructor(width, height, file) {
+        this.hk = loadJSON(file);
         this.fontSize = DEFAULT_FONT;
         this.cw = width;
         this.ch = height;
@@ -52,17 +40,17 @@ class Gui {
         }
     }
 
-    resize (cw, ch) {
-        this.cw = cw;
-        this.ch = ch;
+    resize (xScale, yScale) {
+        this.cw = this.cw * xScale;
+        this.ch = this.ch * yScale;;
 
         for (const key of Object.keys(this.hk)) {
-            this.hk[key].x = floor(guiData[key].x * (cw / DEFAULT_W));
-            this.hk[key].y = floor(guiData[key].y * ch / DEFAULT_H);
-            this.fontSize = floor(DEFAULT_FONT * ch / DEFAULT_H);
+            this.hk[key].x = floor(this.hk[key].x * xScale);
+            this.hk[key].y = floor(this.hk[key].y * yScale);
+            this.fontSize = floor(DEFAULT_FONT * this.ch / DEFAULT_H);
 
             if (this.hk[key].type === 'prog') {
-                this.hk[key].w = floor(guiData[key].w * cw / DEFAULT_W);
+                this.hk[key].w = floor(this.hk[key].w * xScale);
             }
         } 
     }

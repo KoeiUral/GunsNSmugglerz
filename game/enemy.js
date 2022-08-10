@@ -9,7 +9,7 @@ const FOLLOW_VEL = 5;
 const FOLLOW_HP = 1;
 const FOLLOW_SCORE = 50;
 
-const STAR_SIZE = 4;
+const STAR_SIZE = 5;
 
 class Star extends Item {
     constructor(x, y) {

@@ -47,4 +47,14 @@ class Item {
         fill(255);
         rect(this.posX, this.posY, this.w, this.h);
     }
+
+    resize(xScale, yScale) {
+        this.w = this.w * xScale;
+        this.h = this.h * yScale;
+        
+        this.posX = this.posX * xScale;
+        this.posY = this.posY * yScale;
+        this.velX = this.velX * xScale;
+        this.velY = this.velY * yScale;
+    }
 }

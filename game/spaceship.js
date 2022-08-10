@@ -5,24 +5,22 @@ const RIGHT = 3;
 const FIRE = 4;
 //const STAB = 5;
 
-const SHIP_W = 30;
-const SHIP_H = 15;
-const SHIP_VEL_H = 10;
-const SHIP_VEL_V = 5;
-const SHOT_VEL = 30;
+const SHIP_W = 17;
+const SHIP_H = 9;
+const SHIP_VEL_H = 6;
+const SHIP_VEL_V = 4.5;
+const SHOT_VEL = 18;
 const SHOT_SIZE = SHIP_H / 3;
-const SHIP_HP = 3;
+const SHIP_HP = 5;
 const OP_WORK = 400;
 const FIRE_FREQ = 70;
 
 
 class SpaceShip extends Item {
     constructor(x, y) {
-        super(x, y, SHIP_W, SHIP_H, 0, 0, SHIP_HP); 
+        super(x, y, SHIP_W, SHIP_H, SHIP_VEL_H, SHIP_VEL_V, SHIP_HP, 0); 
         this.posX = x;
         this.posY = y;
-        this.width = SHIP_W;
-        this.height = SHIP_H;
         this.immunity = 0;
 
         this.shots = new Shots();
@@ -133,19 +131,19 @@ class SpaceShip extends Item {
         switch (direction) {
             case UP:
                 faultFactor += (1 - (this.ops[UP] == OP_WORK)) * 2;
-                this.posY -= SHIP_VEL_V / faultFactor;
+                this.posY -= this.velY / faultFactor;
                 break;
             case DOWN:
                 faultFactor += (1 - (this.ops[DOWN] == OP_WORK)) * 2;
-                this.posY += SHIP_VEL_V  / faultFactor;
+                this.posY += this.velY  / faultFactor;
                 break;
             case LEFT:
                 faultFactor += (1 - (this.ops[LEFT] == OP_WORK)) * 2;
-                this.posX -= SHIP_VEL_H / faultFactor;
+                this.posX -= this.velX / faultFactor;
                 break;
             case RIGHT:
                 faultFactor += (1 - (this.ops[RIGHT] == OP_WORK)) * 2;
-                this.posX += SHIP_VEL_H / faultFactor;
+                this.posX += this.velX / faultFactor;
                 break;
 
             default:
@@ -159,13 +157,13 @@ class SpaceShip extends Item {
         }
 
         // Wrap the postion
-        if (this.posX > windowWidth - SHIP_W) {
-            this.posX = windowWidth - SHIP_W;
+        if (this.posX > game.cw - this.w) {
+            this.posX = game.cw - this.w;
         } else if (this.posX < 0) {
             this.posX = 0;
         }
-        if (this.posY > windowHeight - SHIP_H) {
-            this.posY = windowHeight - SHIP_H;
+        if (this.posY > game.ch - this.h) {
+            this.posY = game.ch - this.h;
         } else if (this.posY < 0) {
             this.posY = 0;
         }
@@ -189,6 +187,11 @@ class SpaceShip extends Item {
                 }
                 break;
             }
+        }
+
+        // Decrement immunity (if active)
+        if (this.immunity > 0) {
+            this.immunity--;
         }
     }
 
@@ -216,14 +219,9 @@ class SpaceShip extends Item {
     show() {
         stroke(255);
         fill(255);
-        rect(this.posX, this.posY, this.width, this.height);
+        rect(this.posX, this.posY, this.w, this.h);
 
         this.shots.update();
-
-        // decrement immunity
-        if (this.immunity > 0) {
-            this.immunity--;
-        }
     }
 }
 
@@ -236,9 +234,9 @@ class Shot extends Item {
 
     show() {
         textFont(ibmFont);
-        textAlign(CENTER);
+        textAlign(CENTER, CENTER);
         textSize(30);
-        text("*", this.posX, this.posY + 10);
+        text("*", this.posX, this.posY);
     }
 }
 
@@ -264,7 +262,7 @@ class Shots {
     update() {
         for (let i = 0; i < this.list.length; i++) {
             this.list[i].move();
-            if (this.list[i].posX < windowWidth) {
+            if (this.list[i].posX < game.cw) {
                 this.list[i].show();
             } else {
                 this.list.splice(i, 1);

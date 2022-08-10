@@ -1,24 +1,25 @@
 const DEFAULT_W = 1024;
 const DEFAULT_H = 768;
 const DEFAULT_FONT = 20;
+
 const guiData = {
-    Score:  {type:'flat',  x:  800, y:10, val:  0},
-    Life:   {type:'prog',  x:   10, y:10, val: 500,  w: 200, max: 500},
-    Repair: {type:'prog',  x:  350, y:10, val:   0,  w: 200, max: 400},
-    Status: {type:'flat',  x: 1200, y:10, val: ''},
-    Left:   {type:'icon',  x: 1300, y:10, val: 'y', active: 1},
-    Up:     {type:'icon',  x: 1322, y:10, val: 'Z', active: 1},
-    Down:   {type:'icon',  x: 1344, y:10, val: 'z', active: 1},
-    Right:  {type:'icon',  x: 1366, y:10, val: 'Y', active: 1},
-    Fire:   {type:'icon',  x: 1390, y:10, val: '[', active: 1},
+    Life:   {type:'prog',  x:   10, y:10, val: 500,  w: 150, max: 500},
+    Repair: {type:'prog',  x:  250, y:10, val:   0,  w: 150, max: 400},
+    Score:  {type:'flat',  x:  500, y:10, val:  0},
+    Status: {type:'flat',  x:  800, y:10, val: ''},
+    Left:   {type:'icon',  x:  900, y:10, val: 'y', active: 1},
+    Up:     {type:'icon',  x:  922, y:10, val: 'Z', active: 1},
+    Down:   {type:'icon',  x:  944, y:10, val: 'z', active: 1},
+    Right:  {type:'icon',  x:  966, y:10, val: 'Y', active: 1},
+    Fire:   {type:'icon',  x:  990, y:10, val: '[', active: 1},
 }
 
 class Gui {
     constructor(width, height) {
         this.hk = JSON.parse(JSON.stringify(guiData));
         this.fontSize = DEFAULT_FONT;
-        this.w = width;
-        this.h = height;
+        this.cw = width;
+        this.ch = height;
 
         this.boxX = 0;
         this.boxY = 0;
@@ -52,8 +53,8 @@ class Gui {
     }
 
     resize (cw, ch) {
-        this.w = cw;
-        this.h = ch;
+        this.cw = cw;
+        this.ch = ch;
 
         for (const key of Object.keys(this.hk)) {
             this.hk[key].x = floor(guiData[key].x * (cw / DEFAULT_W));
@@ -114,14 +115,14 @@ class Gui {
     displayText(message, size, blinking) {
         fill(255);
         textFont(this.font);
-        textSize(size);
+        textSize(size  * this.ch / DEFAULT_H);
         textAlign(CENTER, BASELINE);
 
         if ((blinking) && ((floor(frameCount / 10)) % 2 == 0)) {
             return;
         } 
 
-        text(message, this.w / 2, this.h / 2 + this.frameLnOffset);
+        text(message, this.cw / 2, this.ch / 2 + this.frameLnOffset);
         this.frameLnOffset += size + textDescent() * 0.4;
     }
 
@@ -130,7 +131,7 @@ class Gui {
             textWrap(WORD);
             fill(255);
             textFont(this.font);
-            textSize(40);
+            textSize(40 * this.ch / DEFAULT_H);
             textAlign(CENTER, BASELINE);
 
             text(this.boxMessage, this.boxX, this.boxStart, this.boxW, this.boxH);

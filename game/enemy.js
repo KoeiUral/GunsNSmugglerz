@@ -1,11 +1,19 @@
 
-const ENEMY_SIZE = 30;
-const ENEMY_VEL = -15;
-const ENEMY_HP = 1;
+const METEOR_SIZE = 17;
+const METEOR_VEL = -7.5;
+const METEOR_HP = 1;
+const METEOR_SCORE = 1;
+
+const FOLLOW_SIZE = 5;
+const FOLLOW_VEL = 5;
+const FOLLOW_HP = 1;
+const FOLLOW_SCORE = 50;
+
+const STAR_SIZE = 4;
 
 class Star extends Item {
     constructor(x, y) {
-        let dist = random(5);
+        let dist = random(STAR_SIZE);
         super(x, y, dist, dist, -dist, 0, 1);
 
         this.blincking = floor(random(20, 50));
@@ -21,11 +29,13 @@ class Star extends Item {
 }
 
 class StarsBG {
-    constructor() {
+    constructor(w, h) {
+        this.cw = w;
+        this.ch = h;
         this.list = [];
 
         for (let i = 0; i < 100; i++) {
-            this.list.push(new Star(random(windowWidth), random(windowHeight)));
+            this.list.push(new Star(random(this.cw), random(this.ch)));
         }
     }
 
@@ -34,8 +44,8 @@ class StarsBG {
             this.list[i].move();
 
             if(this.list[i].posX < 0) {
-                this.list[i].posX = windowWidth;
-                this.list[i].posY = random(windowHeight);
+                this.list[i].posX = this.cw;
+                this.list[i].posY = random(this.ch);
             }
         }       
     }
@@ -44,6 +54,15 @@ class StarsBG {
         for (let i = 0; i < this.list.length; i++) {
             this.list[i].show();
         } 
+    }
+
+    resize(xs, ys) {
+        this.cw = this.cw * xs;
+        this.ch = this.ch * ys;
+
+        for (let star of this.list) {
+            star.resize(xs, ys);
+        }
     }
 }
 
@@ -69,16 +88,16 @@ class Junk extends Item {
     }
 }
 
-class Enemy extends Item {
+class Meteor extends Item {
     constructor(x, y) {
         let factor = random(1, 3);
-        super(x, y, ENEMY_SIZE * factor, ENEMY_SIZE * factor, ENEMY_VEL / factor, 0, ENEMY_HP * factor, 1);
+        super(x, y, METEOR_SIZE * factor, METEOR_SIZE * factor, METEOR_VEL / factor, 0, METEOR_HP * factor, METEOR_SCORE);
     }
 }
 
 class Follower extends Item {
     constructor(x, y) {
-        super(x, y, 10, 10, 0, 0, 1, 50);
+        super(x, y, FOLLOW_SIZE, FOLLOW_SIZE, FOLLOW_VEL, FOLLOW_VEL, FOLLOW_HP, FOLLOW_SCORE);
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
@@ -88,15 +107,15 @@ class Follower extends Item {
         if (this.posX <= game.ship.posX) {
             let d = dist(this.posX, this.posY, game.ship.posX, game.ship.posY);
 
-            this.posX += (game.ship.posX - this.posX) * 10 / d;
-            this.posY += (game.ship.posY - this.posY) * 10 / d;
+            this.posX += (game.ship.posX - this.posX) * this.velX / d;
+            this.posY += (game.ship.posY - this.posY) * this.velY / d;
         }
         else {
             if (this.origX == 0) {
                 this.origX = this.posX;
                 this.origY = this.posY;
 
-                this.exit = (this.posY > windowHeight / 2) ? 1 : -1;
+                this.exit = (this.posY > game.ch / 2) ? 1 : -1;
             }
 
             this.posX += 8;

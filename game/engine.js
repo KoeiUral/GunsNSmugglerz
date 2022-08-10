@@ -12,13 +12,17 @@ const END_LEVEL = 10;
 
 class Engine {
     constructor(w, h) {
+        // Hold canvas size
+        this.cw = w;
+        this.ch = h;
+
         // Game entities
-        this.ship = new SpaceShip(20, windowHeight / 2);
+        this.ship = new SpaceShip(20, this.ch / 2);
         this.meteors = [];
         this.enemies = [];
         this.junks = [];
-        this.bg = new StarsBG();
-        this.gui = new Gui(w, h);
+        this.bg = new StarsBG(this.cw, this.ch);
+        this.gui = new Gui(this.cw, this.ch);
 
         this.phase = SPLASH;
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -31,8 +35,6 @@ class Engine {
 
         this.updateFreq = 200;
         this.levelCount = 1;
-        this.cw = w;
-        this.ch = h;
         this.pause = false;
 
         // Sound effects
@@ -76,7 +78,7 @@ class Engine {
                 this.enemies[i].move();
 
                 // Remove a enemy if it is outside the screen (right side)
-                if ((this.enemies[i].posX > windowWidth) || (this.enemies[i].posY > windowHeight) || (this.enemies[i].posY < 0)) {
+                if ((this.enemies[i].posX > this.cw) || (this.enemies[i].posY > this.ch) || (this.enemies[i].posY < 0)) {
                     this.enemies.splice(i, 1);
                 } 
             }
@@ -86,7 +88,7 @@ class Engine {
                 this.junks[i].move();
 
                 // Remove a metor if it is outside the screen (left side)
-                if ((this.junks[i].posX < 0) || (this.junks[i].posX > windowWidth) || (this.junks[i].posY > windowHeight) || (this.junks[i].posY < 0)) {
+                if ((this.junks[i].posX < 0) || (this.junks[i].posX > this.cw) || (this.junks[i].posY > windowHeight) || (this.junks[i].posY < 0)) {
                     this.junks.splice(i, 1);
                 } 
             }
@@ -121,7 +123,7 @@ class Engine {
         // Add meteors according to timer
         if ((counter % this.meteorFreq) === 0) {
             for (let i = 0; i < this.meteorNbr; i++) {
-                this.meteors.push(new Enemy(windowWidth, random(windowHeight)));
+                this.meteors.push(new Meteor(this.cw, random(this.ch)));
             }
         }
 
@@ -186,7 +188,6 @@ class Engine {
             this.displayIntro();
         }
         else if (this.phase === STORY) {
-            //image(introImg, 10, this.ch / 2 - introImg.height, 2 * introImg.width, 2 * introImg.height);
             this.gui.displayTextBox();
 
             if (this.gui.isBoxDisplayOver()) {
@@ -229,10 +230,26 @@ class Engine {
         this.gui.frameLnOffset = 0;
     }
 
-    resize(w, h) {
-        this.cw = w;
-        this.ch = h;
-        this.gui.resize(w, h);
+    resize(xs, ys) {
+        this.cw = this.cw * xs;
+        this.ch = this.ch * ys;
+
+        this.gui.resize(this.cw, this.ch);
+        this.bg.resize(xs, ys);
+
+        this.ship.resize(xs, ys);
+
+        for (let it of this.meteors) {
+            it.resize(xs, ys);
+        }
+
+        for (let it of this.enemies) {
+            it.resize(xs, ys);
+        }
+
+        for (let it of this.junks) {
+            it.resize(xs, ys);
+        }
     }
 
     checkCollisions(hitList, targetList, hitScore, targetScore) {
@@ -247,7 +264,7 @@ class Engine {
                         // Add scores if hit dies
                         if (hitScore) {
                             this.addScore(hitList[i].score);
-                            // create junks
+                            // Create junks
                             let pieces = floor(random(2, 5));
                             for (let k = 0; k < pieces; k++) {
                                 this.junks.push(new Junk(hitList[i].posX, hitList[i].posY, hitList[i].w / pieces));
@@ -285,12 +302,12 @@ class Engine {
         fill(255);
         textFont(ibmFont);
         textAlign(CENTER);
-        textSize(200);
-        text("GUNS N\nSMUGGLERz", windowWidth / 2, windowHeight / 2 - 150);
+        textSize(150 * this.ch / DEFAULT_H);
+        text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - 150); // TODO: REMOVE MAGIC NUMBER!!!
 
         if ((floor(frameCount / 40)) % 2 == 0) {
             textSize(20);
-            text("- Press SPACE to start -", windowWidth / 2, windowHeight / 2 + 250);
+            text("- Press SPACE to start -", this.cw / 2, this.ch / 2 + 250); // TODO: REMOVE MAGIC NUMBER!!!
         }
     }
 

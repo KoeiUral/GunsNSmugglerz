@@ -10,8 +10,13 @@ let hitSound;
 let introMessage = "The galaxy is ruled by the evil government, you are smuggling goods all over the planets. Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the meteors to escape the Gov's ships and survive. Good LUCK and ... enjoy the Guns!";
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-    game.resize(canvas.width, canvas.height);
+    let maxW = min(windowWidth, DEFAULT_W);
+    let maxH = min(windowHeight, DEFAULT_H);
+    let xScale = maxW / canvas.width;
+    let yScale = maxH / canvas.height;
+
+    resizeCanvas(maxW, maxH, false);
+    game.resize(xScale, yScale);
 }
 
 
@@ -27,7 +32,7 @@ function preload() {
 
 function setup() {
     // let minSize = min(windowWidth, windowHeight);
-    canvas = createCanvas(windowWidth, windowHeight);
+    canvas = createCanvas(DEFAULT_W, DEFAULT_H);
 
     // Create the game engine
     game = new Engine(canvas.width, canvas.height);

@@ -31,7 +31,7 @@ function preload() {
 
     // Create the game engine prealoading the gui.json file
     game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/gui/gui.json');
-    game.gui.initFonts(ibmFont, arrFont);
+
 }
 
 function setup() {
@@ -42,6 +42,7 @@ function setup() {
 
     // Create the P5 Canvas
     canvas = createCanvas(maxW, maxH);
+    game.gui.initFonts(ibmFont, arrFont);
 
     // Resize the game wrt default sizes
     game.resize(xScale, yScale);
@@ -55,7 +56,7 @@ function keyPressed() {
         game.gui.consoleBox(introMessage, 200, game.ch, game.cw - 400, 600);
     } else if ((keyCode === 32) && (game.phase == STORY)) { //SPACEBAR
         game.gui.scrollUp();
-    } else if ((keyCode === 83) && ((game.phase == DEAD) || (game.phase == DEAD))) { // S
+    } else if ((keyCode === 83) && ((game.phase == DEAD) || (game.phase == WIN))) { // S
         game.reset();
     } else if (keyCode === 80) { // P 
         game.pause = (game.pause) ? false : true;

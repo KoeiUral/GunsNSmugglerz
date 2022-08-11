@@ -19,20 +19,27 @@ class Gui {
         this.boxMessage = "";
         this.boxEnd = true;
 
-        // display text varibales
+        // Display text varibales
         this.msgCounter = 0;
         this.msgConsole = "";
         this.frameLnOffset = 0;
+
+        this.defValues = {};
     }
 
     initFonts(textFont, iconFont) {
         this.font = textFont;
         this.iconFont = iconFont;
+
+        // Store HK default values
+        for (const key of Object.keys(this.hk)) {
+            this.defValues[key] = this.hk[key].val;
+        }
     }
 
     reset() {
         for (const key of Object.keys(this.hk)) {
-            this.hk[key].val = guiData[key].val;
+            this.hk[key].val = this.defValues[key];
 
             if (this.hk[key].type == 'icon') {
                 this.hk[key].active = 1;

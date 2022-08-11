@@ -22,8 +22,16 @@ class Star extends Item {
     show() {
         if (floor(frameCount / this.blincking) % 2 == 0) {
             noStroke();
-            fill(200);
-            rect(this.posX, this.posY, this.w, this.h);
+
+            if (HALO) {
+                fill(255, 0, 255, 180);
+                rect(this.posX -1, this.posY -1, this.w, this.h);
+                fill(0, 255, 255, 180);
+                rect(this.posX +1, this.posY +1, this.w, this.h);     
+            }
+
+           fill(255, 255, 255, 200);
+           rect(this.posX, this.posY, this.w, this.h);
         }
     }
 }

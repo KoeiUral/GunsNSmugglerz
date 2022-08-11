@@ -1,3 +1,5 @@
+const HALO = false;
+
 /**
  * Implements a general item wit basic functionality.
  */
@@ -44,6 +46,14 @@ class Item {
 
     show() {
         noStroke();
+
+        if (HALO) {
+            fill(255, 0, 255);
+            rect(this.posX - 1, this.posY - 1, this.w, this.h);
+            fill(0, 255, 255);
+            rect(this.posX + 1, this.posY + 1, this.w, this.h);
+        }
+
         fill(255);
         rect(this.posX, this.posY, this.w, this.h);
     }

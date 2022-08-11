@@ -1,4 +1,4 @@
-const HALO = false;
+const HALO = true;
 
 /**
  * Implements a general item wit basic functionality.

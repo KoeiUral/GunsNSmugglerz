@@ -50,7 +50,6 @@ class SpaceShip extends Item {
             let faultId = 0;
             let keyId = '';
 
-            //game.monoSynth.play('C1', 1, 0, 2);
             hitSound.play();
             game.gui.hk['Life'].val -= 100;
 
@@ -228,6 +227,30 @@ class SpaceShip extends Item {
 
         fill(255);
         rect(this.posX, this.posY, this.w, this.h);
+
+        if ((this.ops[UP] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
+            //;
+        } else {
+            rect(this.posX -2, this.posY - 2, this.w + 2, 2); 
+        }
+
+        if ((this.ops[DOWN] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
+            //;
+        } else {
+            rect(this.posX -2, this.posY + this.h, this.w + 2, 2); 
+        }
+
+        if ((this.ops[LEFT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
+            //;
+        } else {
+            rect(this.posX - 2, this.posY, 2, this.h); 
+        }
+
+        if ((this.ops[RIGHT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
+            //;
+        } else {
+            rect(this.posX + this.w, this.posY, 2, this.h); 
+        }
 
         this.shots.update();
     }

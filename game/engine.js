@@ -161,7 +161,7 @@ class Engine {
                 if (this.levelCount >= 3) { 
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;
-                    //this.gui.consoleLine("Rear shoot updated");
+                    this.gui.consoleBox("*** !!! Shoot updated !!! ***", this.cw, this.ch - 40, 300, 30, SCROLL_LEFT, 30);
                 }
 
                 if (this.levelCount === END_LEVEL) {
@@ -215,15 +215,17 @@ class Engine {
 
             // Draw the gui
             this.gui.show();
+            this.gui.displayTextBox();
+
         } else if (this.phase === DEAD) {
             this.gui.displayText("GAME OVER", 80, false);
             this.gui.displayText("Score: " + this.gui.hk['Score'].val + " - Level: " + this.levelCount, 40, false);
-            this.gui.displayText("Press s to restart or refresh the page", 20, true);
+            this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
         } else if (this.phase === WIN) {
             this.gui.displayText("STAGE COMPLETE", 80, false);
             this.gui.displayText("You left the bloody pigs behind, good job boy!", 40, false);
             this.gui.displayText("... next stage coming soon ...", 30, false); 
-            this.gui.displayText("Press s to restart or refresh the page", 20, true);
+            this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
         }
 
         // Reset the frame line offset in the gui

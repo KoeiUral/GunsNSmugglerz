@@ -2,6 +2,10 @@ const DEFAULT_W = 1024;
 const DEFAULT_H = 768;
 const DEFAULT_FONT = 20;
 
+const SCROLL_LEFT = 0;
+const SCROLL_UP = 1;
+const SCROLL_VEL = -4;
+
 class Gui {
     constructor(width, height, file) {
         this.hk = loadJSON(file);
@@ -13,9 +17,9 @@ class Gui {
         this.boxY = 0;
         this.boxW = 0;
         this.boxH = 0;
-
-        this.boxStart = 0;
-        this.boxVel = -2;
+        this.boxSize = 40;
+        this.boxScroll = SCROLL_UP;
+        this.boxVel = SCROLL_VEL;
         this.boxMessage = "";
         this.boxEnd = true;
 
@@ -126,26 +130,33 @@ class Gui {
             textWrap(WORD);
             fill(255);
             textFont(this.font);
-            textSize(40 * this.ch / DEFAULT_H);
+            textSize(this.boxSize * this.ch / DEFAULT_H);
             textAlign(CENTER, BASELINE);
 
-            text(this.boxMessage, this.boxX, this.boxStart, this.boxW, this.boxH);
-            this.boxStart += this.boxVel;
+            text(this.boxMessage, this.boxX, this.boxY, this.boxW, this.boxH);
 
-            if ((this.boxStart + this.boxH) < 0) {
-                this.boxEnd = true;
+            if (this.boxScroll === SCROLL_UP) {
+                this.boxY += this.boxVel;
+                if ((this.boxY + this.boxH) < 0) {
+                    this.boxEnd = true;
+                }
+            } else if (this.boxScroll === SCROLL_LEFT) {
+                this.boxX += this.boxVel;
+                if ((this.boxX + this.boxW) < 0) {
+                    this.boxEnd = true;
+                }
             }
         }
     }
 
-    isBoxDisplayOver () {
-        return this.boxEnd;
-    }
-
     scrollUp () {
         if (this.boxEnd === false) {
-            this.boxStart -= 100;
+            this.boxY -= 100 * this.ch / DEFAULT_H;
         } 
+    }
+
+    isBoxDisplayOver () {
+        return this.boxEnd;
     }
 
     consoleLine(message) {
@@ -153,13 +164,14 @@ class Gui {
         this.msgConsole = message.slice();
     }
 
-    consoleBox(message, x, y, w, h) {
+    consoleBox(message, x, y, w, h, type, size) {
         this.boxX = x;
         this.boxY = y;
         this.boxW = w;
         this.boxH = h;
+        this.boxScroll = type;
+        this.boxSize = size;
 
-        this.boxStart = this.boxY ;//+ this.boxH;
         this.boxMessage = message.slice();
         this.boxEnd = false;
     }

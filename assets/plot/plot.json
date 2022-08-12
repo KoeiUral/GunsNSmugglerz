@@ -2,27 +2,23 @@
     "INTRO": {
         "frames": [
             {"screen": [
-                {"type": "textbox", "x": 800, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x":  10, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
-                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+                {"type": "textbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Evviva la Pizza"},
+                {"type": "image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
+                {"type": "audio",   "loop": true, "path": "./assets/audio/death.wav"}
             ]},
             {"screen": [
                 {"type": "textbox", "x":  10, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x": 410, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
-                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+                {"type": "image",   "x": 410, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
+                {"type": "audio",   "loop": false, "ref": 0, "path": "./assets/audio/death.wav"}
             ]}
         ]
     },
     "STAGE1": {
         "frames": [
-            {}
         ]
     },
     "END": {
         "frames": [
-            {},
-            {},
-            {}
         ]
     }
 }

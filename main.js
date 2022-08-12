@@ -30,8 +30,7 @@ function preload() {
     hitSound = loadSound('assets/audio/death.wav');
 
     // Create the game engine prealoading the gui.json file
-    game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/gui/gui.json');
-
+    game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/gui/gui.json', 'assets/plot/plot.json');
 }
 
 function setup() {
@@ -53,7 +52,7 @@ function keyPressed() {
         game.ship.fire();
     } else if ((keyCode === 32) && (game.phase == SPLASH)) { //SPACEBAR
         game.phase = STORY; // STORY
-        game.gui.consoleBox(introMessage, 200, game.ch, game.cw - 400, 600, SCROLL_UP, 40);
+        //game.gui.consoleBox(introMessage, 200, game.ch, game.cw - 400, 600, SCROLL_UP, 40);
     } else if ((keyCode === 32) && (game.phase == STORY)) { //SPACEBAR
         game.gui.scrollUp();
     } else if ((keyCode === 83) && ((game.phase == DEAD) || (game.phase == WIN))) { // S

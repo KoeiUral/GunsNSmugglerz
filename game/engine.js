@@ -11,7 +11,7 @@ const WIN = 4;
 const END_LEVEL = 10;
 
 class Engine {
-    constructor(w, h, guiFile) {
+    constructor(w, h, guiFile, plotFile) {
         // Hold canvas size
         this.cw = w;
         this.ch = h;
@@ -23,6 +23,7 @@ class Engine {
         this.junks = [];
         this.bg = new StarsBG(this.cw, this.ch);
         this.gui = new Gui(this.cw, this.ch, guiFile);
+        this.story = new StoryTeller(plotFile);
 
         this.phase = SPLASH;
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -188,12 +189,13 @@ class Engine {
             this.displayIntro();
         }
         else if (this.phase === STORY) {
-            this.gui.displayTextBox();
+            /*this.gui.displayTextBox();
 
             if (this.gui.isBoxDisplayOver()) {
                 this.phase = RUN;
                 gunsLevel1.loop();
-            }
+            }*/
+            this.story.playCh("INTRO");
         } else if (this.phase === RUN) {
             // Draw the ship
             this.ship.show();

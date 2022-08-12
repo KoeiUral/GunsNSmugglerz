@@ -1,0 +1,28 @@
+{
+    "INTRO": {
+        "frames": [
+            {"screen": [
+                {"type": "textbox", "x": 800, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
+                {"type": "image",   "x":  10, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
+                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+            ]},
+            {"screen": [
+                {"type": "textbox", "x":  10, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
+                {"type": "image",   "x": 410, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
+                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+            ]}
+        ]
+    },
+    "STAGE1": {
+        "frames": [
+            {}
+        ]
+    },
+    "END": {
+        "frames": [
+            {},
+            {},
+            {}
+        ]
+    }
+}

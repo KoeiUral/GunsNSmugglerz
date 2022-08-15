@@ -22,7 +22,7 @@ function preload() {
     ibmFont = loadFont('assets/font/INVASION2000.TTF');
     arrFont = loadFont('assets/font/PixArrows.ttf');
 
-    gunsLevel1 = loadSound('assets/audio/guns1_s.mp3');
+    gunsLevel1 = loadSound('assets/audio/sweet.mp3');
     gunsEnd = loadSound('assets/audio/guns_end_s.mp3');
     levelUpSound = loadSound('assets/audio/round_end.wav');
     hitSound = loadSound('assets/audio/death.wav');

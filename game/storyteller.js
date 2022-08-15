@@ -11,6 +11,7 @@ class StoryTeller {
         this.curFrame = 0;
         this.chapterEnd = false;
         this.frameEnd = true;
+        this.audioPlaying = -1; // no audio is playing
 
         loadJSON(filePath, this.onJsonReady);
     }
@@ -60,7 +61,8 @@ class StoryTeller {
             } else if (element['type'] === "image") {
                 // Display the image
                 image(imageSet[element['ref']], element['x'], element['y'], element['w'], element['h']);
-            } else if ((element['type'] === "audio") && (audioSet[element['ref']].isPlaying() === false)) {
+            } else if ((element['type'] === "audio") && (this.audioPlaying === -1)) {
+                this.audioPlaying = element['ref'];
                 if (element['loop'] === true) {
                     audioSet[element['ref']].loop();
                 } else {
@@ -78,6 +80,7 @@ class StoryTeller {
     
                 if (chapterIsOver) {
                     game.phase = RUN;
+                    gunsLevel1.loop();
                 } else {
                     game.phase = STORY_PLAY;
                 }
@@ -90,6 +93,11 @@ class StoryTeller {
 
     nextFrame(chapter) {
         this.frameEnd = true;
+        // Stop audio if it is playing 
+        if (this.audioPlaying > -1) {
+            audioSet[this.audioPlaying].stop();
+            this.audioPlaying = -1;
+        }
 
         if (plot[chapter]['frames'][this.curFrame + 1] != undefined) {
             this.curFrame += 1;

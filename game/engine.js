@@ -261,6 +261,7 @@ class Engine {
                 let endChapter = this.story.nextFrame(this.storyChapter);
     
                 if (endChapter) {
+                    gunsLevel1.loop();
                     this.phase = RUN;
                 } else {
                     this.phase = STORY_PLAY;

@@ -3,11 +3,21 @@ let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
 // Game phases
-const SPLASH = 0;
-const STORY = 1;
-const RUN = 2;
-const DEAD = 3;
-const WIN = 4;
+const LOAD = 0;
+const SPLASH = 1;
+const STORY_PLAY = 2;
+const STORY_WAIT = 3;
+const RUN = 4;
+const PAUSE = 5;
+const DEAD = 6;
+const WIN = 7;
+
+const KEY_SPACE = 32;
+const KEY_M = 78;
+const KEY_P = 80;
+const KEY_S = 83;
+
+
 const END_LEVEL = 10;
 
 class Engine {
@@ -24,6 +34,7 @@ class Engine {
         this.bg = new StarsBG(this.cw, this.ch);
         this.gui = new Gui(this.cw, this.ch, guiFile);
         this.story = new StoryTeller(plotFile);
+        this.storyChapter = "";
 
         this.phase = SPLASH;
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -166,10 +177,16 @@ class Engine {
                 }
 
                 if (this.levelCount === END_LEVEL) {
-                    // Game completed
-                    this.phase = WIN;
+                    // Stage completed
                     gunsLevel1.stop();
-                    gunsEnd.loop();
+
+                    // Get next Chapter
+                    this.storyChapter = this.story.getNextChapter();
+
+                    if (this.storyChapter === "END") {
+                        this.phase = WIN;
+                        gunsEnd.loop();
+                    }
                 }
             }
 
@@ -188,14 +205,8 @@ class Engine {
         if (this.phase === SPLASH) {
             this.displayIntro();
         }
-        else if (this.phase === STORY) {
-            /*this.gui.displayTextBox();
-
-            if (this.gui.isBoxDisplayOver()) {
-                this.phase = RUN;
-                gunsLevel1.loop();
-            }*/
-            this.story.playCh("INTRO");
+        else if ((this.phase === STORY_PLAY) || (this.phase == STORY_WAIT)) {
+            this.story.playCh(this.storyChapter);
         } else if (this.phase === RUN) {
             // Draw the ship
             this.ship.show();
@@ -225,13 +236,44 @@ class Engine {
             this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
         } else if (this.phase === WIN) {
             this.gui.displayText("STAGE COMPLETE", 80, false);
-            this.gui.displayText("You left the bloody pigs behind, good job boy!", 40, false);
+            this.gui.displayText("You left the bloody pigs behind, well done!", 40, false);
             this.gui.displayText("... next stage coming soon ...", 30, false); 
             this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
         }
 
         // Reset the frame line offset in the gui
         this.gui.frameLnOffset = 0;
+    }
+
+    processInput(key) {
+        if (key === KEY_SPACE) {
+            if (this.phase === SPLASH) {
+                // Show the story's beginning
+                this.storyChapter = this.story.getNextChapter();
+                game.phase = STORY_PLAY;
+            } else if (this.phase === STORY_PLAY) {
+                // Just scroll up the text 
+                this.gui.scrollUp();
+            } else if (this.phase === STORY_WAIT) {
+                // Check if it is the last frame and move to run
+                let endChapter = this.story.nextFrame(this.storyChapter);
+    
+                if (endChapter) {
+                    this.phase = RUN;
+                } else {
+                    this.phase = STORY_PLAY;
+                }
+            } else if (this.phase === RUN) {
+                // If running, fire
+                game.ship.fire();
+            }
+        } else if ((key === KEY_S) && ((this.phase == DEAD) || (this.phase == WIN))) {
+            // If game ended, press s to reset
+            this.reset();
+        } else if (key === KEY_P) {
+            // Enable / disable pause
+            this.pause = (this.pause) ? false : true;
+        }
     }
 
     resize(xs, ys) {

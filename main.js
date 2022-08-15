@@ -7,8 +7,6 @@ let gunsEnd;
 let levelUpSound;
 let hitSound;
 
-let introMessage = "The galaxy is ruled by the evil government, you are smuggling goods all over the planets. Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the meteors to escape the Gov's ships and survive. Good LUCK and ... enjoy the Guns!";
-
 function windowResized() {
     let maxW = min(windowWidth, DEFAULT_W);
     let maxH = min(windowHeight, DEFAULT_H);
@@ -48,18 +46,7 @@ function setup() {
 }
 
 function keyPressed() {
-    if ((keyCode === 32) && (game.phase == RUN)) { //SPACEBAR
-        game.ship.fire();
-    } else if ((keyCode === 32) && (game.phase == SPLASH)) { //SPACEBAR
-        game.phase = STORY; // STORY
-        //game.gui.consoleBox(introMessage, 200, game.ch, game.cw - 400, 600, SCROLL_UP, 40);
-    } else if ((keyCode === 32) && (game.phase == STORY)) { //SPACEBAR
-        game.gui.scrollUp();
-    } else if ((keyCode === 83) && ((game.phase == DEAD) || (game.phase == WIN))) { // S
-        game.reset();
-    } else if (keyCode === 80) { // P 
-        game.pause = (game.pause) ? false : true;
-    }
+    game.processInput(keyCode)
 }
 
 

@@ -2,9 +2,11 @@
 let plot;
 let audioSet = [];
 let imageSet = [];
+let chapters = [];
 
 class StoryTeller {
     constructor(filePath) {
+        this.chapterId = 0;
         this.curChapter = "";
         this.curFrame = 0;
         this.chapterEnd = false;
@@ -22,6 +24,9 @@ class StoryTeller {
 
         for (let chapter of Object.keys(plot)) {
             console.log(chapter);
+            // Save chapters in order
+            chapters[plot[chapter]['id']] = chapter;
+
             // Iterate over all frames within the chapeter
             for (let frame of plot[chapter]['frames']) {
                 // Iterate over element within the screen
@@ -73,10 +78,11 @@ class StoryTeller {
                 textSize(20  * game.ch / DEFAULT_H);
                 text("- Press SPACE to continue -", game.cw / 2, game.ch / 2 - 100); // TODO: move this i a gui custom function
             }
+            game.phase = STORY_WAIT;
         }
     }
 
-    nextFrame() {
+    nextFrame(chapter) {
         this.frameEnd = true;
 
         if (plot[chapter]['frames'][this.curFrame + 1] != undefined) {
@@ -88,6 +94,13 @@ class StoryTeller {
         }
 
         return this.chapterEnd;
+    }
+
+    getNextChapter() {
+        let nextCh = chapters[this.chapterId];
+        this.chapterId++;
+
+        return nextCh;
     }
 
 

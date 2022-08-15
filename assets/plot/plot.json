@@ -1,24 +1,28 @@
 {
     "INTRO": {
+        "id" : 0,
         "frames": [
             {"screen": [
-                {"type": "textbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
-                {"type": "audio",   "loop": true, "path": "./assets/audio/death.wav"}
+                {"type": "textbox", "x": 200, "y": 768, "w": 824,"h": 500, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets. Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the meteors to escape the Gov's ships and survive. Good LUCK and ... enjoy the Guns!"},
+                {"type": "//image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
+                {"type": "//audio",   "loop": true, "path": "./assets/audio/death.wav"}
             ]},
             {"screen": [
-                {"type": "textbox", "x":  10, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x": 410, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
-                {"type": "audio",   "loop": false, "ref": 0, "path": "./assets/audio/death.wav"}
+                {"type": "textbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Metti immagine con la spiega del gioco"},
+                {"type": "//image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
+                {"type": "//audio",   "loop": true, "path": "./assets/audio/death.wav"}
             ]}
         ]
     },
-    "STAGE1": {
-        "frames": [
-        ]
-    },
     "END": {
+        "id" : 1,
         "frames": [
+            {"screen": [
+                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "STAGE COMPLETE"},
+                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "You left the bloody pigs behind, well done!"},
+                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "... next stage coming soon ..."},
+                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Press 's' or refresh the page to restart"}
+            ]}   
         ]
     }
 }

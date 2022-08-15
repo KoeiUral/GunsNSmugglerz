@@ -2,14 +2,18 @@
     "INTRO": {
         "id" : 0,
         "frames": [
-            {"screen": [
-                {"type": "textbox", "x": 200, "y": 768, "w": 824,"h": 500, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets. Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the meteors to escape the Gov's ships and survive. Good LUCK and ... enjoy the Guns!"},
-                {"type": "//image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
-                {"type": "//audio",   "loop": true, "path": "./assets/audio/death.wav"}
+            {"auto": false,
+             "screen": [
+              {"type": "image", "x":  0, "y":  0, "w": 1024,"h": 768, "ref": 0, "path": "./assets/image/tutorial.png"},
+              {"type": "txtbox", "x": 17, "y": 40, "w": 150,"h": 80, "s": 20, "msg":  "Spaseship Hit Points"},
+              {"type": "txtbox", "x": 190, "y": 410, "w": 400,"h": 100, "s": 20, "msg":  "Your spaceship, every time you get hit, the ship loses HPs and a thruster or fire"},
+              {"type": "txtbox", "x": 824, "y": 40, "w": 200,"h": 400, "s": 20, "msg":  "Status of each thruster, when blinking it is not working"},
+              {"type": "txtbox", "x": 380, "y": 40, "w": 300,"h": 500, "s": 20, "msg":  "The bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs"},
+              {"type": "//audio", "loop": true, "path": "./assets/audio/death.wav"}
             ]},
-            {"screen": [
-                {"type": "textbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Metti immagine con la spiega del gioco"},
-                {"type": "//image",   "x":  10, "y":  10, "w": 400,"h": 400, "ref": 0, "path": "./assets/image/intro.png"},
+            { "auto": true,
+              "screen": [
+                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 600, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the resistance.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the ateroids to escape the Gov's ships and survive. Good LUCK and ... enjoy the Guns!"},
                 {"type": "//audio",   "loop": true, "path": "./assets/audio/death.wav"}
             ]}
         ]
@@ -17,11 +21,12 @@
     "END": {
         "id" : 1,
         "frames": [
-            {"screen": [
-                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "STAGE COMPLETE"},
-                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "You left the bloody pigs behind, well done!"},
-                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "... next stage coming soon ..."},
-                {"type": "textline", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Press 's' or refresh the page to restart"}
+            {"auto": false,
+             "screen": [
+                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "STAGE COMPLETE"},
+                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "You left the bloody pigs behind, well done!"},
+                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "... next stage coming soon ..."},
+                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Press 's' or refresh the page to restart"}
             ]}   
         ]
     }

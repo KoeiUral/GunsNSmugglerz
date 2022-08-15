@@ -173,7 +173,7 @@ class Engine {
                 if (this.levelCount >= 3) { 
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;
-                    this.gui.consoleBox("*** !!! Shoot updated !!! ***", this.cw, this.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                    this.gui.consoleBox("*** !!! Rear Shoot updated !!! ***", this.cw, this.ch - 40, 700, 30, SCROLL_LEFT, 30);
                 }
 
                 if (this.levelCount === END_LEVEL) {
@@ -207,6 +207,7 @@ class Engine {
         }
         else if ((this.phase === STORY_PLAY) || (this.phase == STORY_WAIT)) {
             this.story.playCh(this.storyChapter);
+
         } else if (this.phase === RUN) {
             // Draw the ship
             this.ship.show();
@@ -228,17 +229,18 @@ class Engine {
 
             // Draw the gui
             this.gui.show();
-            this.gui.displayTextBox();
+            this.gui.showScrollingBox();
 
         } else if (this.phase === DEAD) {
             this.gui.displayText("GAME OVER", 80, false);
             this.gui.displayText("Score: " + this.gui.hk['Score'].val + " - Level: " + this.levelCount, 40, false);
-            this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
+            this.gui.displayContinueMsg("s", "restart");
+
         } else if (this.phase === WIN) {
             this.gui.displayText("STAGE COMPLETE", 80, false);
             this.gui.displayText("You left the bloody pigs behind, well done!", 40, false);
             this.gui.displayText("... next stage coming soon ...", 30, false); 
-            this.gui.displayText("Press 's' or refresh the page to restart", 20, true);
+            this.gui.displayContinueMsg("s", "restart");
         }
 
         // Reset the frame line offset in the gui
@@ -350,12 +352,9 @@ class Engine {
         textAlign(CENTER, CENTER);
         textSize(150 * this.ch / DEFAULT_H);
         text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - this.ch / 10);
-        let yOffset = 1.5 * textAscent();
 
-        if ((floor(frameCount / 40)) % 2 == 0) {
-            textSize(20  * this.ch / DEFAULT_H);
-            text("- Press SPACE to start -", this.cw / 2, this.ch / 2 + yOffset);
-        }
+        //this.gui.displayTextBox("GUNS N\nSMUGGLERz", 150, 10, 10, this.cw - 20, this.ch);
+        this.gui.displayContinueMsg("SPACE", "start");
     }
 
     reset() {

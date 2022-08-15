@@ -48,14 +48,15 @@ class StoryTeller {
     }
 
     playCh(chapter) {
-
         let screen = plot[chapter]['frames'][this.curFrame]['screen'];
 
         for (let element of screen) {
-            if ((element['type'] === "textbox") && (this.frameEnd)) {
+            if ((element['type'] === "txtscroll") && (this.frameEnd)) {
                 // Start a scrolling text box
-                game.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, 20); // TODO: REMOVE MAGIC
+                game.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']); // TODO: REMOVE MAGIC
                 this.frameEnd = false;
+            } else if (element['type'] === "txtbox") {
+                game.gui.displayTextBox(element['msg'], element['s'], element['x'], element['y'], element['w'], element['h']);
             } else if (element['type'] === "image") {
                 // Display the image
                 image(imageSet[element['ref']], element['x'], element['y'], element['w'], element['h']);
@@ -68,17 +69,22 @@ class StoryTeller {
             }
         }
 
-        game.gui.displayTextBox();
+        // Show the text box scrolling
+        game.gui.showScrollingBox();
 
-        if (game.gui.isBoxDisplayOver()) {
-            if ((floor(frameCount / 40)) % 2 == 0) {
-                fill(255);
-                textFont(ibmFont);
-                textAlign(CENTER, CENTER);
-                textSize(20  * game.ch / DEFAULT_H);
-                text("- Press SPACE to continue -", game.cw / 2, game.ch / 2 - 100); // TODO: move this i a gui custom function
+        if (game.gui.isScrollBoxOver()) {
+            if (plot[chapter]['frames'][this.curFrame]['auto']) {
+                let chapterIsOver = this.nextFrame(this.curChapter);
+    
+                if (chapterIsOver) {
+                    game.phase = RUN;
+                } else {
+                    game.phase = STORY_PLAY;
+                }
+            } else {
+                game.gui.displayContinueMsg("SPACE", "continue");
+                game.phase = STORY_WAIT;
             }
-            game.phase = STORY_WAIT;
         }
     }
 
@@ -97,10 +103,10 @@ class StoryTeller {
     }
 
     getNextChapter() {
-        let nextCh = chapters[this.chapterId];
+        this.curChapter = chapters[this.chapterId];
         this.chapterId++;
 
-        return nextCh;
+        return this.curChapter;
     }
 
 

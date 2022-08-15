@@ -366,6 +366,7 @@ class Engine {
         
         // Reset gui and HK
         this.gui.reset();
+        this.story.reset();
 
         // Move the ship at the beginning
         this.ship.reset();

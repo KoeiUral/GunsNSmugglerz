@@ -42,6 +42,9 @@ class Gui {
     }
 
     reset() {
+        this.boxMessage = "";
+        this.boxEnd = true;
+        
         for (const key of Object.keys(this.hk)) {
             this.hk[key].val = this.defValues[key];
 

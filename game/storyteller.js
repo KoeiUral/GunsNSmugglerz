@@ -117,6 +117,14 @@ class StoryTeller {
         return this.curChapter;
     }
 
+    reset() {
+        this.chapterId = 0;
+        this.curChapter = "";
+        this.curFrame = 0;
+        this.chapterEnd = false;
+        this.frameEnd = true;
+        this.audioPlaying = -1;
+    }
 
 
 }

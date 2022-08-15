@@ -8,7 +8,7 @@
               {"type": "txtbox", "x": 17, "y": 40, "w": 150,"h": 80, "s": 20, "msg":  "Spaceship Hit Points"},
               {"type": "txtbox", "x": 320, "y": 40, "w": 300,"h": 500, "s": 20, "msg":  "The bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs"},
               {"type": "txtbox", "x": 800, "y": 40, "w": 230,"h": 400, "s": 20, "msg":  "Status of each thruster, when blinking it is not working and ship cannot move in that direction"},
-              {"type": "txtbox", "x": 190, "y": 350, "w": 400,"h": 100, "s": 20, "msg":  "Your spaceship, every time you get hit, the ship loses HPs and a thruster or fire"},
+              {"type": "txtbox", "x": 190, "y": 350, "w": 400,"h": 100, "s": 20, "msg":  "Your spaceship: every time you get hit, the ship loses HPs and a thruster or fire"},
               {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
             ]},
             { "auto": true,

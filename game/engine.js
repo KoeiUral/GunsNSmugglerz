@@ -10,7 +10,6 @@ const STORY_WAIT = 3;
 const RUN = 4;
 const PAUSE = 5;
 const DEAD = 6;
-const WIN = 7;
 
 const KEY_SPACE = 32;
 const KEY_M = 78;
@@ -194,7 +193,7 @@ class Engine {
                 this.levelCount++;
                 this.gui.consoleLine("LEVEL " + this.levelCount);
                 
-                soundSet["LEVEL_UP"].play();
+
                 this.addScore(100);
 
                 if (this.levelCount >= 3) { 
@@ -209,10 +208,10 @@ class Engine {
 
                     // Get next Chapter
                     this.storyChapter = this.story.getNextChapter();
-
-                    if (this.storyChapter === "END") {
-                        this.phase = WIN;
-                    }
+                    this.phase = STORY_PLAY;
+                } else {
+                    // If not the end, play the level-up sound
+                    soundSet["LEVEL_UP"].play();
                 }
             }
 
@@ -262,12 +261,6 @@ class Engine {
             this.gui.displayText("Score: " + this.gui.hk['Score'].val + " - Level: " + this.levelCount, 40, false);
             this.gui.displayContinueMsg("s", "restart");
 
-        } else if (this.phase === WIN) {
-            //this.gui.displayText("STAGE COMPLETE", 80, false);
-            //this.gui.displayText("You left the bloody pigs behind, well done!", 40, false);
-            //this.gui.displayText("... next stage coming soon ...", 30, false);
-            this.story.playCh(this.storyChapter);
-            this.gui.displayContinueMsg("s", "restart");
         }
 
         // Reset the frame line offset in the gui
@@ -283,11 +276,11 @@ class Engine {
             } else if (this.phase === STORY_PLAY) {
                 // Just scroll up the text 
                 this.gui.scrollUp();
-            } else if (this.phase === STORY_WAIT) {
+            } else if ((this.phase === STORY_WAIT) && (this.storyChapter != "END")) {
                 // Check if it is the last frame and move to run
-                let endChapter = this.story.nextFrame(this.storyChapter);
+                let lastFrame = this.story.nextFrame(this.storyChapter);
     
-                if (endChapter) {
+                if (lastFrame) {
                     musicSet["L1"].loop();
                     this.phase = RUN;
                 } else {
@@ -297,7 +290,7 @@ class Engine {
                 // If running, fire
                 game.ship.fire();
             }
-        } else if ((key === KEY_S) && ((this.phase == DEAD) || (this.phase == WIN))) {
+        } else if ((key === KEY_S) && ((this.phase === DEAD) || (this.storyChapter === "END"))) {
             // If game ended, press s to reset
             this.reset();
         } else if (key === KEY_P) {
@@ -423,10 +416,8 @@ class Engine {
         this.maxEnemyNbr = 3;
 
         // Stop the music
-        if (this.phase === DEAD) {
-            musicSet["DEAD"].stop();
-        } else if (this.phase === WIN) {
-            musicSet["WIN"].stop();
+        for (let song of Object.keys(musicSet)) {
+            musicSet[song].stop();
         }
 
         this.levelCount = 1;

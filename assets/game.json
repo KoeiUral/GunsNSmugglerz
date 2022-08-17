@@ -15,7 +15,6 @@
 
     "Music": {
         "L1": "assets/audio/sweet.mp3",
-        "DEAD": "assets/audio/guns_end_s.mp3",
-        "WIN": "assets/audio/guns_end_s.mp3"
+        "DEAD": "assets/audio/guns_end_s.mp3"
     }
 }

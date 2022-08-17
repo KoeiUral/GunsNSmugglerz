@@ -75,16 +75,22 @@ class StoryTeller {
 
         if (game.gui.isScrollBoxOver()) {
             if (plot[chapter]['frames'][this.curFrame]['auto']) {
-                let chapterIsOver = this.nextFrame(this.curChapter);
+                let lastFrame = this.nextFrame(this.curChapter);
     
-                if (chapterIsOver) {
+                if ((lastFrame) && (chapter != "END")) {
                     game.phase = RUN;
                     musicSet["L1"].loop();
                 } else {
                     game.phase = STORY_PLAY;
                 }
             } else {
-                game.gui.displayContinueMsg("SPACE", "continue");
+                // If we reached the end of the story, restart the game
+                if (chapter === "END") { // TODO: and check for the last frame of the chapter!
+                    game.gui.displayContinueMsg("s", "restart");
+                } else {
+                    game.gui.displayContinueMsg("SPACE", "continue");
+                }
+
                 game.phase = STORY_WAIT;
             }
         }
@@ -122,7 +128,12 @@ class StoryTeller {
         this.curFrame = 0;
         this.chapterEnd = false;
         this.frameEnd = true;
-        this.audioPlaying = -1;
+
+        // Stop the music
+        if (this.audioPlaying != -1) {
+            audioSet[this.audioPlaying].stop();
+            this.audioPlaying = -1;
+        }
     }
 
 

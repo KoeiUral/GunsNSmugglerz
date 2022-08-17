@@ -59,23 +59,33 @@ class Engine {
     }
 
     onJsonLoaded(data) {
+        // Count number of file to loads
+        totalFileNbr += Object.keys(data['Fonts']).length + Object.keys(data['Sounds']).length + Object.keys(data['Music']).length;
+
         // Load the Fonts
         for (let font of Object.keys(data['Fonts'])) {
             //console.log("Font %s at path %s", font, data['Fonts'][font]);
-            fontSet[font] = loadFont(data['Fonts'][font]);
+            fontSet[font] = loadFont(data['Fonts'][font], notifyProgress);
         }
 
         // Load the sounds
         for (let sound of Object.keys(data['Sounds'])) {
             //console.log("Sound %s at path %s", sound, data['Sounds'][sound]);
-            soundSet[sound] = loadSound(data['Sounds'][sound]);
+            soundSet[sound] = loadSound(data['Sounds'][sound], notifyProgress);
         }
 
         // Load the musics
         for (let music of Object.keys(data['Music'])) {
             //console.log("Music %s at path %s", music, data['Music'][music]);
-            musicSet[music] = loadSound(data['Music'][music]);
+            musicSet[music] = loadSound(data['Music'][music], notifyProgress);
         }
+    }
+
+    init() {
+        // Sound notification 
+        soundSet["LEVEL_UP"].play();
+        this.gui.initFonts();
+        startUp = false;
     }
 
     step() {

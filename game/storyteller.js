@@ -4,6 +4,19 @@ let audioSet = [];
 let imageSet = [];
 let chapters = [];
 
+let fileProgress = 0;
+let totalFileNbr = 0;
+let isGameLoading = true;
+let startUp = true;
+
+function notifyProgress() {
+    fileProgress++;
+
+    if (fileProgress >= totalFileNbr) {
+        isGameLoading = false;
+    }
+}
+
 class StoryTeller {
     constructor(filePath) {
         this.chapterId = 0;
@@ -23,6 +36,17 @@ class StoryTeller {
         // Copy the data into variable
         plot = JSON.parse(JSON.stringify(data));
 
+        // Count number of file to load
+        for (let chapter of Object.keys(plot)) {
+            for (let frame of plot[chapter]['frames']) {
+                for (let element of frame['screen']) {
+                    if ((element['type'] === "audio") || (element['type'] === "image")) {
+                        totalFileNbr++;  
+                    }
+                }
+            }
+        }
+
         for (let chapter of Object.keys(plot)) {
             // Save chapters in order
             chapters[plot[chapter]['id']] = chapter;
@@ -33,12 +57,12 @@ class StoryTeller {
                 for (let element of frame['screen']) {
                     // Check if it is audio, then load p5 audio in set
                     if (element['type'] === "audio") {
-                        audioSet[audioId] = (loadSound(element['path']));
+                        audioSet[audioId] = (loadSound(element['path'], notifyProgress));
                         element['ref'] = audioId;
                         audioId++;
                     } // Else if it is image, then load p5 image
                     else if (element['type'] === "image") {
-                        imageSet[imageId] = (loadImage(element['path']));
+                        imageSet[imageId] = (loadImage(element['path'], notifyProgress));
                         element['ref'] = imageId;
                         imageId++;
                     }

@@ -24,7 +24,6 @@ class StoryTeller {
         plot = JSON.parse(JSON.stringify(data));
 
         for (let chapter of Object.keys(plot)) {
-            console.log(chapter);
             // Save chapters in order
             chapters[plot[chapter]['id']] = chapter;
 
@@ -80,7 +79,7 @@ class StoryTeller {
     
                 if (chapterIsOver) {
                     game.phase = RUN;
-                    gunsLevel1.loop();
+                    musicSet["L1"].loop();
                 } else {
                     game.phase = STORY_PLAY;
                 }

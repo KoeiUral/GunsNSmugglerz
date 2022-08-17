@@ -17,11 +17,17 @@ const KEY_M = 78;
 const KEY_P = 80;
 const KEY_S = 83;
 
-
 const END_LEVEL = 10;
 
+const fontSet = {};
+const soundSet = {};
+const musicSet = {};
+
 class Engine {
-    constructor(w, h, guiFile, plotFile) {
+    constructor(w, h, gameFile, guiFile, plotFile) {
+        // Read audio and song info
+        loadJSON(gameFile, this.onJsonLoaded);
+
         // Hold canvas size
         this.cw = w;
         this.ch = h;
@@ -51,6 +57,26 @@ class Engine {
 
         // Sound effects
         //....
+    }
+
+    onJsonLoaded(data) {
+        // Load the Fonts
+        for (let font of Object.keys(data['Fonts'])) {
+            //console.log("Font %s at path %s", font, data['Fonts'][font]);
+            fontSet[font] = loadFont(data['Fonts'][font]);
+        }
+
+        // Load the sounds
+        for (let sound of Object.keys(data['Sounds'])) {
+            //console.log("Sound %s at path %s", sound, data['Sounds'][sound]);
+            soundSet[sound] = loadSound(data['Sounds'][sound]);
+        }
+
+        // Load the musics
+        for (let music of Object.keys(data['Music'])) {
+            //console.log("Music %s at path %s", music, data['Music'][music]);
+            musicSet[music] = loadSound(data['Music'][music]);
+        }
     }
 
     step() {
@@ -122,8 +148,9 @@ class Engine {
             // Check if the game is over
             if (this.ship.isDead()) {
                 this.phase = DEAD;
-                gunsLevel1.stop();
-                gunsEnd.loop();
+
+                musicSet["L1"].stop(); // TODO: change L1 key with variable of the level
+                musicSet["DEAD"].loop();
             }
 
             // Increment level difficulty
@@ -167,7 +194,7 @@ class Engine {
                 this.levelCount++;
                 this.gui.consoleLine("LEVEL " + this.levelCount);
                 
-                levelUpSound.play();
+                soundSet["LEVEL_UP"].play();
                 this.addScore(100);
 
                 if (this.levelCount >= 3) { 
@@ -178,14 +205,13 @@ class Engine {
 
                 if (this.levelCount === END_LEVEL) {
                     // Stage completed
-                    gunsLevel1.stop();
+                    musicSet["L1"].stop();
 
                     // Get next Chapter
                     this.storyChapter = this.story.getNextChapter();
 
                     if (this.storyChapter === "END") {
                         this.phase = WIN;
-                        gunsEnd.loop();
                     }
                 }
             }
@@ -237,9 +263,10 @@ class Engine {
             this.gui.displayContinueMsg("s", "restart");
 
         } else if (this.phase === WIN) {
-            this.gui.displayText("STAGE COMPLETE", 80, false);
-            this.gui.displayText("You left the bloody pigs behind, well done!", 40, false);
-            this.gui.displayText("... next stage coming soon ...", 30, false); 
+            //this.gui.displayText("STAGE COMPLETE", 80, false);
+            //this.gui.displayText("You left the bloody pigs behind, well done!", 40, false);
+            //this.gui.displayText("... next stage coming soon ...", 30, false);
+            this.story.playCh(this.storyChapter);
             this.gui.displayContinueMsg("s", "restart");
         }
 
@@ -261,7 +288,7 @@ class Engine {
                 let endChapter = this.story.nextFrame(this.storyChapter);
     
                 if (endChapter) {
-                    gunsLevel1.loop();
+                    musicSet["L1"].loop();
                     this.phase = RUN;
                 } else {
                     this.phase = STORY_PLAY;
@@ -349,7 +376,7 @@ class Engine {
 
     displayIntro() {
         fill(255);
-        textFont(ibmFont);
+        textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
         textSize(150 * this.ch / DEFAULT_H);
         text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - this.ch / 10);
@@ -395,11 +422,15 @@ class Engine {
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
 
+        // Stop the music
+        if (this.phase === DEAD) {
+            musicSet["DEAD"].stop();
+        } else if (this.phase === WIN) {
+            musicSet["WIN"].stop();
+        }
+
         this.levelCount = 1;
         this.phase = SPLASH;
-
-        // Stop the music
-        gunsEnd.stop();
     }
 
 }

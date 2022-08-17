@@ -15,6 +15,8 @@ const SHIP_HP = 5;
 const OP_WORK = 400;
 const FIRE_FREQ = 70;
 
+const DAMAGE_TICK = 3;
+
 
 class SpaceShip extends Item {
     constructor(x, y) {
@@ -50,7 +52,7 @@ class SpaceShip extends Item {
             let faultId = 0;
             let keyId = '';
 
-            hitSound.play();
+            soundSet["HIT"].play();
             game.gui.hk['Life'].val -= 100;
 
             if (this.workingOps.length > 0) {
@@ -233,25 +235,25 @@ class SpaceShip extends Item {
         if ((this.ops[UP] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
             //;
         } else {
-            rect(this.posX -2, this.posY - 2, this.w + 2, 2); 
+            rect(this.posX - DAMAGE_TICK, this.posY - DAMAGE_TICK, this.w + DAMAGE_TICK, DAMAGE_TICK); 
         }
 
         if ((this.ops[DOWN] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
             //;
         } else {
-            rect(this.posX -2, this.posY + this.h, this.w + 2, 2); 
+            rect(this.posX -DAMAGE_TICK, this.posY + this.h, this.w + DAMAGE_TICK, DAMAGE_TICK); 
         }
 
         if ((this.ops[LEFT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
             //;
         } else {
-            rect(this.posX - 2, this.posY, 2, this.h); 
+            rect(this.posX - DAMAGE_TICK, this.posY, DAMAGE_TICK, this.h); 
         }
 
         if ((this.ops[RIGHT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
             //;
         } else {
-            rect(this.posX + this.w, this.posY, 2, this.h); 
+            rect(this.posX + this.w, this.posY, DAMAGE_TICK, this.h); 
         }
 
         this.shots.update();
@@ -266,7 +268,7 @@ class Shot extends Item {
     }
 
     show() {
-        textFont(ibmFont);
+        textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
         textSize(30 * game.ch / DEFAULT_H);
         text("*", this.posX, this.posY);

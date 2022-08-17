@@ -31,9 +31,9 @@ class Gui {
         this.defValues = {};
     }
 
-    initFonts(textFont, iconFont) {
-        this.font = textFont;
-        this.iconFont = iconFont;
+    initFonts() {
+        this.font = fontSet["TEXTF"];
+        this.iconFont = fontSet["ICONF"];
 
         // Store HK default values
         for (const key of Object.keys(this.hk)) {

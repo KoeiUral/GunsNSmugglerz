@@ -1,11 +1,4 @@
-
 let game;
-let ibmFont;
-let arrFont;
-let gunsLevel1;
-let gunsEnd;
-let levelUpSound;
-let hitSound;
 
 function windowResized() {
     let maxW = min(windowWidth, DEFAULT_W);
@@ -19,16 +12,8 @@ function windowResized() {
 
 
 function preload() {
-    ibmFont = loadFont('assets/font/INVASION2000.TTF');
-    arrFont = loadFont('assets/font/PixArrows.ttf');
-
-    gunsLevel1 = loadSound('assets/audio/sweet.mp3');
-    gunsEnd = loadSound('assets/audio/guns_end_s.mp3');
-    levelUpSound = loadSound('assets/audio/round_end.wav');
-    hitSound = loadSound('assets/audio/death.wav');
-
-    // Create the game engine prealoading the gui.json file
-    game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/gui/gui.json', 'assets/plot/plot.json');
+    // Create the game engine prealoading the asset files
+    game = new Engine(DEFAULT_W, DEFAULT_H, 'assets/game.json', 'assets/gui/gui.json', 'assets/plot/plot.json');
 }
 
 function setup() {
@@ -39,7 +24,7 @@ function setup() {
 
     // Create the P5 Canvas
     canvas = createCanvas(maxW, maxH);
-    game.gui.initFonts(ibmFont, arrFont);
+    game.gui.initFonts();
 
     // Resize the game wrt default sizes
     game.resize(xScale, yScale);

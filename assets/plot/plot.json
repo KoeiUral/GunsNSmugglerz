@@ -23,10 +23,10 @@
         "frames": [
             {"auto": false,
              "screen": [
-                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "STAGE COMPLETE"},
-                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "You left the bloody pigs behind, well done!"},
-                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "... next stage coming soon ..."},
-                {"type": "txtbox", "x": 200, "y": 768, "w": 800,"h": 600, "msg":  "Press 's' or refresh the page to restart"}
+                {"type": "txtbox", "x": 20, "y": 300,  "w": 984,"h": 100, "s":80, "msg":  "STAGE COMPLETE"},
+                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 100, "s":40, "msg":  "You left the bloody pigs behind, well done!"},
+                {"type": "txtbox", "x": 100, "y": 500, "w": 824,"h": 100, "s":30, "msg":  "... next stage coming soon ..."},
+                {"type": "audio", "loop": true, "path": "assets/audio/guns_end_s.mp3"}
             ]}   
         ]
     }

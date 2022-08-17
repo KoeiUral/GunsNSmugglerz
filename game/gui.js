@@ -193,14 +193,26 @@ class Gui {
     }
 
     consoleBox(message, x, y, w, h, type, size) {
-        this.boxX = x * this.cw / DEFAULT_W;
-        this.boxY = y * this.ch / DEFAULT_H;
-        this.boxW = w * this.cw / DEFAULT_W;
-        this.boxH = h * this.ch / DEFAULT_H;
-        this.boxScroll = type;
         this.boxSize = size * this.ch / DEFAULT_H;
 
-        this.boxMessage = message.slice();
+        // if a message is scrolling, append the new one 
+        if ((this.boxEnd === false) && (type === this.boxScroll)) {
+            this.boxW += (w + 100) * this.cw / DEFAULT_W;
+            this.boxH += h * this.ch / DEFAULT_H;
+
+            this.boxMessage += "  :::  ";
+            this.boxMessage += message;
+        } // else reset from beginning
+        else {
+            this.boxX = x * this.cw / DEFAULT_W;
+            this.boxY = y * this.ch / DEFAULT_H;
+            this.boxW = w * this.cw / DEFAULT_W;
+            this.boxH = h * this.ch / DEFAULT_H;
+            this.boxScroll = type;
+
+            this.boxMessage = message.slice();
+        }
+
         this.boxEnd = false;
     }
 }

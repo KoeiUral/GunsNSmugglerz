@@ -62,8 +62,7 @@ class SpaceShip extends Item {
                 this.ops[this.workingOps[faultId]] = 0;
                 game.gui.hk[keyId].active = 0;
 
-                //game.gui.consoleLine(this.getFaultMsg(this.workingOps[faultId]) + " damaged!");
-                game.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", game.cw, game.ch - 40, 700, 30, SCROLL_LEFT, 30);
+                game.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
                 this.workingOps.splice(faultId, 1);
             }
         }
@@ -179,8 +178,7 @@ class SpaceShip extends Item {
 
                 if (this.ops[i] == OP_WORK) {
                     this.workingOps.push(i);
-                    //game.gui.consoleLine(this.getFaultMsg(i) + "  repaired!");
-                    game.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", game.cw, game.ch - 40, 700, 30, SCROLL_LEFT, 30);
+                    game.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
 
                     let keyId = this.getFaultKey(i);
 

@@ -64,19 +64,16 @@ class Engine {
 
         // Load the Fonts
         for (let font of Object.keys(data['Fonts'])) {
-            //console.log("Font %s at path %s", font, data['Fonts'][font]);
             fontSet[font] = loadFont(data['Fonts'][font], notifyProgress);
         }
 
         // Load the sounds
         for (let sound of Object.keys(data['Sounds'])) {
-            //console.log("Sound %s at path %s", sound, data['Sounds'][sound]);
             soundSet[sound] = loadSound(data['Sounds'][sound], notifyProgress);
         }
 
-        // Load the musics
+        // Load the music
         for (let music of Object.keys(data['Music'])) {
-            //console.log("Music %s at path %s", music, data['Music'][music]);
             musicSet[music] = loadSound(data['Music'][music], notifyProgress);
         }
     }
@@ -114,7 +111,7 @@ class Engine {
             for (let i = 0; i < this.meteors.length; i++) {
                 this.meteors[i].move();
 
-                // Remove a metor if it is outside the screen (left side)
+                // Remove a meteor if it is outside the screen (left side)
                 if (this.meteors[i].posX < 0) {
                     this.meteors.splice(i, 1);
                 } 
@@ -134,7 +131,7 @@ class Engine {
             for (let i = 0; i < this.junks.length; i++) {
                 this.junks[i].move();
 
-                // Remove a metor if it is outside the screen (left side)
+                // Remove a meteor if it is outside the screen (left side)
                 if ((this.junks[i].posX < 0) || (this.junks[i].posX > this.cw) || (this.junks[i].posY > windowHeight) || (this.junks[i].posY < 0)) {
                     this.junks.splice(i, 1);
                 } 
@@ -262,7 +259,7 @@ class Engine {
                 this.junks[i].show();
             }
 
-            // Draw the gui
+            // Draw the GUI
             this.gui.show();
             this.gui.showScrollingBox();
 
@@ -273,7 +270,7 @@ class Engine {
 
         }
 
-        // Reset the frame line offset in the gui
+        // Reset the frame line offset in the GUI
         this.gui.frameLnOffset = 0;
     }
 
@@ -384,7 +381,6 @@ class Engine {
         textSize(150 * this.ch / DEFAULT_H);
         text("GUNS N\nSMUGGLERz", this.cw / 2, this.ch / 2 - this.ch / 10);
 
-        //this.gui.displayTextBox("GUNS N\nSMUGGLERz", 150, 10, 10, this.cw - 20, this.ch);
         this.gui.displayContinueMsg("SPACE", "start");
     }
 
@@ -394,7 +390,7 @@ class Engine {
         this.enemies.splice(0, this.enemies.length);
         this.junks.splice(0, this.junks.length);
         
-        // Reset gui and HK
+        // Reset GUI and HK
         this.gui.reset();
         this.story.reset();
 

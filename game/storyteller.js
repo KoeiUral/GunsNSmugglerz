@@ -51,7 +51,7 @@ class StoryTeller {
             // Save chapters in order
             chapters[plot[chapter]['id']] = chapter;
 
-            // Iterate over all frames within the chapeter
+            // Iterate over all frames within the chapter
             for (let frame of plot[chapter]['frames']) {
                 // Iterate over element within the screen
                 for (let element of frame['screen']) {
@@ -77,7 +77,7 @@ class StoryTeller {
         for (let element of screen) {
             if ((element['type'] === "txtscroll") && (this.frameEnd)) {
                 // Start a scrolling text box
-                game.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']); // TODO: REMOVE MAGIC
+                game.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']);
                 this.frameEnd = false;
             } else if (element['type'] === "txtbox") {
                 game.gui.displayTextBox(element['msg'], element['s'], element['x'], element['y'], element['w'], element['h']);

@@ -1,28 +1,33 @@
 {
     "INTRO": {
+        "id" : 0,
         "frames": [
-            {"screen": [
-                {"type": "textbox", "x": 800, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x":  10, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
-                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+            {"auto": false,
+             "screen": [
+              {"type": "image", "x":  0, "y":  0, "w": 1024,"h": 768, "ref": 0, "path": "./assets/image/tutorial.png"},
+              {"type": "txtbox", "x": 17, "y": 40, "w": 150,"h": 80, "s": 20, "msg":  "Spaceship Hit Points"},
+              {"type": "txtbox", "x": 320, "y": 40, "w": 300,"h": 500, "s": 20, "msg":  "The bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs"},
+              {"type": "txtbox", "x": 800, "y": 40, "w": 230,"h": 400, "s": 20, "msg":  "Status of each thruster, when blinking it is not working and ship cannot move in that direction"},
+              {"type": "txtbox", "x": 190, "y": 350, "w": 400,"h": 100, "s": 20, "msg":  "Your spaceship: every time you get hit, the ship loses HPs and a thruster or fire"},
+              {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
             ]},
-            {"screen": [
-                {"type": "textbox", "x":  10, "y": 800, "w": 100,"h": 100, "msg":  "Evviva la Pizza"},
-                {"type": "image",   "x": 410, "y":  10, "w": 400,"h": 400, "path": "./assets/image/test.png"},
-                {"type": "audio",   "loop": false, "path": "./assets/audio/intro.mp3"}
+            { "auto": true,
+              "screen": [
+                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 600, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the resistance.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the asteroids to escape the Gov's ships.\n   \nGood LUCK and ... enjoy the Guns!"},
+                {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
             ]}
         ]
     },
-    "STAGE1": {
-        "frames": [
-            {}
-        ]
-    },
     "END": {
+        "id" : 1,
         "frames": [
-            {},
-            {},
-            {}
+            {"auto": false,
+             "screen": [
+                {"type": "txtbox", "x": 20, "y": 300,  "w": 984,"h": 100, "s":80, "msg":  "STAGE COMPLETE"},
+                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 100, "s":40, "msg":  "You left the bloody pigs behind, well done!"},
+                {"type": "txtbox", "x": 100, "y": 500, "w": 824,"h": 100, "s":30, "msg":  "... next stage coming soon ..."},
+                {"type": "audio", "loop": true, "path": "assets/audio/guns_end_s.mp3"}
+            ]}   
         ]
     }
 }

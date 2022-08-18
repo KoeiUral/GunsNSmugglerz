@@ -4,7 +4,7 @@ const DEFAULT_FONT = 20;
 
 const SCROLL_LEFT = 0;
 const SCROLL_UP = 1;
-const SCROLL_VEL = -4;
+const SCROLL_VEL = -3;
 
 class Gui {
     constructor(width, height, file) {
@@ -31,9 +31,9 @@ class Gui {
         this.defValues = {};
     }
 
-    initFonts(textFont, iconFont) {
-        this.font = textFont;
-        this.iconFont = iconFont;
+    initFonts() {
+        this.font = fontSet["TEXTF"];
+        this.iconFont = fontSet["ICONF"];
 
         // Store HK default values
         for (const key of Object.keys(this.hk)) {
@@ -42,6 +42,9 @@ class Gui {
     }
 
     reset() {
+        this.boxMessage = "";
+        this.boxEnd = true;
+        
         for (const key of Object.keys(this.hk)) {
             this.hk[key].val = this.defValues[key];
 
@@ -125,7 +128,22 @@ class Gui {
         this.frameLnOffset += size + textDescent() * 0.4;
     }
 
-    displayTextBox() {
+    displayTextBox(message, size, x, y, w, h) {
+        let xBox = x * this.cw / DEFAULT_W;
+        let yBox = y * this.ch / DEFAULT_H;
+        let wBox = w * this.cw / DEFAULT_W;
+        let hBox = h * this.ch / DEFAULT_H;
+
+        fill(255);
+        textWrap(WORD);
+        textFont(this.font);
+        textSize(size  * this.ch / DEFAULT_H);
+        textAlign(CENTER, BASELINE);
+        
+        text(message, xBox, yBox, wBox, hBox);
+    }
+
+    showScrollingBox() {
         if (this.boxEnd === false) {
             textWrap(WORD);
             fill(255);
@@ -149,13 +167,23 @@ class Gui {
         }
     }
 
+    displayContinueMsg(keyMsg, actionMsg) {
+        if ((floor(frameCount / 40)) % 2 == 0) {
+            fill(255);
+            textFont(this.font);
+            textAlign(CENTER, CENTER);
+            textSize(20  * game.ch / DEFAULT_H);
+            text("- Press " + keyMsg +" to " + actionMsg + " -", game.cw / 2, game.ch / 8 * 7);
+        }
+    }
+
     scrollUp () {
         if (this.boxEnd === false) {
             this.boxY -= 100 * this.ch / DEFAULT_H;
         } 
     }
 
-    isBoxDisplayOver () {
+    isScrollBoxOver () {
         return this.boxEnd;
     }
 
@@ -165,14 +193,26 @@ class Gui {
     }
 
     consoleBox(message, x, y, w, h, type, size) {
-        this.boxX = x;
-        this.boxY = y;
-        this.boxW = w;
-        this.boxH = h;
-        this.boxScroll = type;
-        this.boxSize = size;
+        this.boxSize = size * this.ch / DEFAULT_H;
 
-        this.boxMessage = message.slice();
+        // if a message is scrolling, append the new one 
+        if ((this.boxEnd === false) && (type === this.boxScroll)) {
+            this.boxW += (w + 100) * this.cw / DEFAULT_W;
+            this.boxH += h * this.ch / DEFAULT_H;
+
+            this.boxMessage += "  :::  ";
+            this.boxMessage += message;
+        } // else reset from beginning
+        else {
+            this.boxX = x * this.cw / DEFAULT_W;
+            this.boxY = y * this.ch / DEFAULT_H;
+            this.boxW = w * this.cw / DEFAULT_W;
+            this.boxH = h * this.ch / DEFAULT_H;
+            this.boxScroll = type;
+
+            this.boxMessage = message.slice();
+        }
+
         this.boxEnd = false;
     }
 }

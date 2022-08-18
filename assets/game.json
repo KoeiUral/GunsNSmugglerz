@@ -1,0 +1,20 @@
+{
+    "DEFAULT_W": 1024,
+    "DEFAULT_H": 768,
+    "DEFAULT_FONT": 20,
+
+    "Fonts": {
+        "TEXTF": "assets/font/INVASION2000.TTF",
+        "ICONF": "assets/font/PixArrows.ttf"
+    },
+
+    "Sounds": {
+        "LEVEL_UP": "assets/audio/round_end.wav",
+        "HIT": "assets/audio/death.wav"
+    },
+
+    "Music": {
+        "L1": "assets/audio/sweet.mp3",
+        "DEAD": "assets/audio/guns_end_s.mp3"
+    }
+}

@@ -245,18 +245,18 @@ class Engine {
             this.ship.show();
 
             // Draw the meteors
-            for (let i = 0; i < this.meteors.length; i++) {
-                this.meteors[i].show();
+            for (let meteor of this.meteors) {
+                meteor.show();
             } 
 
             // Draw the enemies
-            for (let i = 0; i < this.enemies.length; i++) {
-                this.enemies[i].show();
+            for (let enemy of this.enemies) {
+                enemy.show();
             }
 
             // Draw the junks
-            for (let i = 0; i < this.junks.length; i++) {
-                this.junks[i].show();
+            for (let junk of this.junks) {
+                junk.show();
             }
 
             // Draw the GUI
@@ -404,7 +404,7 @@ class Engine {
             MET_NBR_LIST[i] = 1;
         }
 
-        MET_FREQ_LIST[0] =  60; //[60, 50, 40, 30, 20, 30, 40, 50];
+        MET_FREQ_LIST[0] =  60;
         MET_FREQ_LIST[1] =  50;
         MET_FREQ_LIST[2] =  40;
         MET_FREQ_LIST[3] =  30;

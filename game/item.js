@@ -32,10 +32,7 @@ class Item {
     }
 
     isDead() {
-        if (this.hp <= 0) {
-            return true;
-        }
-        return false;
+        return (this.hp <= 0);
     }
 
     // Moves this rectangle by the provided x and y distances.

@@ -48,19 +48,19 @@ class StarsBG {
     }
 
     update() {
-        for (let i = 0; i < this.list.length; i++) {
-            this.list[i].move();
+        for (let star of this.list) {
+            star.move();
 
-            if(this.list[i].posX < 0) {
-                this.list[i].posX = this.cw;
-                this.list[i].posY = random(this.ch);
+            if (star.posX < 0) {
+                star.posX = this.cw;
+                star.posY = random(this.ch);
             }
         }       
     }
 
     show() {
-        for (let i = 0; i < this.list.length; i++) {
-            this.list[i].show();
+        for (let star of this.list) {
+            star.show();
         } 
     }
 

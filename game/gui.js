@@ -56,7 +56,7 @@ class Gui {
 
     resize (xScale, yScale) {
         this.cw = this.cw * xScale;
-        this.ch = this.ch * yScale;;
+        this.ch = this.ch * yScale;
 
         for (const key of Object.keys(this.hk)) {
             this.hk[key].x = floor(this.hk[key].x * xScale);

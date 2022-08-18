@@ -3,7 +3,6 @@ const DOWN = 1;
 const LEFT = 2;
 const RIGHT = 3;
 const FIRE = 4;
-//const STAB = 5;
 
 const SHIP_W = 17;
 const SHIP_H = 9;
@@ -117,11 +116,11 @@ class SpaceShip extends Item {
     }
 
     isDead() {
-        for (let i = 0; i < this.ops.length; i++) {
-            if (this.ops[i] >= OP_WORK) {
+        for (let opValue of this.ops) {
+            if (opValue >= OP_WORK) {
                 return false;
             }
-        }
+        } 
 
         return true;
     }
@@ -230,28 +229,20 @@ class SpaceShip extends Item {
         fill(255);
         rect(this.posX, this.posY, this.w, this.h);
 
-        if ((this.ops[UP] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
-            //;
-        } else {
+        if (!((this.ops[UP] < OP_WORK) && (floor(frameCount / 20) % 2 == 0))) {
             rect(this.posX - DAMAGE_TICK, this.posY - DAMAGE_TICK, this.w + DAMAGE_TICK, DAMAGE_TICK); 
         }
 
-        if ((this.ops[DOWN] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
-            //;
-        } else {
+        if (!((this.ops[DOWN] < OP_WORK) && (floor(frameCount / 20) % 2 == 0))) {
             rect(this.posX -DAMAGE_TICK, this.posY + this.h, this.w + DAMAGE_TICK, DAMAGE_TICK); 
         }
 
-        if ((this.ops[LEFT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
-            //;
-        } else {
-            rect(this.posX - DAMAGE_TICK, this.posY, DAMAGE_TICK, this.h); 
+        if (!((this.ops[LEFT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0))) {
+            rect(this.posX - DAMAGE_TICK, this.posY, DAMAGE_TICK, this.h);
         }
 
-        if ((this.ops[RIGHT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0)) {
-            //;
-        } else {
-            rect(this.posX + this.w, this.posY, DAMAGE_TICK, this.h); 
+        if (!((this.ops[RIGHT] < OP_WORK) && (floor(frameCount / 20) % 2 == 0))) {
+            rect(this.posX + this.w, this.posY, DAMAGE_TICK, this.h);
         }
 
         this.shots.update();

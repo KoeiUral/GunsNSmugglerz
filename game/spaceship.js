@@ -116,12 +116,6 @@ class SpaceShip extends Item {
     }
 
     isDead() {
-        /*for (let i = 0; i < this.ops.length; i++) {
-            if (this.ops[i] >= OP_WORK) {
-                return false;
-            }
-        }*/
-
         for (let opValue of this.ops) {
             if (opValue >= OP_WORK) {
                 return false;

@@ -30,7 +30,7 @@
             ]},
             { "auto": false,
               "screen": [
-                {"type": "image", "x":  8, "y":  8, "w": 496,"h": 496, "ref": 0, "path": "./assets/image/trap.jpg"},
+                {"type": "image", "x": 52, "y": 126, "w": 920,"h": 516, "ref": 0, "path": "./assets/image/trap.png"},
                 {"type": "txtscroll", "x": 520, "y": 768, "w": 496,"h": 600, "s": 30, "msg":  "They were waiting for you on the other side of the asteroid belt and now you have to face the entire Gov. division, prepare yourself for a fury battle!"},
                 {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
             ]}

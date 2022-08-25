@@ -190,7 +190,11 @@ class Engine {
         this.ch = this.ch * ys;
 
         this.gui.resize(xs, ys);
-        this.game.resize(this.currentLevel, xs, ys);
+
+        // Before init, the game is not yet instantiated
+        if (this.game != undefined) {
+            this.game.resize(this.currentLevel, xs, ys);
+        }
     }
 
 

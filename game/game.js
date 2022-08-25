@@ -38,13 +38,14 @@ class Game {
         // Create the player
         let startPos = 70 * engine.cw / DEFAULT_W; 
         this.ship = new SpaceShip(startPos, engine.ch / 2);
+        this.junks = [];
 
         // Level Set
         this.levelSet = [];
 
         // Add levels to the list of levels, to be used by engine
         this.levelSet.push(new Level1(this.ship));
-        //this.levelSet.push(new Level2(this.ship));
+        this.levelSet.push(new Level2(this.ship));
         //this.levelSet.push(new Level3(this.ship));
     }
 
@@ -100,6 +101,66 @@ class Game {
     processInput(key) {
         if (key === KEY_SPACE) {
             this.ship.fire();
+        }
+    }
+
+    movePlayer() {
+        if (keyIsDown(LEFT_ARROW)) {
+            this.ship.move(LEFT);
+        }
+        if (keyIsDown(RIGHT_ARROW)) {
+            this.ship.move(RIGHT);
+        } 
+        if (keyIsDown(UP_ARROW)) {
+            this.ship.move(UP);
+        } 
+        if (keyIsDown(DOWN_ARROW)) {
+            this.ship.move(DOWN);
+        }
+    }
+
+    checkCollisions(hitList, targetList, hitScore, targetScore) {
+        for (let i = 0; i < hitList.length; i++) {
+            let hit = false;
+            for (let j = 0; j < targetList.length; j++) {
+                if (hitList[i].intersects(targetList[j])) {
+                    hitList[i].hit();
+                    targetList[j].hit();
+
+                    if (hitList[i].isDead()) {
+                        // Add scores if hit dies
+                        if (hitScore) {
+                            engine.addScore(hitList[i].score);
+                            // Create junks
+                            let pieces = floor(random(2, 5));
+                            for (let k = 0; k < pieces; k++) {
+                                this.junks.push(new Junk(hitList[i].posX, hitList[i].posY, hitList[i].w / pieces));
+                            }
+                        }
+
+                        hitList.splice(i, 1);
+                        hit = true;
+                    }
+
+                    if (targetList[j].isDead()) {
+                        if (targetScore) {
+                            engine.addScore(targetList[j].score);
+                            let pieces = floor(random(2, 5));
+                            for (let k = 0; k < pieces; k++) {
+                                this.junks.push(new Junk(targetList[j].posX, targetList[j].posY, targetList[j].w / pieces));
+                            }
+                        }
+                        targetList.splice(j, 1);
+                    }
+
+                    break;
+                }
+            }
+
+            // Jump to the next hit list item
+            if (hit === true) {
+                continue;
+            }
         }
     }
 

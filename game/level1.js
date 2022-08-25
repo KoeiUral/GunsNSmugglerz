@@ -2,7 +2,7 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 10;
+const END_STAGE = 2;
 
 class Level1 extends BaseLevel {
     constructor(player) {
@@ -11,7 +11,7 @@ class Level1 extends BaseLevel {
         this.ship = player;
         this.meteors = [];
         this.enemies = [];
-        this.junks = [];
+        //this.junks = [];
         this.bg = new StarsBG(engine.cw, engine.ch);
 
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -30,7 +30,7 @@ class Level1 extends BaseLevel {
         // Clean all arrays
         this.meteors.splice(0, this.meteors.length);
         this.enemies.splice(0, this.enemies.length);
-        this.junks.splice(0, this.junks.length);
+        engine.game.junks.splice(0, engine.game.junks.length);
 
         // Reset meteors adding parameters
         for (let i = 0; i < MET_NBR_LIST.length; i++) {
@@ -68,18 +68,7 @@ class Level1 extends BaseLevel {
         this.bg.update();
 
         // Move the ship with keyboard inputs
-        if (keyIsDown(LEFT_ARROW)) {
-            this.ship.move(LEFT);
-        }
-        if (keyIsDown(RIGHT_ARROW)) {
-            this.ship.move(RIGHT);
-        } 
-        if (keyIsDown(UP_ARROW)) {
-            this.ship.move(UP);
-        } 
-        if (keyIsDown(DOWN_ARROW)) {
-            this.ship.move(DOWN);
-        }
+        engine.game.movePlayer();
 
         // Run the repair loop (if ship damaged)
         this.ship.repair();
@@ -106,28 +95,28 @@ class Level1 extends BaseLevel {
         }
 
         // Move all the junks
-        for (let i = 0; i < this.junks.length; i++) {
-            this.junks[i].move();
+        for (let i = 0; i < engine.game.junks.length; i++) {
+            engine.game.junks[i].move();
 
             // Remove a meteor if it is outside the screen (left side)
-            if ((this.junks[i].posX < 0) || (this.junks[i].posX > engine.cw) || (this.junks[i].posY > windowHeight) || (this.junks[i].posY < 0)) {
-                this.junks.splice(i, 1);
+            if ((engine.game.junks[i].posX < 0) || (engine.game.junks[i].posX > engine.cw) || (engine.game.junks[i].posY > windowHeight) || (engine.game.junks[i].posY < 0)) {
+                engine.game.junks.splice(i, 1);
             } 
         }
 
         // Check all the collisions ...
         // Check shots and meteors
-        this.checkCollisions(this.ship.shots.list, this.meteors, false, true);
+        engine.game.checkCollisions(this.ship.shots.list, this.meteors, false, true);
 
         // Check shots and enemies
-        this.checkCollisions(this.ship.shots.list, this.enemies, false, true);
+        engine.game.checkCollisions(this.ship.shots.list, this.enemies, false, true);
 
         // Check enemies and meteors
-        this.checkCollisions(this.enemies, this.meteors, true, true);
+        engine.game.checkCollisions(this.enemies, this.meteors, true, true);
 
         // check for ship collision
-        this.checkCollisions(new Array(this.ship), this.meteors, false, true);
-        this.checkCollisions(new Array(this.ship), this.enemies, false, false);
+        engine.game.checkCollisions(new Array(this.ship), this.meteors, false, true);
+        engine.game.checkCollisions(new Array(this.ship), this.enemies, false, false);
 
         // Check if the game is over
         if (this.ship.isDead()) {
@@ -203,52 +192,6 @@ class Level1 extends BaseLevel {
         }
     }
 
-    checkCollisions(hitList, targetList, hitScore, targetScore) {
-        for (let i = 0; i < hitList.length; i++) {
-            let hit = false;
-            for (let j = 0; j < targetList.length; j++) {
-                if (hitList[i].intersects(targetList[j])) {
-                    hitList[i].hit();
-                    targetList[j].hit();
-
-                    if (hitList[i].isDead()) {
-                        // Add scores if hit dies
-                        if (hitScore) {
-                            engine.addScore(hitList[i].score);
-                            // Create junks
-                            let pieces = floor(random(2, 5));
-                            for (let k = 0; k < pieces; k++) {
-                                this.junks.push(new Junk(hitList[i].posX, hitList[i].posY, hitList[i].w / pieces));
-                            }
-                        }
-
-                        hitList.splice(i, 1);
-                        hit = true;
-                    }
-
-                    if (targetList[j].isDead()) {
-                        if (targetScore) {
-                            engine.addScore(targetList[j].score);
-                            let pieces = floor(random(2, 5));
-                            for (let k = 0; k < pieces; k++) {
-                                this.junks.push(new Junk(targetList[j].posX, targetList[j].posY, targetList[j].w / pieces));
-                            }
-                        }
-                        targetList.splice(j, 1);
-                    }
-
-                    break;
-                }
-            }
-
-            // Jump to the next hit list item
-            if (hit === true) {
-                continue;
-            }
-        }
-    }
-
-
     show() {       
         // draw the BG
         this.bg.show();
@@ -267,7 +210,7 @@ class Level1 extends BaseLevel {
         }
 
         // Draw the junks
-        for (let junk of this.junks) {
+        for (let junk of engine.game.junks) {
             junk.show();
         }
     }
@@ -284,7 +227,7 @@ class Level1 extends BaseLevel {
             it.resize(xs, ys);
         }
 
-        for (let it of this.junks) {
+        for (let it of engine.game.junks) {
             it.resize(xs, ys);
         }
     }

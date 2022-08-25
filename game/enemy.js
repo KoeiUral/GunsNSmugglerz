@@ -9,71 +9,6 @@ const FOLLOW_VEL = 5;
 const FOLLOW_HP = 1;
 const FOLLOW_SCORE = 50;
 
-const STAR_SIZE = 5;
-
-class Star extends Item {
-    constructor(x, y) {
-        let dist = random(STAR_SIZE);
-        super(x, y, dist, dist, -dist, 0, 1);
-
-        this.blincking = floor(random(20, 50));
-    }
-
-    show() {
-        if (floor(frameCount / this.blincking) % 2 == 0) {
-            noStroke();
-
-            if (HALO) {
-                fill(255, 0, 255, 180);
-                rect(this.posX -1, this.posY -1, this.w, this.h);
-                fill(0, 255, 255, 180);
-                rect(this.posX +1, this.posY +1, this.w, this.h);     
-            }
-
-           fill(255, 255, 255, 200);
-           rect(this.posX, this.posY, this.w, this.h);
-        }
-    }
-}
-
-class StarsBG {
-    constructor(w, h) {
-        this.cw = w;
-        this.ch = h;
-        this.list = [];
-
-        for (let i = 0; i < 100; i++) {
-            this.list.push(new Star(random(this.cw), random(this.ch)));
-        }
-    }
-
-    update() {
-        for (let star of this.list) {
-            star.move();
-
-            if (star.posX < 0) {
-                star.posX = this.cw;
-                star.posY = random(this.ch);
-            }
-        }       
-    }
-
-    show() {
-        for (let star of this.list) {
-            star.show();
-        } 
-    }
-
-    resize(xs, ys) {
-        this.cw = this.cw * xs;
-        this.ch = this.ch * ys;
-
-        for (let star of this.list) {
-            star.resize(xs, ys);
-        }
-    }
-}
-
 
 class Junk extends Item {
     constructor(x, y, size) {
@@ -104,26 +39,27 @@ class Meteor extends Item {
 }
 
 class Follower extends Item {
-    constructor(x, y) {
+    constructor(x, y, target) {
         super(x, y, FOLLOW_SIZE, FOLLOW_SIZE, FOLLOW_VEL, FOLLOW_VEL, FOLLOW_HP, FOLLOW_SCORE);
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
+        this.target = target;
     }
 
     move() {
-        if (this.posX <= game.ship.posX) {
-            let d = dist(this.posX, this.posY, game.ship.posX, game.ship.posY);
+        if (this.posX <= this.target.posX) {
+            let d = dist(this.posX, this.posY, this.target.posX, this.target.posY);
 
-            this.posX += (game.ship.posX - this.posX) * this.velX / d;
-            this.posY += (game.ship.posY - this.posY) * this.velY / d;
+            this.posX += (this.target.posX - this.posX) * this.velX / d;
+            this.posY += (this.target.posY - this.posY) * this.velY / d;
         }
         else {
             if (this.origX == 0) {
                 this.origX = this.posX;
                 this.origY = this.posY;
 
-                this.exit = (this.posY > game.ch / 2) ? 1 : -1;
+                this.exit = (this.posY > engine.ch / 2) ? 1 : -1;
             }
 
             this.posX += 8;

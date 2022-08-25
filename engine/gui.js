@@ -172,8 +172,8 @@ class Gui {
             fill(255);
             textFont(this.font);
             textAlign(CENTER, CENTER);
-            textSize(20  * game.ch / DEFAULT_H);
-            text("- Press " + keyMsg +" to " + actionMsg + " -", game.cw / 2, game.ch / 8 * 7);
+            textSize(20  * engine.ch / DEFAULT_H);
+            text("- Press " + keyMsg +" to " + actionMsg + " -", engine.cw / 2, engine.ch / 8 * 7);
         }
     }
 

@@ -77,10 +77,10 @@ class StoryTeller {
         for (let element of screen) {
             if ((element['type'] === "txtscroll") && (this.frameEnd)) {
                 // Start a scrolling text box
-                game.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']);
+                engine.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']);
                 this.frameEnd = false;
             } else if (element['type'] === "txtbox") {
-                game.gui.displayTextBox(element['msg'], element['s'], element['x'], element['y'], element['w'], element['h']);
+                engine.gui.displayTextBox(element['msg'], element['s'], element['x'], element['y'], element['w'], element['h']);
             } else if (element['type'] === "image") {
                 // Display the image
                 image(imageSet[element['ref']], element['x'], element['y'], element['w'], element['h']);
@@ -95,27 +95,17 @@ class StoryTeller {
         }
 
         // Show the text box scrolling
-        game.gui.showScrollingBox();
+        engine.gui.showScrollingBox();
 
-        if (game.gui.isScrollBoxOver()) {
+        // If the scrolling is over and it is not the last frame of the game (i.e. WIN), then
+        if ((engine.gui.isScrollBoxOver()) && (engine.phase !== WIN)) {
+            // Move to the next frame if in auto mode
             if (plot[chapter]['frames'][this.curFrame]['auto']) {
-                let lastFrame = this.nextFrame(this.curChapter);
-    
-                if ((lastFrame) && (chapter != "END")) {
-                    game.phase = RUN;
-                    musicSet["L1"].loop();
-                } else {
-                    game.phase = STORY_PLAY;
-                }
-            } else {
-                // If we reached the end of the story, restart the game
-                if (chapter === "END") { // TODO: and check for the last frame of the chapter!
-                    game.gui.displayContinueMsg("s", "restart");
-                } else {
-                    game.gui.displayContinueMsg("SPACE", "continue");
-                }
-
-                game.phase = STORY_WAIT;
+                this.nextFrame(this.curChapter);
+            } // Else wait for key input
+            else {
+                engine.gui.displayContinueMsg("SPACE", "continue");
+                engine.phase = STORY_WAIT;
             }
         }
     }
@@ -136,7 +126,14 @@ class StoryTeller {
             this.chapterEnd = true;
         }
 
-        return this.chapterEnd;
+        // If chapter ended
+        if (this.chapterEnd) { 
+            // Move to the next level if we are not at the end of the game
+            engine.phase = (chapter != "END") ? RUN : WIN;
+        } else {
+            // Continue with the story
+            engine.phase = STORY_PLAY;
+        }
     }
 
     getNextChapter() {

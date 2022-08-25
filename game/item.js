@@ -41,6 +41,11 @@ class Item {
         this.posY += this.velY;
     }
 
+    setVel(vx, vy) {
+        this.velX = vx;
+        this.velY = vy;
+    }
+
     show() {
         noStroke();
 

@@ -52,16 +52,16 @@ class SpaceShip extends Item {
             let keyId = '';
 
             soundSet["HIT"].play();
-            game.gui.hk['Life'].val -= 100;
+            engine.gui.hk['Life'].val -= 100;
 
             if (this.workingOps.length > 0) {
                 faultId = floor(random(this.workingOps.length));
                 keyId = this.getFaultKey(this.workingOps[faultId]);
 
                 this.ops[this.workingOps[faultId]] = 0;
-                game.gui.hk[keyId].active = 0;
+                engine.gui.hk[keyId].active = 0;
 
-                game.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                engine.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", engine.cw, engine.ch - 40, 300, 30, SCROLL_LEFT, 30);
                 this.workingOps.splice(faultId, 1);
             }
         }
@@ -157,13 +157,13 @@ class SpaceShip extends Item {
         }
 
         // Wrap the postion
-        if (this.posX > game.cw - this.w) {
-            this.posX = game.cw - this.w;
+        if (this.posX > engine.cw - this.w) {
+            this.posX = engine.cw - this.w;
         } else if (this.posX < 0) {
             this.posX = 0;
         }
-        if (this.posY > game.ch - this.h) {
-            this.posY = game.ch - this.h;
+        if (this.posY > engine.ch - this.h) {
+            this.posY = engine.ch - this.h;
         } else if (this.posY < 0) {
             this.posY = 0;
         }
@@ -173,17 +173,17 @@ class SpaceShip extends Item {
         for (let i = 0; i < this.ops.length; i++) {
             if (this.ops[i] < OP_WORK) {
                 this.ops[i]++;
-                game.gui.hk['Repair'].val = this.ops[i];
+                engine.gui.hk['Repair'].val = this.ops[i];
 
                 if (this.ops[i] == OP_WORK) {
                     this.workingOps.push(i);
-                    game.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                    engine.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", engine.cw, engine.ch - 40, 300, 30, SCROLL_LEFT, 30);
 
                     let keyId = this.getFaultKey(i);
 
-                    game.gui.hk['Repair'].val = 0;
-                    game.gui.hk['Life'].val += 100;
-                    game.gui.hk[keyId].active = 1;
+                    engine.gui.hk['Repair'].val = 0;
+                    engine.gui.hk['Life'].val += 100;
+                    engine.gui.hk[keyId].active = 1;
                 }
                 break;
             }
@@ -195,9 +195,9 @@ class SpaceShip extends Item {
         }
     }
 
-    fireBack() {
+    fireBack(enemies) {
         if ((this.rearOn) && (frameCount % this.rearFreq === 0)) {
-            for (const enemy of game.enemies) {
+            for (const enemy of enemies) {
                 if (enemy.posX < this.posX) {
                     let d = dist(enemy.posX, enemy.posY, this.posX, this.posY);
                     let velX = (enemy.posX - this.posX) * SHOT_VEL / d;
@@ -259,7 +259,7 @@ class Shot extends Item {
     show() {
         textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
-        textSize(30 * game.ch / DEFAULT_H);
+        textSize(30 * engine.ch / DEFAULT_H);
         text("*", this.posX, this.posY);
     }
 }
@@ -286,7 +286,7 @@ class Shots {
     update() {
         for (let i = 0; i < this.list.length; i++) {
             this.list[i].move();
-            if (this.list[i].posX < game.cw) {
+            if (this.list[i].posX < engine.cw) {
                 this.list[i].show();
             } else {
                 this.list.splice(i, 1);

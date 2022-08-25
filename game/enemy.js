@@ -39,8 +39,8 @@ class Meteor extends Item {
 }
 
 class Follower extends Item {
-    constructor(x, y, target) {
-        super(x, y, FOLLOW_SIZE, FOLLOW_SIZE, FOLLOW_VEL, FOLLOW_VEL, FOLLOW_HP, FOLLOW_SCORE);
+    constructor(x, y, s, v, target) {
+        super(x, y, s, s, v, v, FOLLOW_HP, FOLLOW_SCORE);
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
@@ -68,4 +68,73 @@ class Follower extends Item {
     }
 }
 
+class FollowerNg extends Follower {
+    constructor(x, y, s, v, target, shots) {
+        super(x, y, s * 1.8, v * 1.3, target);
+        this.shots = shots;
+        this.fireFreq = 20;
+        this.frameOff = frameCount;
+    }
 
+    fire() {
+        if ((abs(this.posY - this.target.posY) < 50) && ((frameCount - this.frameOff) % this.fireFreq === 0)) {
+            this.shots.addDir(this.posX + this.w, this.posY + this.h /2, SHOT_VEL, 0);
+        }
+    }
+}
+
+
+
+class Kamikaze extends Item {
+    constructor(w, h, target) {
+        let startPos = random(3);
+        let posX = 0;
+        let posY = 0;
+
+        if (startPos < 0.2) {
+            posX = w - random(w/10);
+            posY = 0;
+        }
+        else if (startPos > 2.7 ){
+            posX = w - random(w/10);
+            posY = h;
+        }
+        else  {
+            posX = w;
+            posY = random(h);
+        }
+
+
+        let d = dist(posX, posY, target.posX, target.posY);
+        let velX = (target.posX - posX) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+        let velY = (target.posY - posY) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+
+        super(posX, posY, 20, 5, velX, velY, 1, 100);
+    }
+}
+
+
+class Tank extends Item {
+    constructor(x, y, target, shots) {
+        super(x, y, 90, 30, -5, 0, 6, 50);
+        this.target = target;
+        this.shots = shots;
+        this.frameOff = frameCount;
+        this.fireFreq = 100;
+        this.fireToggle = 0;
+    }
+
+    fire() {
+        if ((frameCount - this.frameOff) % this.fireFreq === 0) {
+            let d = dist(this.target.posX, this.target.posY, this.posX, this.posY) * 2; // 2 * to reduce the shot velocity
+            let velX = (this.target.posX - this.posX) * SHOT_VEL / d;
+            let velY = (this.target.posY - this.posY) * SHOT_VEL / d;
+
+            let xOffset = (this.fireToggle === 0) ? this.w / 4 : this.w * 3 / 4;
+            let yOffset = (this.target.posY > this.PosY) ? this.h : -this.h;
+            this.fireToggle = (this.fireToggle === 0) ? 1 : 0;
+
+            this.shots.addDir(this.posX + xOffset, this.posY + yOffset, velX, velY);
+        }
+    }
+}

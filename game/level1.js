@@ -2,7 +2,7 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 2;
+const END_STAGE = 4;
 
 class Level1 extends BaseLevel {
     constructor(player) {
@@ -74,35 +74,10 @@ class Level1 extends BaseLevel {
         this.ship.repair();
         this.ship.fireBack(this.enemies);
 
-        // Move all the meteors
-        for (let i = 0; i < this.meteors.length; i++) {
-            this.meteors[i].move();
-
-            // Remove a meteor if it is outside the screen (left side)
-            if (this.meteors[i].posX < 0) {
-                this.meteors.splice(i, 1);
-            } 
-        }
-
-        // Move all the enemies 
-        for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].move();
-
-            // Remove a enemy if it is outside the screen (right side)
-            if ((this.enemies[i].posX > engine.cw) || (this.enemies[i].posY > engine.ch) || (this.enemies[i].posY < 0)) {
-                this.enemies.splice(i, 1);
-            } 
-        }
-
-        // Move all the junks
-        for (let i = 0; i < engine.game.junks.length; i++) {
-            engine.game.junks[i].move();
-
-            // Remove a meteor if it is outside the screen (left side)
-            if ((engine.game.junks[i].posX < 0) || (engine.game.junks[i].posX > engine.cw) || (engine.game.junks[i].posY > windowHeight) || (engine.game.junks[i].posY < 0)) {
-                engine.game.junks.splice(i, 1);
-            } 
-        }
+        // Move all the enemies
+        this.moveList(this.meteors, false);
+        this.moveList(this.enemies, false);
+        this.moveList(engine.game.junks, false);
 
         // Check all the collisions ...
         // Check shots and meteors
@@ -144,7 +119,7 @@ class Level1 extends BaseLevel {
         if ((counter % this.enemyFreq) === 0) {
             let swarmNbr = floor(random (this.minEnemyNbr, this.maxEnemyNbr));
             for (let i = 0; i < swarmNbr; i++) {
-                this.enemies.push(new Follower(0, random(windowHeight), this.ship));
+                this.enemies.push(new Follower(0, random(windowHeight), FOLLOW_SIZE, FOLLOW_VEL, this.ship));
             }
         }
 
@@ -183,13 +158,13 @@ class Level1 extends BaseLevel {
                     // If not the end, play the level-up sound
                     soundSet["LEVEL_UP"].play();
                 }
-
-                return endLevel;
             }
 
             this.meteorFreq = MET_FREQ_LIST[this.meteorIndex];
             this.meteorNbr = MET_NBR_LIST[this.meteorIndex];
         }
+
+        return endLevel;
     }
 
     show() {       

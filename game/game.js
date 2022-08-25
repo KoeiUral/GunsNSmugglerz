@@ -25,6 +25,21 @@
     resize(xs, ys) {
 
     }
+
+    moveList(list, fireFlag) {
+        // Move and in case fire all the items
+        for (let i = 0; i < list.length; i++) {
+            list[i].move();
+            if (fireFlag) {
+                list[i].fire();
+            }
+
+            // Remove an item if it is outside the screen
+            if ((list[i].posX < 0) || (list[i].posX > engine.cw)|| (list[i].posY < 0)  || (list[i].posY > engine.ch) ) {
+                list.splice(i, 1);
+            } 
+        }
+    }
     
 }
 
@@ -81,6 +96,7 @@ class Game {
 
     // Custom function for the end of game, when dead 
     displayGameOver() {
+        let reachLevel = " " + (engine.currentLevel + parseInt('1')) + "-" + this.levelSet[engine.currentLevel].stageCount;
         // Start the music
         if (musicSet["DEAD"].isPlaying() === false) {
             musicSet["DEAD"].loop();
@@ -88,7 +104,7 @@ class Game {
 
         this.levelSet[0].bg.show();
         engine.gui.displayText("GAME OVER", 80, false);
-        engine.gui.displayText("Score: " + engine.gui.hk['Score'].val + " - Level: " + engine.currentLevel + 1, 40, false);
+        engine.gui.displayText("Score: " + engine.gui.hk['Score'].val + " - Level: " + reachLevel, 40, false);
         engine.gui.displayContinueMsg("s", "restart");
     }
 
@@ -163,7 +179,6 @@ class Game {
             }
         }
     }
-
 }
 
 

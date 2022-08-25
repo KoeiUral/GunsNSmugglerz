@@ -9,7 +9,7 @@ const SHIP_H = 9;
 const SHIP_VEL_H = 6;
 const SHIP_VEL_V = 4.5;
 const SHOT_VEL = 18;
-const SHOT_SIZE = SHIP_H / 3;
+const SHOT_SIZE = 6;
 const SHIP_HP = 5;
 const OP_WORK = 400;
 const FIRE_FREQ = 70;
@@ -24,11 +24,11 @@ class SpaceShip extends Item {
         this.posY = y;
         this.immunity = 0;
 
-        this.shots = new Shots();
+        this.shots = new ShipShots();
         this.ops = [OP_WORK, OP_WORK, OP_WORK, OP_WORK, OP_WORK];
         this.workingOps = [0, 1, 2, 3, 4];
         this.rearFreq = FIRE_FREQ;
-        this.rearOn = false;
+        this.rearOn = true;
     }
 
     reset() {
@@ -251,9 +251,9 @@ class SpaceShip extends Item {
 
 
 
-class Shot extends Item {
+class LineShot extends Item {
     constructor(x, y) {
-        super(x + SHIP_W, y + SHIP_H / 2, SHOT_SIZE * 3, SHOT_SIZE, SHOT_VEL, 0, 1, 0);
+        super(x, y, SHOT_SIZE * 3, SHOT_SIZE, SHOT_VEL, 0, 1, 0);
     }
 
     show() {
@@ -264,25 +264,25 @@ class Shot extends Item {
     }
 }
 
-class RearShot extends Item {
-    constructor(x, y, vx, vy) {
-        super(x, y + SHIP_H / 2, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
-    }
-}
+//class DirShot extends Item {
+//    constructor(x, y, vx, vy) {
+//        super(x, y + SHIP_H / 2, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
+//    }
+//}
 
-class Shots {
+class ShipShots extends Shots {
     constructor () {
-        this.list = [];
+        super();
     }
 
     add(x, y) {
-        this.list.push(new Shot(x, y));
+        this.list.push(new LineShot(x + SHIP_W, y + SHIP_H / 2));
     }
 
     addBack(x, y, vx, vy) {
-        this.list.push(new RearShot(x, y, vx, vy)); 
+        this.list.push(new DirShot(x, y + SHIP_H / 2, vx, vy)); 
     }
-
+/*
     update() {
         for (let i = 0; i < this.list.length; i++) {
             this.list[i].move();
@@ -293,4 +293,5 @@ class Shots {
             }
         }
     }
+*/
 }

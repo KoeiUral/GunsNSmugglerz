@@ -70,3 +70,37 @@ class Item {
         this.velY = this.velY * yScale;
     }
 }
+
+
+
+
+class DirShot extends Item {
+    constructor(x, y, vx, vy) {
+        super(x, y, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
+    }
+}
+
+class Shots {
+    constructor () {
+        this.list = [];
+    }
+
+    addDir(x, y, vx, vy) {
+        this.list.push(new DirShot(x, y, vx, vy)); 
+    }
+
+    update() {
+        for (let i = 0; i < this.list.length; i++) {
+            this.list[i].move();
+
+            if ((this.list[i].posX >= 0)        && 
+                (this.list[i].posX < engine.cw) &&
+                (this.list[i].posY >= 0)        &&
+                (this.list[i].posY < engine.ch)) {
+                this.list[i].show();
+            } else {
+                this.list.splice(i, 1);
+            }
+        }
+    }
+}

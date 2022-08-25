@@ -5,6 +5,7 @@ class Star extends Item {
         let dist = random(STAR_SIZE);
         super(x, y, dist, dist, -dist, 0, 1);
 
+        this.dist = dist;
         this.blincking = floor(random(20, 50));
     }
 
@@ -66,10 +67,38 @@ class StarsBG {
 class PerlinStarsBG extends StarsBG {
     constructor(w, h) {
         super(w, h);
+        this.noiseOffset = random(100);
+        this.noiseDelta = 0.001;
     }
 
     // Override update method
     update() {
-        // TODO!
+        let angle = noise(this.noiseOffset) * TWO_PI;
+        let force = p5.Vector.fromAngle(angle);
+        force.setMag(2);
+        
+        this.noiseOffset += this.noiseDelta;
+
+        for (let star of this.list) {
+            star.setVel(force.x * star.dist, force.y * star.dist);
+            star.move();
+
+            if (star.posX < 0) {
+                star.posX = this.cw;
+                star.posY = random(this.ch);
+            }
+            else if (star.posX > this.cw) {
+                star.posX = 0;
+                star.posY = random(this.ch);
+            }
+            else if (star.posY < 0) {
+                star.posX = random(this.cw);
+                star.posY = this.ch;
+            }
+            else if (star.posY > this.ch) {
+                star.posX = random(this.cw);
+                star.posY = 0;
+            }
+        } 
     }
 }

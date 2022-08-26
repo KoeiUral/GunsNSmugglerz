@@ -36,7 +36,7 @@ class Engine {
 
         // Engine entities
         this.gui = new Gui(this.cw, this.ch, guiFile);
-        this.game = {}; //new Game();
+        this.game = {};
         this.story = new StoryTeller(plotFile);
         this.storyChapter = "";
 

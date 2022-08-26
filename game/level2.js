@@ -34,9 +34,8 @@ class Level2 extends BaseLevel {
     }
 
     init() {
-
-
-
+        // TODO USEFULL!
+        ;
     }
 
     dispose() {
@@ -157,7 +156,7 @@ class Level2 extends BaseLevel {
             this.maxFollowNbr = this.increaseNumber(this.followFreq, this.maxFollowNbr);
 
             // Check if stage is over
-            if ((counter - this.stageFrCount) >+ ENEMEY_STAGE[this.stageId].d) {
+            if ((counter - this.stageFrCount) >= ENEMEY_STAGE[this.stageId].d) {
                 this.stageId++;
                 this.stageFrCount = counter;
 
@@ -224,7 +223,24 @@ class Level2 extends BaseLevel {
     }
 
     resize(xs, ys) {
+        this.bg.resize(xs, ys);
+        this.ship.resize(xs, ys);
 
+        for (let it of this.kamiz) {
+            it.resize(xs, ys);
+        }
+
+        for (let it of this.tanks) {
+            it.resize(xs, ys);
+        }
+
+        for (let it of this.followers) {
+            it.resize(xs, ys);
+        }
+
+        for (let it of engine.game.junks) {
+            it.resize(xs, ys);
+        }
     }
     
 }

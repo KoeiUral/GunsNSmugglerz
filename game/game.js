@@ -6,6 +6,7 @@
 
     }
 
+/* // TEMPLATE CLASS METHODS:
     init() {
 
     }
@@ -25,7 +26,7 @@
     resize(xs, ys) {
 
     }
-
+*/
     moveList(list, fireFlag) {
         // Move and in case fire all the items
         for (let i = 0; i < list.length; i++) {
@@ -39,8 +40,7 @@
                 list.splice(i, 1);
             } 
         }
-    }
-    
+    } 
 }
 
 
@@ -61,7 +61,6 @@ class Game {
         // Add levels to the list of levels, to be used by engine
         this.levelSet.push(new Level1(this.ship));
         this.levelSet.push(new Level2(this.ship));
-        //this.levelSet.push(new Level3(this.ship));
     }
 
     reset() {

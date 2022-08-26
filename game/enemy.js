@@ -93,7 +93,6 @@ class Kamikaze extends Item {
 
         if (startPos < 0.2) {
             posX = w - random(w/10);
-            posY = 0;
         }
         else if (startPos > 2.7 ){
             posX = w - random(w/10);

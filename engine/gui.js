@@ -4,7 +4,53 @@ const DEFAULT_FONT = 20;
 
 const SCROLL_LEFT = 0;
 const SCROLL_UP = 1;
-const SCROLL_VEL = -3;
+const SCROLL_VEL = -2;
+
+class ScrollingMsg {
+    constructor (x, y, w, h, s, t, msg, font) {
+        this.boxX = x;
+        this.boxY = y;
+        this.boxW = w;
+        this.boxH = h;
+        this.font = font
+        this.size = s * engine.ch / DEFAULT_H;
+        this.boxScroll = t;
+        this.boxVel = SCROLL_VEL;
+        this.boxMessage = msg;
+    }
+
+    show(xOffset) {
+        textWrap(WORD);
+        fill(255);
+        textFont(this.font);
+        textSize(this.size);
+        textAlign(CENTER, BASELINE);
+
+        text(this.boxMessage, xOffset, this.boxY, this.boxW, this.boxH);
+        xOffset = textWidth(this.boxMessage);
+
+        if (this.boxScroll === SCROLL_UP) {
+            this.boxY += this.boxVel;
+            if ((this.boxY + this.boxH) < 0) {
+                xOffset = -1;
+            }
+        } else if (this.boxScroll === SCROLL_LEFT) {
+            this.boxX += this.boxVel;
+            if ((this.boxX + this.boxW) < 0) {
+                xOffset = -1;
+            }
+        }
+
+        return xOffset;
+    }
+
+    scroll () {
+        this.boxX = (this.boxScroll === SCROLL_LEFT) ? this.boxX - 100 * engine.ch / DEFAULT_H : this.boxX;
+        this.boxY = (this.boxScroll === SCROLL_UP) ? this.boxY - 100 * engine.ch / DEFAULT_H : this.boxY;
+    }
+}
+
+
 
 class Gui {
     constructor(width, height, file) {
@@ -12,16 +58,7 @@ class Gui {
         this.fontSize = DEFAULT_FONT;
         this.cw = width;
         this.ch = height;
-
-        this.boxX = 0;
-        this.boxY = 0;
-        this.boxW = 0;
-        this.boxH = 0;
-        this.boxSize = 40;
-        this.boxScroll = SCROLL_UP;
-        this.boxVel = SCROLL_VEL;
-        this.boxMessage = "";
-        this.boxEnd = true;
+        this.scrollBoxes = [];
 
         // Display text varibales
         this.msgCounter = 0;
@@ -41,11 +78,18 @@ class Gui {
         }
     }
 
-    reset() {
-        this.boxMessage = "";
-        this.boxEnd = true;
+    reset(scoreReset) {
+        this.msgConsole = "";
+        this.msgCounter = 0;
+        //this.scrollBoxes.splice(0, this.scrollBoxes.length);
+        this.scrollBoxes.length = 0;
         
         for (const key of Object.keys(this.hk)) {
+            // Skip the score reset
+            if ((scoreReset === false) && (key === 'Score')) {
+                continue;
+            }
+
             this.hk[key].val = this.defValues[key];
 
             if (this.hk[key].type == 'icon') {
@@ -110,6 +154,9 @@ class Gui {
             this.msgCounter--;
         }
 
+        // Show the scrolling box if any
+        this.showScrollingBox();
+
         // Reset the frameLineOffset
         this.frameLnOffset = 0;
     }
@@ -119,12 +166,13 @@ class Gui {
         textFont(this.font);
         textSize(size  * this.ch / DEFAULT_H);
         textAlign(CENTER, BASELINE);
+        textWrap(WORD);
 
         if ((blinking) && ((floor(frameCount / 10)) % 2 == 0)) {
             return;
         } 
 
-        text(message, this.cw / 2, this.ch / 2 + this.frameLnOffset);
+        text(message, 0, this.ch / 2 - 25 + this.frameLnOffset, this.cw, this.ch / 2);
         this.frameLnOffset += size + textDescent() * 0.4;
     }
 
@@ -144,26 +192,25 @@ class Gui {
     }
 
     showScrollingBox() {
-        if (this.boxEnd === false) {
-            textWrap(WORD);
-            fill(255);
-            textFont(this.font);
-            textSize(this.boxSize * this.ch / DEFAULT_H);
-            textAlign(CENTER, BASELINE);
+        let offset = 0;
+        let delta = 0;
 
-            text(this.boxMessage, this.boxX, this.boxY, this.boxW, this.boxH);
-
-            if (this.boxScroll === SCROLL_UP) {
-                this.boxY += this.boxVel;
-                if ((this.boxY + this.boxH) < 0) {
-                    this.boxEnd = true;
-                }
-            } else if (this.boxScroll === SCROLL_LEFT) {
-                this.boxX += this.boxVel;
-                if ((this.boxX + this.boxW) < 0) {
-                    this.boxEnd = true;
-                }
+        // Init the x offset to cocatenate multiple horzional messages
+        if (this.scrollBoxes.length > 0) {
+            offset = this.scrollBoxes[0].boxX;
+        }
+    
+        // Iterate over all the scrolling boxes
+        for (let i = 0; i < this.scrollBoxes.length; i++) {
+            delta = this.scrollBoxes[i].show(offset);
+            // Show the Msg and if it is out of screen
+            if (delta === -1) {
+                // Remove the message fomr the list
+                this.scrollBoxes.splice(i, 1);
+                delta = 0;
             }
+
+            offset += delta;
         }
     }
 
@@ -177,22 +224,25 @@ class Gui {
         }
     }
 
-    scrollUp () {
-        if (this.boxEnd === false) {
-            this.boxY -= 100 * this.ch / DEFAULT_H;
-        } 
+    scroll () {
+        for (let box of this.scrollBoxes) {
+            box.scroll();
+        }
     }
 
     isScrollBoxOver () {
-        return this.boxEnd;
+        return (this.scrollBoxes.length === 0);
     }
 
     consoleLine(message) {
-        this.msgCounter = 100;
+        this.msgCounter = 150;
         this.msgConsole = message.slice();
     }
 
     consoleBox(message, x, y, w, h, type, size) {
+        this.scrollBoxes.push(new ScrollingMsg(x,y,w, h, size, type, message, this.font));
+        
+        /*
         this.boxSize = size * this.ch / DEFAULT_H;
 
         // if a message is scrolling, append the new one 
@@ -214,5 +264,6 @@ class Gui {
         }
 
         this.boxEnd = false;
+        */
     }
 }

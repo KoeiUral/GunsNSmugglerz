@@ -103,8 +103,8 @@ class Game {
         }
 
         this.levelSet[0].bg.show();
-        engine.gui.displayText("GAME OVER", 80, false);
-        engine.gui.displayText("Score: " + engine.gui.hk['Score'].val + " - Level: " + reachLevel, 40, false);
+        engine.gui.displayTextBox("GAME OVER", 80, 0, engine.ch / 2 - 40, engine.cw, engine.ch / 2);
+        engine.gui.displayTextBox("Score: " + engine.gui.hk['Score'].val + " - Level: " + reachLevel, 40, 0, engine.ch / 2 + 80, engine.cw, engine.ch / 2);
         engine.gui.displayContinueMsg("s", "restart");
     }
 

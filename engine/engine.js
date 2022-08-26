@@ -111,8 +111,6 @@ class Engine {
 
             // Draw the GUI
             this.gui.show();
-            this.gui.showScrollingBox();
-
         }
         else if (this.phase === DEAD) {
             this.game.displayGameOver();
@@ -121,10 +119,7 @@ class Engine {
             this.game.displayBg();
             this.story.playCh(this.storyChapter);
             this.gui.displayContinueMsg("s", "restart");
-        } 
-
-        // Reset the frame line offset in the GUI
-        this.gui.frameLnOffset = 0;
+        }
     }
 
     processInput(key) {
@@ -136,7 +131,7 @@ class Engine {
             } 
             else if (this.phase === STORY_PLAY) {
                 // Just scroll up the text 
-                this.gui.scrollUp();
+                this.gui.scroll();
             } 
             else if (this.phase === STORY_WAIT) {
                 // Check if it is the last frame and move to run
@@ -200,7 +195,7 @@ class Engine {
 
     reset() {      
         // Reset GUI and HK
-        this.gui.reset();
+        this.gui.reset(true);
         this.story.reset();
         this.game.reset();
 

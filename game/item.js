@@ -41,6 +41,11 @@ class Item {
         this.posY += this.velY;
     }
 
+    setVel(vx, vy) {
+        this.velX = vx;
+        this.velY = vy;
+    }
+
     show() {
         noStroke();
 
@@ -63,5 +68,46 @@ class Item {
         this.posY = this.posY * yScale;
         this.velX = this.velX * xScale;
         this.velY = this.velY * yScale;
+    }
+}
+
+
+
+
+class DirShot extends Item {
+    constructor(x, y, vx, vy) {
+        super(x, y, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
+    }
+
+    show() {
+        textFont(fontSet["TEXTF"]);
+        textAlign(CENTER, CENTER);
+        textSize(30 * engine.ch / DEFAULT_H);
+        text("*", this.posX, this.posY);
+    }
+}
+
+class Shots {
+    constructor () {
+        this.list = [];
+    }
+
+    addDir(x, y, vx, vy) {
+        this.list.push(new DirShot(x, y, vx, vy)); 
+    }
+
+    update() {
+        for (let i = 0; i < this.list.length; i++) {
+            this.list[i].move();
+
+            if ((this.list[i].posX >= 0)        && 
+                (this.list[i].posX < engine.cw) &&
+                (this.list[i].posY >= 0)        &&
+                (this.list[i].posY < engine.ch)) {
+                this.list[i].show();
+            } else {
+                this.list.splice(i, 1);
+            }
+        }
     }
 }

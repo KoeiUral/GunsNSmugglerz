@@ -9,71 +9,6 @@ const FOLLOW_VEL = 5;
 const FOLLOW_HP = 1;
 const FOLLOW_SCORE = 50;
 
-const STAR_SIZE = 5;
-
-class Star extends Item {
-    constructor(x, y) {
-        let dist = random(STAR_SIZE);
-        super(x, y, dist, dist, -dist, 0, 1);
-
-        this.blincking = floor(random(20, 50));
-    }
-
-    show() {
-        if (floor(frameCount / this.blincking) % 2 == 0) {
-            noStroke();
-
-            if (HALO) {
-                fill(255, 0, 255, 180);
-                rect(this.posX -1, this.posY -1, this.w, this.h);
-                fill(0, 255, 255, 180);
-                rect(this.posX +1, this.posY +1, this.w, this.h);     
-            }
-
-           fill(255, 255, 255, 200);
-           rect(this.posX, this.posY, this.w, this.h);
-        }
-    }
-}
-
-class StarsBG {
-    constructor(w, h) {
-        this.cw = w;
-        this.ch = h;
-        this.list = [];
-
-        for (let i = 0; i < 100; i++) {
-            this.list.push(new Star(random(this.cw), random(this.ch)));
-        }
-    }
-
-    update() {
-        for (let star of this.list) {
-            star.move();
-
-            if (star.posX < 0) {
-                star.posX = this.cw;
-                star.posY = random(this.ch);
-            }
-        }       
-    }
-
-    show() {
-        for (let star of this.list) {
-            star.show();
-        } 
-    }
-
-    resize(xs, ys) {
-        this.cw = this.cw * xs;
-        this.ch = this.ch * ys;
-
-        for (let star of this.list) {
-            star.resize(xs, ys);
-        }
-    }
-}
-
 
 class Junk extends Item {
     constructor(x, y, size) {
@@ -104,26 +39,27 @@ class Meteor extends Item {
 }
 
 class Follower extends Item {
-    constructor(x, y) {
-        super(x, y, FOLLOW_SIZE, FOLLOW_SIZE, FOLLOW_VEL, FOLLOW_VEL, FOLLOW_HP, FOLLOW_SCORE);
+    constructor(x, y, s, v, target) {
+        super(x, y, s, s, v, v, FOLLOW_HP, FOLLOW_SCORE);
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
+        this.target = target;
     }
 
     move() {
-        if (this.posX <= game.ship.posX) {
-            let d = dist(this.posX, this.posY, game.ship.posX, game.ship.posY);
+        if (this.posX <= this.target.posX) {
+            let d = dist(this.posX, this.posY, this.target.posX, this.target.posY);
 
-            this.posX += (game.ship.posX - this.posX) * this.velX / d;
-            this.posY += (game.ship.posY - this.posY) * this.velY / d;
+            this.posX += (this.target.posX - this.posX) * this.velX / d;
+            this.posY += (this.target.posY - this.posY) * this.velY / d;
         }
         else {
             if (this.origX == 0) {
                 this.origX = this.posX;
                 this.origY = this.posY;
 
-                this.exit = (this.posY > game.ch / 2) ? 1 : -1;
+                this.exit = (this.posY > engine.ch / 2) ? 1 : -1;
             }
 
             this.posX += 8;
@@ -132,4 +68,72 @@ class Follower extends Item {
     }
 }
 
+class FollowerNg extends Follower {
+    constructor(x, y, s, v, target, shots) {
+        super(x, y, s * 1.8, v * 1.3, target);
+        this.shots = shots;
+        this.fireFreq = 20;
+        this.frameOff = frameCount;
+    }
 
+    fire() {
+        if ((abs(this.posY - this.target.posY) < 50) && ((frameCount - this.frameOff) % this.fireFreq === 0)) {
+            this.shots.addDir(this.posX + this.w, this.posY + this.h /2, SHOT_VEL, 0);
+        }
+    }
+}
+
+
+
+class Kamikaze extends Item {
+    constructor(w, h, target) {
+        let startPos = random(3);
+        let posX = 0;
+        let posY = 0;
+
+        if (startPos < 0.2) {
+            posX = w - random(w/10);
+        }
+        else if (startPos > 2.7 ){
+            posX = w - random(w/10);
+            posY = h;
+        }
+        else  {
+            posX = w;
+            posY = random(h);
+        }
+
+
+        let d = dist(posX, posY, target.posX, target.posY);
+        let velX = (target.posX - posX) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+        let velY = (target.posY - posY) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+
+        super(posX, posY, 20, 5, velX, velY, 1, 100);
+    }
+}
+
+
+class Tank extends Item {
+    constructor(x, y, target, shots) {
+        super(x, y, 90, 30, -5, 0, 6, 50);
+        this.target = target;
+        this.shots = shots;
+        this.frameOff = frameCount;
+        this.fireFreq = 100;
+        this.fireToggle = 0;
+    }
+
+    fire() {
+        if ((frameCount - this.frameOff) % this.fireFreq === 0) {
+            let d = dist(this.target.posX, this.target.posY, this.posX, this.posY) * 2; // 2 * to reduce the shot velocity
+            let velX = (this.target.posX - this.posX) * SHOT_VEL / d;
+            let velY = (this.target.posY - this.posY) * SHOT_VEL / d;
+
+            let xOffset = (this.fireToggle === 0) ? this.w / 4 : this.w * 3 / 4;
+            let yOffset = (this.target.posY > this.PosY) ? this.h : -this.h;
+            this.fireToggle = (this.fireToggle === 0) ? 1 : 0;
+
+            this.shots.addDir(this.posX + xOffset, this.posY + yOffset, velX, velY);
+        }
+    }
+}

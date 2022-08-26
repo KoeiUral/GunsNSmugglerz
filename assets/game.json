@@ -10,11 +10,13 @@
 
     "Sounds": {
         "LEVEL_UP": "assets/audio/round_end.wav",
-        "HIT": "assets/audio/death.wav"
+        "HIT": "assets/audio/death.wav",
+        "ALARM": "assets/audio/alarm.wav"
     },
 
     "Music": {
         "L1": "assets/audio/sweet.mp3",
+        "L2": "assets/audio/jungle.mp3",
         "DEAD": "assets/audio/guns_end_s.mp3"
     }
 }

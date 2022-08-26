@@ -1,5 +1,5 @@
 {
-    "INTRO": {
+    "L1_INTRO": {
         "id" : 0,
         "frames": [
             {"auto": false,
@@ -18,15 +18,33 @@
             ]}
         ]
     },
-    "END": {
+    "L2_INTRO": {
         "id" : 1,
         "frames": [
             {"auto": false,
              "screen": [
-                {"type": "txtbox", "x": 20, "y": 300,  "w": 984,"h": 100, "s":80, "msg":  "STAGE COMPLETE"},
+                {"type": "txtbox", "x": 20, "y": 300,  "w": 984,"h": 100, "s":80, "msg":  "LEVEL COMPLETE"},
                 {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 100, "s":40, "msg":  "You left the bloody pigs behind, well done!"},
-                {"type": "txtbox", "x": 100, "y": 500, "w": 824,"h": 100, "s":30, "msg":  "... next stage coming soon ..."},
-                {"type": "audio", "loop": true, "path": "assets/audio/guns_end_s.mp3"}
+                {"type": "txtbox", "x": 100, "y": 500, "w": 824,"h": 100, "s":20, "msg":  "However ..."},
+                {"type": "audio", "loop": false, "path": "assets/audio/levelcompl.wav"}
+            ]},
+            { "auto": false,
+              "screen": [
+                {"type": "image", "x": 52, "y": 126, "w": 920,"h": 516, "ref": 0, "path": "./assets/image/trap.png"},
+                {"type": "txtscroll", "x": 520, "y": 768, "w": 496,"h": 600, "s": 30, "msg":  "They were waiting for you on the other side of the asteroid belt and now you have to face the entire Gov. division, prepare yourself for a fury battle!"},
+                {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
+            ]}
+        ]
+    },
+    "END": {
+        "id" : 2,
+        "frames": [
+            {"auto": true,
+             "screen": [
+                {"type": "txtbox", "x": 20,  "y": 300, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
+                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 200, "s":40, "msg":  "You delivered the precious and (mysterious) goods to the resistant"},
+                {"type": "txtbox", "x": 100, "y": 600, "w": 824,"h": 100, "s":30, "msg":  "... new adventures coming soon ..."},
+                {"type": "audio", "loop": true, "path": "assets/audio/topgun.mp3"}
             ]}   
         ]
     }

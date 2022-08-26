@@ -9,7 +9,7 @@ const SHIP_H = 9;
 const SHIP_VEL_H = 6;
 const SHIP_VEL_V = 4.5;
 const SHOT_VEL = 18;
-const SHOT_SIZE = SHIP_H / 3;
+const SHOT_SIZE = 6;
 const SHIP_HP = 5;
 const OP_WORK = 400;
 const FIRE_FREQ = 70;
@@ -24,7 +24,7 @@ class SpaceShip extends Item {
         this.posY = y;
         this.immunity = 0;
 
-        this.shots = new Shots();
+        this.shots = new ShipShots();
         this.ops = [OP_WORK, OP_WORK, OP_WORK, OP_WORK, OP_WORK];
         this.workingOps = [0, 1, 2, 3, 4];
         this.rearFreq = FIRE_FREQ;
@@ -52,16 +52,16 @@ class SpaceShip extends Item {
             let keyId = '';
 
             soundSet["HIT"].play();
-            game.gui.hk['Life'].val -= 100;
+            engine.gui.hk['Life'].val -= 100;
 
             if (this.workingOps.length > 0) {
                 faultId = floor(random(this.workingOps.length));
                 keyId = this.getFaultKey(this.workingOps[faultId]);
 
                 this.ops[this.workingOps[faultId]] = 0;
-                game.gui.hk[keyId].active = 0;
+                engine.gui.hk[keyId].active = 0;
 
-                game.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                engine.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!  ", engine.cw, engine.ch - 40, 600, 30, SCROLL_LEFT, 30);
                 this.workingOps.splice(faultId, 1);
             }
         }
@@ -157,33 +157,33 @@ class SpaceShip extends Item {
         }
 
         // Wrap the postion
-        if (this.posX > game.cw - this.w) {
-            this.posX = game.cw - this.w;
+        if (this.posX > engine.cw - this.w) {
+            this.posX = engine.cw - this.w;
         } else if (this.posX < 0) {
             this.posX = 0;
         }
-        if (this.posY > game.ch - this.h) {
-            this.posY = game.ch - this.h;
+        if (this.posY > engine.ch - this.h) {
+            this.posY = engine.ch - this.h;
         } else if (this.posY < 0) {
             this.posY = 0;
         }
     }
 
-    repair() {
+    repair(inc) {
         for (let i = 0; i < this.ops.length; i++) {
             if (this.ops[i] < OP_WORK) {
-                this.ops[i]++;
-                game.gui.hk['Repair'].val = this.ops[i];
+                this.ops[i] = this.ops[i] + inc;
+                engine.gui.hk['Repair'].val = this.ops[i];
 
-                if (this.ops[i] == OP_WORK) {
+                if (this.ops[i] >= OP_WORK) {
                     this.workingOps.push(i);
-                    game.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", game.cw, game.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                    engine.gui.consoleBox(this.getFaultMsg(i) + "  repaired!  ", engine.cw, engine.ch - 40, 600, 30, SCROLL_LEFT, 30);
 
                     let keyId = this.getFaultKey(i);
 
-                    game.gui.hk['Repair'].val = 0;
-                    game.gui.hk['Life'].val += 100;
-                    game.gui.hk[keyId].active = 1;
+                    engine.gui.hk['Repair'].val = 0;
+                    engine.gui.hk['Life'].val += 100;
+                    engine.gui.hk[keyId].active = 1;
                 }
                 break;
             }
@@ -195,15 +195,15 @@ class SpaceShip extends Item {
         }
     }
 
-    fireBack() {
+    fireBack(enemies) {
         if ((this.rearOn) && (frameCount % this.rearFreq === 0)) {
-            for (const enemy of game.enemies) {
+            for (const enemy of enemies) {
                 if (enemy.posX < this.posX) {
                     let d = dist(enemy.posX, enemy.posY, this.posX, this.posY);
                     let velX = (enemy.posX - this.posX) * SHOT_VEL / d;
                     let velY = (enemy.posY - this.posY) * SHOT_VEL / d;
 
-                    this.shots.addBack(this.posX, this.posY, velX, velY);
+                    this.shots.addBack(this.posX, this.posY -this.h/2, velX, velY);
                     break;
                 }
             }
@@ -212,7 +212,7 @@ class SpaceShip extends Item {
 
     fire() {
         if (this.ops[FIRE] == OP_WORK) {
-            this.shots.add(this.posX, this.posY);
+            this.shots.add(this.posX + this.w, this.posY - this.h/2);
         }
     }
 
@@ -251,46 +251,29 @@ class SpaceShip extends Item {
 
 
 
-class Shot extends Item {
+class LineShot extends Item {
     constructor(x, y) {
-        super(x + SHIP_W, y + SHIP_H / 2, SHOT_SIZE * 3, SHOT_SIZE, SHOT_VEL, 0, 1, 0);
+        super(x, y, SHOT_SIZE * 3, SHOT_SIZE, SHOT_VEL, 0, 1, 0);
     }
 
     show() {
         textFont(fontSet["TEXTF"]);
-        textAlign(CENTER, CENTER);
-        textSize(30 * game.ch / DEFAULT_H);
-        text("*", this.posX, this.posY);
+        textAlign(CENTER, TOP);
+        textSize(20 * engine.ch / DEFAULT_H);
+        text("x", this.posX, this.posY);
     }
 }
 
-class RearShot extends Item {
-    constructor(x, y, vx, vy) {
-        super(x, y + SHIP_H / 2, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
-    }
-}
-
-class Shots {
-    constructor () {
-        this.list = [];
+class ShipShots extends Shots {
+    constructor (ship) {
+        super();
     }
 
     add(x, y) {
-        this.list.push(new Shot(x, y));
+        this.list.push(new LineShot(x, y));
     }
 
     addBack(x, y, vx, vy) {
-        this.list.push(new RearShot(x, y, vx, vy)); 
-    }
-
-    update() {
-        for (let i = 0; i < this.list.length; i++) {
-            this.list[i].move();
-            if (this.list[i].posX < game.cw) {
-                this.list[i].show();
-            } else {
-                this.list.splice(i, 1);
-            }
-        }
+        this.list.push(new DirShot(x, y, vx, vy)); 
     }
 }

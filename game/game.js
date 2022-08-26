@@ -96,7 +96,7 @@ class Game {
 
     // Custom function for the end of game, when dead 
     displayGameOver() {
-        let reachLevel = " " + (engine.currentLevel + parseInt('1')) + "-" + this.levelSet[engine.currentLevel].stageCount;
+        let reachLevel = " " + (engine.currentLevel + parseInt('1')) + "-" + (this.levelSet[engine.currentLevel].stageId + parseInt('1'));
         // Start the music
         if (musicSet["DEAD"].isPlaying() === false) {
             musicSet["DEAD"].loop();

@@ -2,7 +2,7 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 4;
+const END_STAGE = 2;
 
 class Level1 extends BaseLevel {
     constructor(player) {
@@ -11,7 +11,6 @@ class Level1 extends BaseLevel {
         this.ship = player;
         this.meteors = [];
         this.enemies = [];
-        //this.junks = [];
         this.bg = new StarsBG(engine.cw, engine.ch);
 
         this.meteorFreq = MET_FREQ_LIST[0];
@@ -23,7 +22,7 @@ class Level1 extends BaseLevel {
         this.maxEnemyNbr = 3;
 
         this.updateFreq = 200;
-        this.stageCount = 1;
+        this.stageId = 0;
     }
 
     dispose() {
@@ -53,7 +52,7 @@ class Level1 extends BaseLevel {
         this.enemyFreq = 200;
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
-        this.stageCount = 1;
+        this.stageId = 0;
     }
 
     update() {
@@ -96,7 +95,7 @@ class Level1 extends BaseLevel {
         // Check if the game is over
         if (this.ship.isDead()) {
             engine.phase = DEAD;
-            musicSet["L1"].stop(); // TODO: change L1 key with variable of the level
+            musicSet["L1"].stop();
         } else {
             // Increment level difficulty
             isLevelEnd = this.levelUpdate(frameCount);
@@ -140,17 +139,17 @@ class Level1 extends BaseLevel {
                 this.minEnemyNbr++;
                 this.maxEnemyNbr++;
 
-                this.stageCount++;
-                engine.gui.consoleLine("STAGE " + this.stageCount);
+                this.stageId++;
+                engine.gui.consoleLine("STAGE " + (this.stageId + parseInt('1')));
                 engine.addScore(100);
 
-                if (this.stageCount >= 3) { // TODO: REMOVE MAGIC
+                if (this.stageId >= 3) { // TODO: REMOVE MAGIC
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;
                     engine.gui.consoleBox("*** !!! Rear Shoot updated !!! ***", engine.cw, engine.ch - 40, 700, 30, SCROLL_LEFT, 30);
                 }
 
-                if (this.stageCount === END_STAGE) {
+                if (this.stageId === END_STAGE) {
                     // Stage completed
                     musicSet["L1"].stop();
                     endLevel =  true;

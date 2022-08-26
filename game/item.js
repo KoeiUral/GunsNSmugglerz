@@ -82,10 +82,8 @@ class DirShot extends Item {
     show() {
         textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
-        textStyle(BOLD);
         textSize(30 * engine.ch / DEFAULT_H);
         text("*", this.posX, this.posY);
-        textStyle(NORMAL);
     }
 }
 

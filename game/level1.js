@@ -2,7 +2,7 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 2;
+const END_STAGE = 8;
 
 class Level1 extends BaseLevel {
     constructor(player) {
@@ -53,6 +53,10 @@ class Level1 extends BaseLevel {
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
         this.stageId = 0;
+
+        // Reset the ship status and gui wo changing score
+        engine.game.ship.reset();
+        engine.gui.reset(false);
     }
 
     update() {
@@ -70,7 +74,7 @@ class Level1 extends BaseLevel {
         engine.game.movePlayer();
 
         // Run the repair loop (if ship damaged)
-        this.ship.repair();
+        this.ship.repair(1);
         this.ship.fireBack(this.enemies);
 
         // Move all the enemies
@@ -143,10 +147,10 @@ class Level1 extends BaseLevel {
                 engine.gui.consoleLine("STAGE " + (this.stageId + parseInt('1')));
                 engine.addScore(100);
 
-                if (this.stageId >= 3) { // TODO: REMOVE MAGIC
+                if (this.stageId >= 1) { // TODO: REMOVE MAGIC
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;
-                    engine.gui.consoleBox("*** !!! Rear Shoot updated !!! ***", engine.cw, engine.ch - 40, 700, 30, SCROLL_LEFT, 30);
+                    engine.gui.consoleBox("*** !!! Rear Shoot updated !!! ***  ", engine.cw, engine.ch - 40, 700, 30, SCROLL_LEFT, 30);
                 }
 
                 if (this.stageId === END_STAGE) {

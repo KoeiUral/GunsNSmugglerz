@@ -5,7 +5,7 @@ const ENEMEY_STAGE = [
     {f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
     {f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
     {f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
-    {f: 300, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
+    {f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
     {f:   0, k:   0, t:   0, d: 3000, m: "Blody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
 ];
 
@@ -55,19 +55,24 @@ class Level2 extends BaseLevel {
 
         this.maxKamiNbr = 1;
         this.maxTankNbr = 1;
-        this.maxFollowNbr = 1;  
+        this.maxFollowNbr = 1;
+
+        // Reset the ship status and gui wo changing score
+        engine.game.ship.reset();
+        engine.gui.reset(false);
     }
 
     update() {
         let isLevelEnd = false;
 
         // If music is not playing, start it
-        if (musicSet["L2"].isPlaying() === false) {  // TODO: load the music for Level 2
+        if (musicSet["L2"].isPlaying() === false) {
             musicSet["L2"].loop();
 
             // Music start is used to detect begin of level
             this.stageFrCount = frameCount;
             engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
+            this.ship.rearOn = true;
         }
 
         // Update BG
@@ -77,7 +82,7 @@ class Level2 extends BaseLevel {
         engine.game.movePlayer();
 
         // Run the repair loop (if ship damaged)
-        this.ship.repair();
+        this.ship.repair(2);
         this.ship.fireBack(this.followers.concat(this.tanks, this.kamiz));
 
         // Move all the enemies
@@ -171,8 +176,8 @@ class Level2 extends BaseLevel {
                     engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
                     engine.addScore(100);
 
-                    // Play the level-up sound
-                    soundSet["LEVEL_UP"].play(); // TODO: change with alert
+                    // Play the Alarm sound
+                    soundSet["ALARM"].play();
                 }
             }
         }

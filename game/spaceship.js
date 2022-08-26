@@ -28,7 +28,7 @@ class SpaceShip extends Item {
         this.ops = [OP_WORK, OP_WORK, OP_WORK, OP_WORK, OP_WORK];
         this.workingOps = [0, 1, 2, 3, 4];
         this.rearFreq = FIRE_FREQ;
-        this.rearOn = true;
+        this.rearOn = false;
     }
 
     reset() {
@@ -61,7 +61,7 @@ class SpaceShip extends Item {
                 this.ops[this.workingOps[faultId]] = 0;
                 engine.gui.hk[keyId].active = 0;
 
-                engine.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!", engine.cw, engine.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                engine.gui.consoleBox(this.getFaultMsg(this.workingOps[faultId]) + " damaged!  ", engine.cw, engine.ch - 40, 600, 30, SCROLL_LEFT, 30);
                 this.workingOps.splice(faultId, 1);
             }
         }
@@ -169,15 +169,15 @@ class SpaceShip extends Item {
         }
     }
 
-    repair() {
+    repair(inc) {
         for (let i = 0; i < this.ops.length; i++) {
             if (this.ops[i] < OP_WORK) {
-                this.ops[i]++;
+                this.ops[i] = this.ops[i] + inc;
                 engine.gui.hk['Repair'].val = this.ops[i];
 
-                if (this.ops[i] == OP_WORK) {
+                if (this.ops[i] >= OP_WORK) {
                     this.workingOps.push(i);
-                    engine.gui.consoleBox(this.getFaultMsg(i) + "  repaired!", engine.cw, engine.ch - 40, 300, 30, SCROLL_LEFT, 30);
+                    engine.gui.consoleBox(this.getFaultMsg(i) + "  repaired!  ", engine.cw, engine.ch - 40, 600, 30, SCROLL_LEFT, 30);
 
                     let keyId = this.getFaultKey(i);
 
@@ -203,7 +203,7 @@ class SpaceShip extends Item {
                     let velX = (enemy.posX - this.posX) * SHOT_VEL / d;
                     let velY = (enemy.posY - this.posY) * SHOT_VEL / d;
 
-                    this.shots.addBack(this.posX, this.posY, velX, velY);
+                    this.shots.addBack(this.posX, this.posY -this.h/2, velX, velY);
                     break;
                 }
             }
@@ -212,7 +212,7 @@ class SpaceShip extends Item {
 
     fire() {
         if (this.ops[FIRE] == OP_WORK) {
-            this.shots.add(this.posX, this.posY);
+            this.shots.add(this.posX + this.w, this.posY - this.h/2);
         }
     }
 
@@ -258,40 +258,22 @@ class LineShot extends Item {
 
     show() {
         textFont(fontSet["TEXTF"]);
-        textAlign(CENTER, CENTER);
-        textSize(30 * engine.ch / DEFAULT_H);
-        text("*", this.posX, this.posY);
+        textAlign(CENTER, TOP);
+        textSize(20 * engine.ch / DEFAULT_H);
+        text("x", this.posX, this.posY);
     }
 }
 
-//class DirShot extends Item {
-//    constructor(x, y, vx, vy) {
-//        super(x, y + SHIP_H / 2, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
-//    }
-//}
-
 class ShipShots extends Shots {
-    constructor () {
+    constructor (ship) {
         super();
     }
 
     add(x, y) {
-        this.list.push(new LineShot(x + SHIP_W, y + SHIP_H / 2));
+        this.list.push(new LineShot(x, y));
     }
 
     addBack(x, y, vx, vy) {
-        this.list.push(new DirShot(x, y + SHIP_H / 2, vx, vy)); 
+        this.list.push(new DirShot(x, y, vx, vy)); 
     }
-/*
-    update() {
-        for (let i = 0; i < this.list.length; i++) {
-            this.list[i].move();
-            if (this.list[i].posX < engine.cw) {
-                this.list[i].show();
-            } else {
-                this.list.splice(i, 1);
-            }
-        }
-    }
-*/
 }

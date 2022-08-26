@@ -78,6 +78,15 @@ class DirShot extends Item {
     constructor(x, y, vx, vy) {
         super(x, y, SHOT_SIZE, SHOT_SIZE, vx, vy, 1, 0);
     }
+
+    show() {
+        textFont(fontSet["TEXTF"]);
+        textAlign(CENTER, CENTER);
+        textStyle(BOLD);
+        textSize(30 * engine.ch / DEFAULT_H);
+        text("*", this.posX, this.posY);
+        textStyle(NORMAL);
+    }
 }
 
 class Shots {

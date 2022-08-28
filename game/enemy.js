@@ -9,14 +9,27 @@ const FOLLOW_VEL = 5;
 const FOLLOW_HP = 1;
 const FOLLOW_SCORE = 50;
 
+const KAMI_S_W = 20;
+const KAMI_S_H = 5;
+const KAMI_VEL = 15;
+const KAMI_HP = 1;
+const KAMI_SCORE = 100;
+
+const TANK_S_W = 90;
+const TANK_S_H = 30;
+const TANK_VEL_X = -5;
+const TANK_VEL_Y = 0;
+const TANK_HP = 5;
+const TANK_SCORE = 50;
+
 
 class Junk extends Item {
     constructor(x, y, size) {
         let verse = (random() > 0.5) ? 1 : -1;
-        let vx = verse * random (15, 30);
+        let vx = verse * random (15, 30); // Why 15 -30 ??
 
         verse = (random() > 0.5) ? 1 : -1;
-        let vy = verse * random() * random (15, 30);
+        let vy = verse * random (15, 30); // Why 15 -30 ??
 
         let s = (size < 4) ? 4 : size;
         super(x, y, s, s, vx, vy, 0, 0);
@@ -84,7 +97,6 @@ class FollowerNg extends Follower {
 }
 
 
-
 class Kamikaze extends Item {
     constructor(w, h, target) {
         let startPos = random(3);
@@ -105,17 +117,17 @@ class Kamikaze extends Item {
 
 
         let d = dist(posX, posY, target.posX, target.posY);
-        let velX = (target.posX - posX) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
-        let velY = (target.posY - posY) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+        let velX = (target.posX - posX) * KAMI_VEL / d;
+        let velY = (target.posY - posY) * KAMI_VEL / d;
 
-        super(posX, posY, 20, 5, velX, velY, 1, 100);
+        super(posX, posY, KAMI_S_W, KAMI_S_H, velX, velY, KAMI_HP, KAMI_SCORE);
     }
 }
 
 
 class Tank extends Item {
     constructor(x, y, target, shots) {
-        super(x, y, 90, 30, -5, 0, 6, 50);
+        super(x, y, TANK_S_W, TANK_S_H, TANK_VEL_X, TANK_VEL_Y, TANK_HP, TANK_SCORE);
         this.target = target;
         this.shots = shots;
         this.frameOff = frameCount;

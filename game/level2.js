@@ -1,6 +1,6 @@
 
 const ENEMEY_STAGE = [
-    {f:  80, k:   0, t:   0, d: 1000, m: "A flock of followers is cheasing you!"},    // Stage 1
+    {f:  80, k:   0, t:   0, d: 600, m: "A flock of followers is cheasing you!"},     // Stage 1
     {f: 200, k: 100, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
     {f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
     {f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
@@ -110,7 +110,12 @@ class Level2 extends BaseLevel {
         // Check if the game is over
         if (this.ship.isDead()) {
             engine.phase = DEAD;
-            musicSet["L2"].stop();
+            if (this.stageId < ENEMEY_STAGE.length - 1) {
+                musicSet["L2"].stop();
+            } else {
+                musicSet["BOSS"].stop();               
+            }
+
         } else {
             // Increment level difficulty
             isLevelEnd = this.levelUpdate(frameCount);
@@ -158,12 +163,20 @@ class Level2 extends BaseLevel {
                 this.stageId++;
                 this.stageFrCount = counter;
 
-                // Check if there are more stages or not
-                if (this.stageId >= ENEMEY_STAGE.length) {
-                    // Level completed
+                // In case the boss is coming
+                if (this.stageId === ENEMEY_STAGE.length - 1) {
+                    // Stop the level song and play the boss song.
                     musicSet["L2"].stop();
+                    musicSet["BOSS"].loop();
+                } 
+                
+                // Check if there are more stages or not
+                if (this.stageId === ENEMEY_STAGE.length) {
+                    // Level completed
+                    musicSet["BOSS"].stop();
                     endLevel =  true;
-                } else {
+                }
+                else {
                     // Set all the new frequencies (actually duty cycle)
                     this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
                     this.tankFreq = ENEMEY_STAGE[this.stageId].t;

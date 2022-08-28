@@ -121,6 +121,9 @@ class Game {
     }
 
     movePlayer() {
+        // Checl CTRL is pressed for dash
+        this.ship.dashOn = (keyIsDown(CONTROL)) ? true : false;
+
         if (keyIsDown(LEFT_ARROW)) {
             this.ship.move(LEFT);
         }

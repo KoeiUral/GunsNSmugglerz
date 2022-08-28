@@ -1,7 +1,8 @@
 {
-    "Life":   {"type":"prog",  "x":   10, "y":10, "val": 500, "w": 150, "max": 500},
-    "Repair": {"type":"prog",  "x":  250, "y":10, "val":  0,  "w": 150, "max": 400},
-    "Score":  {"type":"flat",  "x":  500, "y":10, "val":  0},
+    "Life":   {"type":"prog",  "x":   10, "y":10, "val": 500, "w": 100, "max": 500},
+    "Rep":    {"type":"prog",  "x":  180, "y":10, "val":  0,  "w": 100, "max": 400},
+    "Dash":   {"type":"prog",  "x":  350, "y":10, "val":  0,  "w": 100, "max": 500},    
+    "Score":  {"type":"flat",  "x":  550, "y":10, "val":  0},
     "Status": {"type":"flat",  "x":  800, "y":10, "val": ""},
     "Left":   {"type":"icon",  "x":  900, "y":10, "val": "y", "active": 1},
     "Up":     {"type":"icon",  "x":  922, "y":10, "val": "Z", "active": 1},

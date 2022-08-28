@@ -11,9 +11,8 @@ const ENEMEY_STAGE = [
 
 class Level2 extends BaseLevel {
     constructor(player) {
-        super();
+        super(player);
 
-        this.ship = player;
         this.bg = new PerlinStarsBG(engine.cw, engine.ch);
         this.kamiz = [];  
         this.tanks = [];
@@ -34,8 +33,16 @@ class Level2 extends BaseLevel {
     }
 
     init() {
-        // TODO USEFULL!
-        ;
+        // If music is not playing, start it
+        if (musicSet["L2"].isPlaying() === false) {
+            musicSet["L2"].loop();
+        }
+
+        this.stageFrCount = frameCount;
+        engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
+        this.ship.rearOn = true;
+
+        this.initialized = true;
     }
 
     dispose() {
@@ -55,6 +62,7 @@ class Level2 extends BaseLevel {
         this.maxKamiNbr = 1;
         this.maxTankNbr = 1;
         this.maxFollowNbr = 1;
+        this.initialized = false;
 
         // Reset the ship status and gui wo changing score
         engine.game.ship.reset();
@@ -63,16 +71,6 @@ class Level2 extends BaseLevel {
 
     update() {
         let isLevelEnd = false;
-
-        // If music is not playing, start it
-        if (musicSet["L2"].isPlaying() === false) {
-            musicSet["L2"].loop();
-
-            // Music start is used to detect begin of level
-            this.stageFrCount = frameCount;
-            engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
-            this.ship.rearOn = true;
-        }
 
         // Update BG
         this.bg.update();
@@ -112,7 +110,7 @@ class Level2 extends BaseLevel {
         // Check if the game is over
         if (this.ship.isDead()) {
             engine.phase = DEAD;
-            musicSet["L2"].stop(); // TODO: change L2 key with variable of the level
+            musicSet["L2"].stop();
         } else {
             // Increment level difficulty
             isLevelEnd = this.levelUpdate(frameCount);

@@ -2,8 +2,9 @@
  *  Abstarct class as interface for specific level implementation
  */
  class BaseLevel {
-    construsctor() {
-
+    constructor(player) {
+        this.ship = player;
+        this.initialized = false;
     }
 
 /* // TEMPLATE CLASS METHODS:

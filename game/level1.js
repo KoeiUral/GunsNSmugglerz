@@ -2,13 +2,12 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 8;
+const END_STAGE = 7;
 
 class Level1 extends BaseLevel {
     constructor(player) {
-        super();
+        super(player);
 
-        this.ship = player;
         this.meteors = [];
         this.enemies = [];
         this.bg = new StarsBG(engine.cw, engine.ch);
@@ -23,6 +22,15 @@ class Level1 extends BaseLevel {
 
         this.updateFreq = 200;
         this.stageId = 0;
+    }
+
+    init() {
+        // If music is not playing, start it
+        if (musicSet["L1"].isPlaying() === false) {
+            musicSet["L1"].loop();
+        }
+
+        this.initialized = true;
     }
 
     dispose() {
@@ -53,6 +61,7 @@ class Level1 extends BaseLevel {
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
         this.stageId = 0;
+        this.initialized = false;
 
         // Reset the ship status and gui wo changing score
         engine.game.ship.reset();
@@ -61,11 +70,6 @@ class Level1 extends BaseLevel {
 
     update() {
         let isLevelEnd = false;
-
-        // If music is not playing, start it
-        if (musicSet["L1"].isPlaying() === false) {
-            musicSet["L1"].loop();
-        }
 
         // Update BG
         this.bg.update();

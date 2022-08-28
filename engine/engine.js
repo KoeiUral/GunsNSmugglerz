@@ -1,6 +1,6 @@
 
 
-const VERSION = 0.1;
+const VERSION = 2022;
 
 // ENGINE phases
 const LOAD = 0;
@@ -80,6 +80,11 @@ class Engine {
 
     step() {
         if (this.phase === RUN) {
+            // Check if the level has already been initializied
+            if (this.game.levelSet[this.currentLevel].initialized === false) {
+                this.game.levelSet[this.currentLevel].init();
+            }
+
             // Execute level step, return true if level is finished
              if (this.game.levelSet[this.currentLevel].update()) {
                 // Dispose the level

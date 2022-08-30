@@ -15,6 +15,7 @@ class Item {
 
         this.hp = life;
         this.score = score;
+        this.halo = HALO;
     }
 
     // Check intersection with any other Rectangle object.
@@ -49,7 +50,7 @@ class Item {
     show() {
         noStroke();
 
-        if (HALO) {
+        if (this.halo) {
             fill(255, 0, 255);
             rect(this.posX - 1, this.posY - 1, this.w, this.h);
             fill(0, 255, 255);

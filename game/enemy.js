@@ -23,6 +23,13 @@ const TANK_HP = 5;
 const TANK_SCORE = 50;
 
 
+
+const CRUISER_W = 1000;
+const CRUISER_H = 400;
+const CRUISER_SEGS = 20;
+const CRUISER_VEL = -1;
+
+
 class Junk extends Item {
     constructor(x, y, size) {
         let verse = (random() > 0.5) ? 1 : -1;
@@ -146,6 +153,66 @@ class Tank extends Item {
             this.fireToggle = (this.fireToggle === 0) ? 1 : 0;
 
             this.shots.addDir(this.posX + xOffset, this.posY + yOffset, velX, velY);
+        }
+    }
+}
+
+
+class StarCruiser {
+    constructor(x, y, target, shots) {
+        this.segments = [];
+        this.windows = [];
+        this.target = target;
+        this.shots = shots;
+
+        let xi = 0;
+        let yi = 0;
+        let wi = 0;
+        let hi = 0;
+
+        // Create all the items composing the cruiser
+        for (let i = 0; i < CRUISER_SEGS; i++) {
+            xi = x + i * CRUISER_W / CRUISER_SEGS;
+            yi = y + (CRUISER_H / 2) * (1 - (i + 1) / CRUISER_SEGS);
+            wi = CRUISER_W / CRUISER_SEGS;
+            hi = (i + 1) * CRUISER_H / CRUISER_SEGS;
+
+            this.segments.push(new Item(xi, yi, wi, hi, CRUISER_VEL, 0, 100, 10000));
+            this.segments[i].halo = false;
+        }
+    }
+
+    intersects(other) {
+        let overlap = false;
+
+        for (let it of this.segments) {
+            overlap = it.intersects(other);
+
+            if (overlap) {
+                break;
+            }
+        }
+
+        return overlap;
+    }
+
+    hit() {
+        this.segments[0].hit();
+    }
+
+    isDead() {
+        return (this.segments[0].isDead());
+    }
+
+    move() {
+        for (let it of this.segments) {
+            it.move();
+        }
+    }
+
+    show() {
+        for (let it of this.segments) {
+            it.show();
         }
     }
 }

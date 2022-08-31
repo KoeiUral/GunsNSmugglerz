@@ -1,4 +1,5 @@
 const HALO = true;
+const TRAIL_LEN = 3;
 
 /**
  * Implements a general item wit basic functionality.
@@ -16,6 +17,9 @@ class Item {
         this.hp = life;
         this.score = score;
         this.halo = HALO;
+        this.trail = false;
+        this.trailSampling = 1;
+        this.prevPos = [];
     }
 
     // Check intersection with any other Rectangle object.
@@ -36,10 +40,34 @@ class Item {
         return (this.hp <= 0);
     }
 
+    storeTrail() {
+        if (frameCount % this.trailSampling === 0) {
+            // Updated the sliding window buffer
+            this.prevPos.push({x: this.posX, y:this.posY});
+
+            if (this.prevPos.length > TRAIL_LEN) {
+                this.prevPos.splice(0, 1);
+            }
+        }
+    }
+
+    showTrail() {
+        let len = this.prevPos.length - 1;
+
+        for (let i = 0; i < len; i++) {
+            fill(255, 255, 255, 55 + 50 * i);
+            rect(this.prevPos[i].x, this.prevPos[i].y, this.w, this.h);
+        }
+    }
+
     // Moves this rectangle by the provided x and y distances.
     move () {
         this.posX += this.velX;
         this.posY += this.velY;
+
+        if (this.trail) {
+            this.storeTrail();
+        }
     }
 
     setVel(vx, vy) {
@@ -50,6 +78,11 @@ class Item {
     show() {
         noStroke();
 
+        // If trail on, draw the previous positions
+        if (this.trail) {
+            this.showTrail();
+        }
+
         if (this.halo) {
             fill(255, 0, 255);
             rect(this.posX - 1, this.posY - 1, this.w, this.h);
@@ -57,6 +90,7 @@ class Item {
             rect(this.posX + 1, this.posY + 1, this.w, this.h);
         }
 
+        // Draw the current position
         fill(255);
         rect(this.posX, this.posY, this.w, this.h);
     }

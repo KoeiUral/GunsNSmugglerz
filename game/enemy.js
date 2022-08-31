@@ -61,6 +61,7 @@ class Meteor extends Item {
 class Follower extends Item {
     constructor(x, y, s, v, target) {
         super(x, y, s, s, v, v, FOLLOW_HP, FOLLOW_SCORE);
+        this.trail = true;
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
@@ -84,6 +85,11 @@ class Follower extends Item {
 
             this.posX += 8;
             this.posY = this.origY + this.exit * pow(this.posX - this.origX, 2) / 100;
+        }
+
+        // Updated the sliding window buffer
+        if (this.trail) {
+            this.storeTrail();
         }
     }
 }

@@ -32,6 +32,7 @@ class SpaceShip extends Item {
         this.rearOn = false;
         this.dashEnergy = 500; // TODO, remove MAGIC NBR
         this.dashOn = false;
+        this.trailSampling = 2;
     }
 
     reset() {
@@ -135,6 +136,8 @@ class SpaceShip extends Item {
         if (this.dashOn && this.dashEnergy > 50) {
             dashFactor = DASH_K;
             this.dashEnergy = this.dashEnergy - 25; // TODO: Remove magic
+
+            this.storeTrail();
         }
 
         switch (direction) {
@@ -200,7 +203,7 @@ class SpaceShip extends Item {
 
         // Restore Dash if not used
         if ((this.dashOn === false) && (this.dashEnergy < 500)) {
-            this.dashEnergy++;
+            this.dashEnergy = this.dashEnergy + inc;
         }
 
         engine.gui.hk['Dash'].val = this.dashEnergy;
@@ -262,6 +265,10 @@ class SpaceShip extends Item {
         }
 
         this.shots.update();
+
+        if (this.dashOn && this.dashEnergy > 50) {
+            this.showTrail();
+        }
     }
 }
 

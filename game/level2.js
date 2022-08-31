@@ -1,12 +1,12 @@
 
 const ENEMEY_STAGE = [
     {f:  0,  k:   0, t:   0, d:  50, m: "3, 2, 1 fight!"},                                         // Stage 0 intro
-//    {f:  80, k:   0, t:   0, d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
-//    {f: 200, k: 100, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
-//    {f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
-//    {f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
-//    {f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
-//    {f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
+    //{f:  80, k:   0, t:   0, d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
+    //{f: 200, k: 100, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
+    //{f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
+    //{f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
+    //{f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
+    //{f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
     {f:   0, k:   0, t:   0, d: 5000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
 ];
 

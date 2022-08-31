@@ -79,26 +79,38 @@ class StoryTeller {
                 // Start a scrolling text box
                 engine.gui.consoleBox(element['msg'], element['x'], element['y'], element['w'], element['h'], SCROLL_UP, element['s']);
                 this.frameEnd = false;
-            } else if (element['type'] === "txtbox") {
+            }
+            else if ((element['type'] === "txttyper") && (this.frameEnd)) {
+                // Start a scrolling text box
+                engine.gui.consoleTyper(element['msg'], element['x'], element['y'], element['w'], element['h'], element['s']);
+                this.frameEnd = false;
+            }
+            else if (element['type'] === "txtbox") {
                 engine.gui.displayTextBox(element['msg'], element['s'], element['x'], element['y'], element['w'], element['h']);
-            } else if (element['type'] === "image") {
+            }
+            else if (element['type'] === "image") {
                 // Display the image
                 image(imageSet[element['ref']], element['x'], element['y'], element['w'], element['h']);
-            } else if ((element['type'] === "audio") && (this.audioPlaying === -1)) {
+            }
+            else if ((element['type'] === "audio") && (this.audioPlaying === -1)) {
                 this.audioPlaying = element['ref'];
                 if (element['loop'] === true) {
                     audioSet[element['ref']].loop();
-                } else {
+                } 
+                else {
                     audioSet[element['ref']].play();
                 }
             }
         }
 
-        // Show the text box scrolling
+        // Show the text box scrolling if any
         engine.gui.showScrollingBox();
 
+        // Show the text typer if any
+        engine.gui.showTyperBox();
+
         // If the scrolling is over and it is not the last frame of the game (i.e. WIN), then
-        if ((engine.gui.isScrollBoxOver()) && (engine.phase !== WIN)) {
+        if ((engine.gui.isScrollBoxOver() && engine.gui.isTyperBoxOver()) && (engine.phase !== WIN)) {
             // Move to the next frame if in auto mode
             if (plot[chapter]['frames'][this.curFrame]['auto']) {
                 this.nextFrame(this.curChapter);
@@ -112,6 +124,10 @@ class StoryTeller {
 
     nextFrame(chapter) {
         this.frameEnd = true;
+        // Remove any typer msg
+        engine.gui.removeTyper();
+
+
         // Stop audio if it is playing 
         if (this.audioPlaying > -1) {
             audioSet[this.audioPlaying].stop();

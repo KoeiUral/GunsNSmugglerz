@@ -15,7 +15,7 @@ const WIN = 7;
 const KEY_SPACE = 32;
 const KEY_M = 78;
 const KEY_P = 80;
-const KEY_S = 83;
+const KEY_R = 82;
 
 const fontSet = {};
 const soundSet = {};
@@ -123,7 +123,7 @@ class Engine {
         else if (this.phase === WIN) {
             this.game.displayBg();
             this.story.playCh(this.storyChapter);
-            this.gui.displayContinueMsg("s", "restart");
+            this.gui.displayContinueMsg("r", "restart");
         }
     }
 
@@ -143,8 +143,8 @@ class Engine {
                 this.story.nextFrame(this.storyChapter);
             }
         } 
-        else if ((key === KEY_S) && (this.phase >= DEAD)) {
-            // If game ended, press s to reset
+        else if ((key === KEY_R) && (this.phase >= DEAD)) {
+            // If game ended, press r to reset
             this.reset();
         } 
         else if (key === KEY_P) {

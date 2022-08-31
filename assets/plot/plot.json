@@ -42,7 +42,7 @@
             {"auto": true,
              "screen": [
                 {"type": "txtbox", "x": 20,  "y": 300, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
-                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 200, "s":40, "msg":  "You delivered the precious and (mysterious) goods to the resistant"},
+                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 200, "s":40, "msg":  "You delivered the precious (and mysterious) goods to the resistant"},
                 {"type": "txtbox", "x": 100, "y": 600, "w": 824,"h": 100, "s":30, "msg":  "... new adventures coming soon ..."},
                 {"type": "audio", "loop": true, "path": "assets/audio/topgun.mp3"}
             ]}   

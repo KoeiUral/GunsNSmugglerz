@@ -37,7 +37,7 @@
             }
 
             // Remove an item if it is outside the screen
-            if ((list[i].posX < 0) || (list[i].posX > engine.cw)|| (list[i].posY < 0)  || (list[i].posY > engine.ch) ) {
+            if (list[i].isOffScreen(engine.cw, engine.ch)) {
                 list.splice(i, 1);
             } 
         }
@@ -52,7 +52,7 @@
 class Game {
     constructor() {
         // Create the player
-        let startPos = 70 * engine.cw / DEFAULT_W; 
+        let startPos = 200 * engine.cw / DEFAULT_W; 
         this.ship = new SpaceShip(startPos, engine.ch / 2);
         this.junks = [];
 

@@ -32,6 +32,15 @@ class Item {
           );   
     }
 
+    isOffScreen(W, H) {
+        return (
+            this.posX + this.w  <= 0  ||
+            this.posX - this.w  >= W  ||
+            this.posY + this.h  <= 0  ||
+            this.posY - this.h  >= H
+          );
+    }
+
     hit() {
         this.hp--;
     }

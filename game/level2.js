@@ -7,7 +7,7 @@ const ENEMEY_STAGE = [
     {f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
     {f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
     {f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
-    {f:   0, k:   0, t:   0, d: 1000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
+    {f:   0, k:   0, t:   0, d: 3000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
 ];   
 
 class Level2 extends BaseLevel {
@@ -181,7 +181,7 @@ class Level2 extends BaseLevel {
                 } // Check if there are more stages or not
                 else if (this.stageId === ENEMEY_STAGE.length) {
                     // Level completed
-                    musicSet["BOSS"].stop();
+                    musicSet["BOSS"].setVolume(0, 10);
                     this.bossFreq = 0;
                     this.kamiFreq = 0;
                     this.tankFreq = 0;

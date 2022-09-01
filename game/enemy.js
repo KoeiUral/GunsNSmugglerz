@@ -174,6 +174,7 @@ class StarCruiser {
         this.posY = y;
         this.w = CRUISER_W;
         this.h = CRUISER_H;
+        this.score = 10000;
 
         let xi = 0;
         let yi = 0;

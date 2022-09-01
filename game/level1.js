@@ -160,7 +160,7 @@ class Level1 extends BaseLevel {
                     this.enemyFreq = 200;
                 } else if (this.stageId === END_STAGE) {
                     // Level completed, time to cool down...
-                    musicSet["L1"].stop();
+                    musicSet["L1"].setVolume(0, 5);
 
                     this.enemyFreq = 0;
                     this.meteorFreq = 0;

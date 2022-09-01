@@ -1,14 +1,14 @@
 
 const ENEMEY_STAGE = [
-    {f:  0,  k:   0, t:   0, d:  50, m: "3, 2, 1 fight!"},                                         // Stage 0 intro
-    //{f:  80, k:   0, t:   0, d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
-    //{f: 200, k: 100, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
-    //{f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
-    //{f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
-    //{f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
-    //{f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
-    {f:   0, k:   0, t:   0, d: 5000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
-];
+    {f:  0,  k:   0, t:   0, d:  50, m: ""},                                         // Stage 0 intro
+    {f:  80, k:   0, t:   0, d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
+    {f: 200, k: 100, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
+    {f: 200, k:  80, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
+    {f: 200, k:   0, t: 150, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
+    {f:   0, k:   0, t:  80, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
+    {f: 250, k: 200, t: 150, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
+    {f:   0, k:   0, t:   0, d: 1000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
+];   
 
 class Level2 extends BaseLevel {
     constructor(player) {
@@ -31,7 +31,10 @@ class Level2 extends BaseLevel {
 
         this.maxKamiNbr = 1;
         this.maxTankNbr = 1;
-        this.maxFollowNbr = 1;       
+        this.maxFollowNbr = 1;
+
+        this.initialized = false;
+        this.coolDown = false;       
     }
 
     init() {
@@ -65,6 +68,7 @@ class Level2 extends BaseLevel {
         this.maxTankNbr = 1;
         this.maxFollowNbr = 1;
         this.initialized = false;
+        this.coolDown = false;
 
         // Reset the ship status and gui wo changing score
         engine.game.ship.reset();
@@ -114,23 +118,19 @@ class Level2 extends BaseLevel {
         // Check if the game is over
         if (this.ship.isDead()) {
             engine.phase = DEAD;
-            if (this.stageId < ENEMEY_STAGE.length - 1) {
-                musicSet["L2"].stop();
-            } else {
-                musicSet["BOSS"].stop();               
-            }
-
-        } else {
+            musicSet["L2"].stop();
+            musicSet["BOSS"].stop();
+        } else if (this.coolDown === false) {
             // Increment level difficulty
-            isLevelEnd = this.levelUpdate(frameCount);
+            this.levelUpdate(frameCount);
+        } else {
+            isLevelEnd = ((this.kamiz.length === 0) && (this.tanks.length === 0) && (this.bosses.length === 0) && (this.followers.length === 0)) ? true : false;
         }
 
         return isLevelEnd;
     }
 
     levelUpdate(counter) {
-        let endLevel = false;
-
         // Add Kamikaze according to timer
         if ((counter % this.kamiFreq) === 0) {
             let swarmNbr = floor(random (1, this.maxKamiNbr));
@@ -178,31 +178,31 @@ class Level2 extends BaseLevel {
                     musicSet["L2"].stop();
                     musicSet["BOSS"].loop();
                     this.bossFreq = 1100;
-                } 
-                
-                // Check if there are more stages or not
-                if (this.stageId === ENEMEY_STAGE.length) {
+                } // Check if there are more stages or not
+                else if (this.stageId === ENEMEY_STAGE.length) {
                     // Level completed
                     musicSet["BOSS"].stop();
-                    endLevel =  true;
+                    this.bossFreq = 0;
+                    this.kamiFreq = 0;
+                    this.tankFreq = 0;
+                    this.followFreq = 0;
+                    this.coolDown = true;
+                    return;  // TODO: ugly solution to skip the freq. update ...
                 }
-                else {
-                    // Set all the new frequencies (actually duty cycle)
-                    this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
-                    this.tankFreq = ENEMEY_STAGE[this.stageId].t;
-                    this.followFreq = ENEMEY_STAGE[this.stageId].f;
 
-                    // Display the message for the new Stage
-                    engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
-                    engine.addScore(100);
+                // Set all the new frequencies (actually duty cycle)
+                this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
+                this.tankFreq = ENEMEY_STAGE[this.stageId].t;
+                this.followFreq = ENEMEY_STAGE[this.stageId].f;
 
-                    // Play the Alarm sound
-                    soundSet["ALARM"].play();
-                }
+                // Display the message for the new Stage
+                engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
+                engine.addScore(100);
+
+                // Play the Alarm sound
+                soundSet["ALARM"].play();
             }
         }
-
-        return endLevel;
     }
 
     increaseNumber(freq, nbr) {

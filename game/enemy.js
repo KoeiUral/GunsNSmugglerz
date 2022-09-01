@@ -143,13 +143,13 @@ class Tank extends Item {
         super(x, y, TANK_S_W, TANK_S_H, TANK_VEL_X, TANK_VEL_Y, TANK_HP, TANK_SCORE);
         this.target = target;
         this.shots = shots;
-        this.frameOff = frameCount;
+        this.frameOff = floor(random(50));
         this.fireFreq = 100;
         this.fireToggle = 0;
     }
 
     fire() {
-        if ((frameCount - this.frameOff) % this.fireFreq === 0) {
+        if ((frameCount + this.frameOff) % this.fireFreq === 0) {
             let d = dist(this.target.posX, this.target.posY, this.posX, this.posY) * 2; // 2 * to reduce the shot velocity
             let velX = (this.target.posX - this.posX) * SHOT_VEL / d;
             let velY = (this.target.posY - this.posY) * SHOT_VEL / d;
@@ -170,6 +170,10 @@ class StarCruiser {
         this.windows = [];
         this.target = target;
         this.shots = shots;
+        this.posX = x;
+        this.posY = y;
+        this.w = CRUISER_W;
+        this.h = CRUISER_H;
 
         let xi = 0;
         let yi = 0;
@@ -202,6 +206,15 @@ class StarCruiser {
         return overlap;
     }
 
+    isOffScreen(W, H) {
+        return (
+            this.posX + this.w  <= 0  ||
+            this.posX - this.w  >= W  ||
+            this.posY + this.h  <= 0  ||
+            this.posY - this.h  >= H
+          );
+    }
+
     hit() {
         this.segments[0].hit();
     }
@@ -211,6 +224,8 @@ class StarCruiser {
     }
 
     move() {
+        this.posX += CRUISER_VEL;
+
         for (let it of this.segments) {
             it.move();
         }

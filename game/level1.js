@@ -2,13 +2,12 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 8;
+const END_STAGE = 7;
 
 class Level1 extends BaseLevel {
     constructor(player) {
-        super();
+        super(player);
 
-        this.ship = player;
         this.meteors = [];
         this.enemies = [];
         this.bg = new StarsBG(engine.cw, engine.ch);
@@ -17,12 +16,23 @@ class Level1 extends BaseLevel {
         this.meteorNbr = MET_NBR_LIST[0];
         this.meteorIndex = 0;
 
-        this.enemyFreq = 200;
+        this.enemyFreq = 0;
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
 
         this.updateFreq = 200;
         this.stageId = 0;
+        this.initialized = false;
+        this.coolDown = false;
+    }
+
+    init() {
+        // If music is not playing, start it
+        if (musicSet["L1"].isPlaying() === false) {
+            musicSet["L1"].loop();
+        }
+
+        this.initialized = true;
     }
 
     dispose() {
@@ -49,10 +59,12 @@ class Level1 extends BaseLevel {
         this.meteorNbr = MET_NBR_LIST[0];
         this.meteorIndex = 0;
 
-        this.enemyFreq = 200;
+        this.enemyFreq = 0;
         this.minEnemyNbr = 1;
         this.maxEnemyNbr = 3;
         this.stageId = 0;
+        this.initialized = false;
+        this.coolDown = false;
 
         // Reset the ship status and gui wo changing score
         engine.game.ship.reset();
@@ -61,11 +73,6 @@ class Level1 extends BaseLevel {
 
     update() {
         let isLevelEnd = false;
-
-        // If music is not playing, start it
-        if (musicSet["L1"].isPlaying() === false) {
-            musicSet["L1"].loop();
-        }
 
         // Update BG
         this.bg.update();
@@ -100,17 +107,17 @@ class Level1 extends BaseLevel {
         if (this.ship.isDead()) {
             engine.phase = DEAD;
             musicSet["L1"].stop();
-        } else {
+        } else if (this.coolDown === false) {
             // Increment level difficulty
-            isLevelEnd = this.levelUpdate(frameCount);
+            this.levelUpdate(frameCount);
+        } else {
+            isLevelEnd = ((this.meteors.length === 0) && (this.enemies.length === 0)) ? true : false;
         }
 
         return isLevelEnd;
     }
 
     levelUpdate(counter) {
-        let endLevel = false;
-
         // Add meteors according to timer
         if ((counter % this.meteorFreq) === 0) {
             for (let i = 0; i < this.meteorNbr; i++) {
@@ -127,7 +134,7 @@ class Level1 extends BaseLevel {
         }
 
         // Increase difficulty
-        if ((counter % this.updateFreq) === 0) {
+        if (((counter % this.updateFreq) === 0) && (this.coolDown === false)) {
             this.meteorIndex = (this.meteorIndex + 1) % MET_FREQ_LIST.length;
 
             // Next level   
@@ -140,34 +147,36 @@ class Level1 extends BaseLevel {
                 if (this.enemyFreq > 50) {
                     this.enemyFreq -= 10;
                 }
+
                 this.minEnemyNbr++;
                 this.maxEnemyNbr++;
-
                 this.stageId++;
+
                 engine.gui.consoleLine("STAGE " + (this.stageId + parseInt('1')));
+                soundSet["LEVEL_UP"].play();
                 engine.addScore(100);
 
-                if (this.stageId >= 1) { // TODO: REMOVE MAGIC
+                if (this.stageId === 1) { // TODO: REMOVE MAGIC
+                    this.enemyFreq = 200;
+                } else if (this.stageId === END_STAGE) {
+                    // Level completed, time to cool down...
+                    musicSet["L1"].setVolume(0, 5);
+
+                    this.enemyFreq = 0;
+                    this.meteorFreq = 0;
+                    this.coolDown = true;
+                    return;  // TODO: ugly solution to skip the freq. update at line 179, 180..
+                } else {
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;
                     engine.gui.consoleBox("*** !!! Rear Shoot updated !!! ***  ", engine.cw, engine.ch - 40, 700, 30, SCROLL_LEFT, 30);
-                }
-
-                if (this.stageId === END_STAGE) {
-                    // Stage completed
-                    musicSet["L1"].stop();
-                    endLevel =  true;
-                } else {
-                    // If not the end, play the level-up sound
-                    soundSet["LEVEL_UP"].play();
-                }
+                }               
             }
 
+            // Update the meteor and enemy spawn frequency
             this.meteorFreq = MET_FREQ_LIST[this.meteorIndex];
             this.meteorNbr = MET_NBR_LIST[this.meteorIndex];
         }
-
-        return endLevel;
     }
 
     show() {       

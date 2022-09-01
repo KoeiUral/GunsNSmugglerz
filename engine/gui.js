@@ -50,6 +50,37 @@ class ScrollingMsg {
     }
 }
 
+class TypeWriterMsg {
+    constructor (x, y, w, h, s, msg, font) {
+        this.boxX = x;
+        this.boxY = y;
+        this.boxW = w;
+        this.boxH = h;
+        this.font = font
+        this.size = s * engine.ch / DEFAULT_H;
+        this.finalMsg = msg;
+        this.displayMsg = "";
+        this.readPtr = 0;
+        this.typeVel = 5;
+    }
+
+    show() {
+        textWrap(WORD);
+        fill(255);
+        textFont(this.font);
+        textSize(this.size);
+        textAlign(LEFT, BASELINE);
+
+        // Add a character to the displayed msg at typing pace
+        if (((frameCount % this.typeVel) === 0) && (this.readPtr < this.finalMsg.length)) {
+            this.displayMsg += this.finalMsg[this.readPtr];
+            this.readPtr++;
+        }
+
+        text(this.displayMsg, this.boxX, this.boxY, this.boxW, this.boxH);
+    }
+}
+
 
 
 class Gui {
@@ -59,6 +90,7 @@ class Gui {
         this.cw = width;
         this.ch = height;
         this.scrollBoxes = [];
+        this.typerBox = [];
 
         // Display text varibales
         this.msgCounter = 0;
@@ -213,6 +245,13 @@ class Gui {
         }
     }
 
+    showTyperBox() {
+        // Iterate over all the typer boxes
+        for (let msg of this.typerBox) {
+            msg.show();
+        }
+    }
+
     displayContinueMsg(keyMsg, actionMsg) {
         if ((floor(frameCount / 40)) % 2 == 0) {
             fill(255);
@@ -223,14 +262,24 @@ class Gui {
         }
     }
 
-    scroll () {
+    scroll() {
         for (let box of this.scrollBoxes) {
             box.scroll();
         }
     }
 
-    isScrollBoxOver () {
+    isScrollBoxOver() {
         return (this.scrollBoxes.length === 0);
+    }
+
+    isTyperBoxOver() {
+        let retState = true;
+
+        if (this.typerBox.length > 0) {
+            retState = (this.typerBox[0].readPtr < this.typerBox[0].finalMsg.length) ? false : true; 
+        }
+
+        return retState;
     }
 
     consoleLine(message) {
@@ -239,6 +288,17 @@ class Gui {
     }
 
     consoleBox(message, x, y, w, h, type, size) {
-        this.scrollBoxes.push(new ScrollingMsg(x,y,w, h, size, type, message, this.font));
+        this.scrollBoxes.push(new ScrollingMsg(x, y, w, h, size, type, message, this.font));
     }
+
+    consoleTyper(message, x, y, w, h, size) {
+        this.typerBox.push(new TypeWriterMsg(x, y, w, h, size, message, this.font));   
+    }
+
+    removeTyper() {
+        if (this.typerBox.length > 0) {
+            this.typerBox.splice(0, 1);
+        }
+    }
+
 }

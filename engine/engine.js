@@ -1,6 +1,6 @@
 
 
-const VERSION = 0.1;
+const VERSION = 2022;
 
 // ENGINE phases
 const LOAD = 0;
@@ -15,7 +15,7 @@ const WIN = 7;
 const KEY_SPACE = 32;
 const KEY_M = 78;
 const KEY_P = 80;
-const KEY_S = 83;
+const KEY_R = 82;
 
 const fontSet = {};
 const soundSet = {};
@@ -80,6 +80,11 @@ class Engine {
 
     step() {
         if (this.phase === RUN) {
+            // Check if the level has already been initializied
+            if (this.game.levelSet[this.currentLevel].initialized === false) {
+                this.game.levelSet[this.currentLevel].init();
+            }
+
             // Execute level step, return true if level is finished
              if (this.game.levelSet[this.currentLevel].update()) {
                 // Dispose the level
@@ -118,7 +123,7 @@ class Engine {
         else if (this.phase === WIN) {
             this.game.displayBg();
             this.story.playCh(this.storyChapter);
-            this.gui.displayContinueMsg("s", "restart");
+            this.gui.displayContinueMsg("r", "restart");
         }
     }
 
@@ -138,8 +143,8 @@ class Engine {
                 this.story.nextFrame(this.storyChapter);
             }
         } 
-        else if ((key === KEY_S) && (this.phase >= DEAD)) {
-            // If game ended, press s to reset
+        else if ((key === KEY_R) && (this.phase >= DEAD)) {
+            // If game ended, press r to reset
             this.reset();
         } 
         else if (key === KEY_P) {

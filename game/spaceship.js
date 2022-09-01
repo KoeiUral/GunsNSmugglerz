@@ -13,6 +13,7 @@ const SHOT_SIZE = 6;
 const SHIP_HP = 5;
 const OP_WORK = 400;
 const FIRE_FREQ = 70;
+const DASH_K = 4;
 
 const DAMAGE_TICK = 3;
 
@@ -29,6 +30,9 @@ class SpaceShip extends Item {
         this.workingOps = [0, 1, 2, 3, 4];
         this.rearFreq = FIRE_FREQ;
         this.rearOn = false;
+        this.dashEnergy = 500; // TODO, remove MAGIC NBR
+        this.dashOn = false;
+        this.trailSampling = 2;
     }
 
     reset() {
@@ -127,23 +131,31 @@ class SpaceShip extends Item {
 
     move(direction) {
         let faultFactor = 1;
+        let dashFactor = 1;
+        
+        if (this.dashOn && this.dashEnergy > 50) {
+            dashFactor = DASH_K;
+            this.dashEnergy = this.dashEnergy - 25; // TODO: Remove magic
+
+            this.storeTrail();
+        }
 
         switch (direction) {
             case UP:
                 faultFactor += (1 - (this.ops[UP] == OP_WORK)) * 2;
-                this.posY -= this.velY / faultFactor;
+                this.posY -= (this.velY / faultFactor) * (dashFactor);
                 break;
             case DOWN:
                 faultFactor += (1 - (this.ops[DOWN] == OP_WORK)) * 2;
-                this.posY += this.velY  / faultFactor;
+                this.posY += (this.velY  / faultFactor) * (dashFactor);;
                 break;
             case LEFT:
                 faultFactor += (1 - (this.ops[LEFT] == OP_WORK)) * 2;
-                this.posX -= this.velX / faultFactor;
+                this.posX -= (this.velX / faultFactor) * (dashFactor);;
                 break;
             case RIGHT:
                 faultFactor += (1 - (this.ops[RIGHT] == OP_WORK)) * 2;
-                this.posX += this.velX / faultFactor;
+                this.posX += (this.velX / faultFactor) * (dashFactor);;
                 break;
 
             default:
@@ -173,7 +185,7 @@ class SpaceShip extends Item {
         for (let i = 0; i < this.ops.length; i++) {
             if (this.ops[i] < OP_WORK) {
                 this.ops[i] = this.ops[i] + inc;
-                engine.gui.hk['Repair'].val = this.ops[i];
+                engine.gui.hk['Rep'].val = this.ops[i];
 
                 if (this.ops[i] >= OP_WORK) {
                     this.workingOps.push(i);
@@ -181,13 +193,20 @@ class SpaceShip extends Item {
 
                     let keyId = this.getFaultKey(i);
 
-                    engine.gui.hk['Repair'].val = 0;
+                    engine.gui.hk['Rep'].val = 0;
                     engine.gui.hk['Life'].val += 100;
                     engine.gui.hk[keyId].active = 1;
                 }
                 break;
             }
         }
+
+        // Restore Dash if not used
+        if ((this.dashOn === false) && (this.dashEnergy < 500)) {
+            this.dashEnergy = this.dashEnergy + inc;
+        }
+
+        engine.gui.hk['Dash'].val = this.dashEnergy;
 
         // Decrement immunity (if active)
         if (this.immunity > 0) {
@@ -246,6 +265,10 @@ class SpaceShip extends Item {
         }
 
         this.shots.update();
+
+        if (this.dashOn && this.dashEnergy > 50) {
+            this.showTrail();
+        }
     }
 }
 

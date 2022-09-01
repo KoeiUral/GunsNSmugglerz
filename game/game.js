@@ -2,8 +2,9 @@
  *  Abstarct class as interface for specific level implementation
  */
  class BaseLevel {
-    construsctor() {
-
+    constructor(player) {
+        this.ship = player;
+        this.initialized = false;
     }
 
 /* // TEMPLATE CLASS METHODS:
@@ -36,7 +37,7 @@
             }
 
             // Remove an item if it is outside the screen
-            if ((list[i].posX < 0) || (list[i].posX > engine.cw)|| (list[i].posY < 0)  || (list[i].posY > engine.ch) ) {
+            if (list[i].isOffScreen(engine.cw, engine.ch)) {
                 list.splice(i, 1);
             } 
         }
@@ -51,7 +52,7 @@
 class Game {
     constructor() {
         // Create the player
-        let startPos = 70 * engine.cw / DEFAULT_W; 
+        let startPos = 200 * engine.cw / DEFAULT_W; 
         this.ship = new SpaceShip(startPos, engine.ch / 2);
         this.junks = [];
 
@@ -104,7 +105,7 @@ class Game {
         this.levelSet[0].bg.show();
         engine.gui.displayTextBox("GAME OVER", 80, 0, engine.ch / 2 - 40, engine.cw, engine.ch / 2);
         engine.gui.displayTextBox("Score: " + engine.gui.hk['Score'].val + " - Level: " + reachLevel, 40, 0, engine.ch / 2 + 80, engine.cw, engine.ch / 2);
-        engine.gui.displayContinueMsg("s", "restart");
+        engine.gui.displayContinueMsg("r", "restart");
     }
 
     // Custom function to display the game back ground, used in story mode
@@ -120,6 +121,9 @@ class Game {
     }
 
     movePlayer() {
+        // Checl CTRL is pressed for dash
+        this.ship.dashOn = (keyIsDown(CONTROL)) ? true : false;
+
         if (keyIsDown(LEFT_ARROW)) {
             this.ship.move(LEFT);
         }

@@ -9,14 +9,34 @@ const FOLLOW_VEL = 5;
 const FOLLOW_HP = 1;
 const FOLLOW_SCORE = 50;
 
+const KAMI_S_W = 20;
+const KAMI_S_H = 5;
+const KAMI_VEL = 15;
+const KAMI_HP = 1;
+const KAMI_SCORE = 100;
+
+const TANK_S_W = 90;
+const TANK_S_H = 30;
+const TANK_VEL_X = -5;
+const TANK_VEL_Y = 0;
+const TANK_HP = 5;
+const TANK_SCORE = 50;
+
+
+
+const CRUISER_W = 1000;
+const CRUISER_H = 400;
+const CRUISER_SEGS = 20;
+const CRUISER_VEL = -1;
+
 
 class Junk extends Item {
     constructor(x, y, size) {
         let verse = (random() > 0.5) ? 1 : -1;
-        let vx = verse * random (15, 30);
+        let vx = verse * random (15, 30); // Why 15 -30 ??
 
         verse = (random() > 0.5) ? 1 : -1;
-        let vy = verse * random() * random (15, 30);
+        let vy = verse * random (15, 30); // Why 15 -30 ??
 
         let s = (size < 4) ? 4 : size;
         super(x, y, s, s, vx, vy, 0, 0);
@@ -41,6 +61,7 @@ class Meteor extends Item {
 class Follower extends Item {
     constructor(x, y, s, v, target) {
         super(x, y, s, s, v, v, FOLLOW_HP, FOLLOW_SCORE);
+        this.trail = true;
         this.origX = 0;
         this.origY = 0;
         this.exit = 1;
@@ -65,6 +86,11 @@ class Follower extends Item {
             this.posX += 8;
             this.posY = this.origY + this.exit * pow(this.posX - this.origX, 2) / 100;
         }
+
+        // Updated the sliding window buffer
+        if (this.trail) {
+            this.storeTrail();
+        }
     }
 }
 
@@ -82,7 +108,6 @@ class FollowerNg extends Follower {
         }
     }
 }
-
 
 
 class Kamikaze extends Item {
@@ -105,26 +130,26 @@ class Kamikaze extends Item {
 
 
         let d = dist(posX, posY, target.posX, target.posY);
-        let velX = (target.posX - posX) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
-        let velY = (target.posY - posY) * 15 / d;  // TODO: REMOVE MAGIC 10, it is the DEFAULT KAMI velocity
+        let velX = (target.posX - posX) * KAMI_VEL / d;
+        let velY = (target.posY - posY) * KAMI_VEL / d;
 
-        super(posX, posY, 20, 5, velX, velY, 1, 100);
+        super(posX, posY, KAMI_S_W, KAMI_S_H, velX, velY, KAMI_HP, KAMI_SCORE);
     }
 }
 
 
 class Tank extends Item {
     constructor(x, y, target, shots) {
-        super(x, y, 90, 30, -5, 0, 6, 50);
+        super(x, y, TANK_S_W, TANK_S_H, TANK_VEL_X, TANK_VEL_Y, TANK_HP, TANK_SCORE);
         this.target = target;
         this.shots = shots;
-        this.frameOff = frameCount;
+        this.frameOff = floor(random(50));
         this.fireFreq = 100;
         this.fireToggle = 0;
     }
 
     fire() {
-        if ((frameCount - this.frameOff) % this.fireFreq === 0) {
+        if ((frameCount + this.frameOff) % this.fireFreq === 0) {
             let d = dist(this.target.posX, this.target.posY, this.posX, this.posY) * 2; // 2 * to reduce the shot velocity
             let velX = (this.target.posX - this.posX) * SHOT_VEL / d;
             let velY = (this.target.posY - this.posY) * SHOT_VEL / d;
@@ -134,6 +159,82 @@ class Tank extends Item {
             this.fireToggle = (this.fireToggle === 0) ? 1 : 0;
 
             this.shots.addDir(this.posX + xOffset, this.posY + yOffset, velX, velY);
+        }
+    }
+}
+
+
+class StarCruiser {
+    constructor(x, y, target, shots) {
+        this.segments = [];
+        this.windows = [];
+        this.target = target;
+        this.shots = shots;
+        this.posX = x;
+        this.posY = y;
+        this.w = CRUISER_W;
+        this.h = CRUISER_H;
+        this.score = 10000;
+
+        let xi = 0;
+        let yi = 0;
+        let wi = 0;
+        let hi = 0;
+
+        // Create all the items composing the cruiser
+        for (let i = 0; i < CRUISER_SEGS; i++) {
+            xi = x + i * CRUISER_W / CRUISER_SEGS;
+            yi = y + (CRUISER_H / 2) * (1 - (i + 1) / CRUISER_SEGS);
+            wi = CRUISER_W / CRUISER_SEGS;
+            hi = (i + 1) * CRUISER_H / CRUISER_SEGS;
+
+            this.segments.push(new Item(xi, yi, wi, hi, CRUISER_VEL, 0, 100, 10000));
+            this.segments[i].halo = false;
+        }
+    }
+
+    intersects(other) {
+        let overlap = false;
+
+        for (let it of this.segments) {
+            overlap = it.intersects(other);
+
+            if (overlap) {
+                break;
+            }
+        }
+
+        return overlap;
+    }
+
+    isOffScreen(W, H) {
+        return (
+            this.posX + this.w  <= 0  ||
+            this.posX - this.w  >= W  ||
+            this.posY + this.h  <= 0  ||
+            this.posY - this.h  >= H
+          );
+    }
+
+    hit() {
+        this.segments[0].hit();
+    }
+
+    isDead() {
+        return (this.segments[0].isDead());
+    }
+
+    move() {
+        this.posX += CRUISER_VEL;
+
+        for (let it of this.segments) {
+            it.move();
+        }
+    }
+
+    show() {
+        for (let it of this.segments) {
+            it.show();
         }
     }
 }

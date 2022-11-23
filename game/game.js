@@ -89,7 +89,7 @@ class Game {
         textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
         textSize(150 * engine.ch / DEFAULT_H);
-        text("GUNS N\nSMUGGLERz", engine.cw / 2, engine.ch / 2 - engine.ch / 10);
+        text("ANARCHO\nSMUGGLERz", engine.cw / 2, engine.ch / 2 - engine.ch / 10);
 
         engine.gui.displayContinueMsg("SPACE", "start");
     }

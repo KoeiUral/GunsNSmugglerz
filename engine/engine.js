@@ -20,6 +20,7 @@ const KEY_R = 82;
 const fontSet = {};
 const soundSet = {};
 const musicSet = {};
+const spriteSet = {};
 
 class Engine {
     constructor(w, h, gameFile, guiFile, plotFile) {
@@ -47,7 +48,8 @@ class Engine {
 
     onJsonLoaded(data) {
         // Count number of file to loads
-        totalFileNbr += Object.keys(data['Fonts']).length + Object.keys(data['Sounds']).length + Object.keys(data['Music']).length;
+        totalFileNbr += Object.keys(data['Fonts']).length + Object.keys(data['Sounds']).length + 
+                        Object.keys(data['Music']).length + Object.keys(data['Sprite']).length;
 
         // Load the Fonts
         for (let font of Object.keys(data['Fonts'])) {
@@ -62,6 +64,11 @@ class Engine {
         // Load the music
         for (let music of Object.keys(data['Music'])) {
             musicSet[music] = loadSound(data['Music'][music], notifyProgress);
+        }
+
+        // Load imgaes
+        for (let sprite of Object.keys(data['Sprite'])) {
+            spriteSet[sprite] = loadImage(data['Sprite'][sprite], notifyProgress);
         }
     }
 

@@ -19,5 +19,9 @@
         "L2": "assets/audio/jungle.mp3",
         "BOSS": "assets/audio/mine.mp3",
         "DEAD": "assets/audio/guns_end_s.mp3"
+    },
+
+    "Sprite": {
+        "STARD": "assets/image/star_destroyer.png"
     }
 }

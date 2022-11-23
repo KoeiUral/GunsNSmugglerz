@@ -25,7 +25,7 @@ const TANK_SCORE = 50;
 
 
 const CRUISER_W = 1000;
-const CRUISER_H = 400;
+const CRUISER_H = 500;
 const CRUISER_SEGS = 20;
 const CRUISER_VEL = -1;
 
@@ -164,8 +164,52 @@ class Tank extends Item {
 }
 
 
+
+class Turret {
+    constructor(area, xOffset, yOffset) {
+        this.area = area;
+        this.fireFreq = floor(50 * random(1, 2));
+        this.velFactor = floor(random(1,3));
+        this.frameOff = floor(random(50));
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+
+    }
+
+    fire(posX, posY, w, h, target, shots) {
+        let visibleArea = 0;
+
+        if ((frameCount + this.frameOff) % this.fireFreq === 0) {
+            // Check if the target is visible
+            if ((target.posX - posX < 3 * w / 4) && (target.posY - posY < h / 2)) {
+                visibleArea = 1;
+            }
+            else if ((target.posX - posX > 3 * w / 4) && (target.posY - posY < h / 2)) {
+                visibleArea = 2;
+            }
+            else if ((target.posX - posX < 3 * w / 4) && (target.posY - posY > h / 2)) {
+                visibleArea = 3;
+            }
+            else if ((target.posX - posX > 3 * w / 4) && (target.posY - posY > h / 2)) {
+                visibleArea = 4;
+            }
+
+            if (this.area == visibleArea) {
+                posX += this.xOffset;
+                posY += this.yOffset
+                let d = dist(target.posX, target.posY, posX, posY) * this.velFactor;
+                let velX = (target.posX - posX) * SHOT_VEL / d;
+                let velY = (target.posY - posY) * SHOT_VEL / d;
+
+                shots.addDir(posX, posY, velX, velY);
+            }
+        }
+    }
+}
+
+
 class StarCruiser {
-    constructor(x, y, target, shots) {
+    constructor(x, y, img, target, shots) {
         this.segments = [];
         this.windows = [];
         this.target = target;
@@ -175,6 +219,8 @@ class StarCruiser {
         this.w = CRUISER_W;
         this.h = CRUISER_H;
         this.score = 10000;
+        this.img = img;
+        this.turrets = [];
 
         let xi = 0;
         let yi = 0;
@@ -190,6 +236,26 @@ class StarCruiser {
 
             this.segments.push(new Item(xi, yi, wi, hi, CRUISER_VEL, 0, 100, 10000));
             this.segments[i].halo = false;
+        }
+
+        // Create the fire turrets
+        let segW = CRUISER_W / CRUISER_SEGS;
+        let segH = CRUISER_H / CRUISER_SEGS
+        this.turrets.push(new Turret(1, 2  * segW, this.h/2 - 2 * segH));
+        this.turrets.push(new Turret(1, 6  * segW, this.h/2 - 4 * segH));
+        this.turrets.push(new Turret(1, 12 * segW, this.h/2 - 6 * segH));
+        this.turrets.push(new Turret(3, 2  * segW, this.h/2 + 2 * segH));
+        this.turrets.push(new Turret(3, 6  * segW, this.h/2 + 4 * segH));
+        this.turrets.push(new Turret(1, 12 * segW, this.h/2 + 6 * segH));
+        this.turrets.push(new Turret(2, 18 * segW, this.h/2 - 7 * segH));
+        this.turrets.push(new Turret(2, 19 * segW, this.h/2 - 2 * segH));
+        this.turrets.push(new Turret(4, 18 * segW, this.h/2 + 7 * segH));
+        this.turrets.push(new Turret(4, 19 * segW, this.h/2 + 2 * segH));
+    }
+
+    fire() {
+        for (let turret of this.turrets) {
+            turret.fire(this.posX, this.posY, this.w, this.h, this.target, this.shots);
         }
     }
 
@@ -233,8 +299,6 @@ class StarCruiser {
     }
 
     show() {
-        for (let it of this.segments) {
-            it.show();
-        }
+        image(this.img, this.posX, this.posY, this.w, this.h, 0, 0, this.img.width, this.img.height,)
     }
 }

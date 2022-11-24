@@ -115,25 +115,25 @@ class Game {
     }
 
     processInput(key) {
-        if (key === KEY_SPACE) {
+        if (key === KEY_L) {
             this.ship.fire();
         }
     }
 
     movePlayer() {
         // Checl CTRL is pressed for dash
-        this.ship.dashOn = (keyIsDown(CONTROL)) ? true : false;
+        this.ship.dashOn = (keyIsDown(KEY_J)) ? true : false;
 
-        if (keyIsDown(LEFT_ARROW)) {
+        if (keyIsDown(KEY_A)) {
             this.ship.move(LEFT);
         }
-        if (keyIsDown(RIGHT_ARROW)) {
+        if (keyIsDown(KEY_D)) {
             this.ship.move(RIGHT);
         } 
-        if (keyIsDown(UP_ARROW)) {
+        if (keyIsDown(KEY_W)) {
             this.ship.move(UP);
         } 
-        if (keyIsDown(DOWN_ARROW)) {
+        if (keyIsDown(KEY_S)) {
             this.ship.move(DOWN);
         }
     }

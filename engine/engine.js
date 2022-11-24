@@ -17,6 +17,13 @@ const KEY_M = 78;
 const KEY_P = 80;
 const KEY_R = 82;
 
+const KEY_W = 87;
+const KEY_A = 65;
+const KEY_S = 83;
+const KEY_D = 68;
+const KEY_L = 76;
+const KEY_J = 74;
+
 const fontSet = {};
 const soundSet = {};
 const musicSet = {};

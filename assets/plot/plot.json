@@ -8,7 +8,7 @@
               {"type": "txtbox", "x": 17, "y": 40, "w": 150,"h": 80, "s": 20, "msg":  "BAKUNIN IV Hit Points"},
               {"type": "txtbox", "x": 200, "y": 40, "w": 500,"h": 500, "s": 20, "msg":  "Rep bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs.\n\nDash bar shows how much hyper accelaration remains"},
               {"type": "txtbox", "x": 800, "y": 40, "w": 230,"h": 400, "s": 20, "msg":  "Thruster status, when an arrow is blinking the ship cannot move in that direction"},
-              {"type": "txtbox", "x": 190, "y": 377, "w": 500,"h": 400, "s": 20, "msg":  "<- The BAKUNIN IV, your spaceship!\n\nPress ARROWS to move the ship\nSPACE for fire\nPress CTRL + ARROWS to hyper accelerate\n\nEvery time you get hit, the ship loses HPs and a thruster or fire goes out of work"},
+              {"type": "txtbox", "x": 190, "y": 377, "w": 500,"h": 400, "s": 20, "msg":  "<- The BAKUNIN IV, your spaceship!\n\nW-A-S-D to move the ship\nPress L for fire\nPress J + W-A-S-D to hyper accelerate\n\nEvery time you get hit, the ship loses HPs and a thruster or fire goes out of work"},
               {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
             ]},
             { "auto": true,

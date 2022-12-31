@@ -89,7 +89,7 @@ class Game {
         textFont(fontSet["TEXTF"]);
         textAlign(CENTER, CENTER);
         textSize(150 * engine.ch / DEFAULT_H);
-        text("ANARCHO\nSMUGGLERz", engine.cw / 2, engine.ch / 2 - engine.ch / 10);
+        text("SpaceApes\nCONTINUUM", engine.cw / 2, engine.ch / 2 - engine.ch / 10);
 
         engine.gui.displayContinueMsg("SPACE", "start");
     }
@@ -115,25 +115,25 @@ class Game {
     }
 
     processInput(key) {
-        if (key === KEY_L) {
+        if ((key === KEY_L) || (key === KEY_SPACE)) {
             this.ship.fire();
         }
     }
 
     movePlayer() {
         // Checl CTRL is pressed for dash
-        this.ship.dashOn = (keyIsDown(KEY_J)) ? true : false;
+        this.ship.dashOn = (keyIsDown(KEY_J) || keyIsDown(CONTROL)) ? true : false;
 
-        if (keyIsDown(KEY_A)) {
+        if (keyIsDown(KEY_A) || keyIsDown(LEFT_ARROW)) {
             this.ship.move(LEFT);
         }
-        if (keyIsDown(KEY_D)) {
+        if (keyIsDown(KEY_D) || keyIsDown(RIGHT_ARROW)) {
             this.ship.move(RIGHT);
         } 
-        if (keyIsDown(KEY_W)) {
+        if (keyIsDown(KEY_W) || keyIsDown(UP_ARROW)) {
             this.ship.move(UP);
         } 
-        if (keyIsDown(KEY_S)) {
+        if (keyIsDown(KEY_S) || keyIsDown(DOWN_ARROW)) {
             this.ship.move(DOWN);
         }
     }

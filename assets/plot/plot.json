@@ -9,12 +9,12 @@
               {"type": "txtbox", "x": 200, "y": 40, "w": 500,"h": 500, "s": 20, "msg":  "Rep bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs.\n\nDash bar shows how much hyper accelaration remains"},
               {"type": "txtbox", "x": 800, "y": 40, "w": 230,"h": 400, "s": 20, "msg":  "Thruster status, when an arrow is blinking the ship cannot move in that direction"},
               {"type": "txtbox", "x": 190, "y": 377, "w": 500,"h": 400, "s": 20, "msg":  "<- The BAKUNIN IV, your spaceship!\n\nW-A-S-D to move the ship\nPress L for fire\nPress J + W-A-S-D to hyper accelerate\n\nEvery time you get hit, the ship loses HPs and a thruster or fire goes out of work"},
-              {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
+              {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]},
             { "auto": true,
               "screen": [
                 {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 600, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the anarcho movement.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the asteroids to escape the Gov's ships.\n   \nGood LUCK and ... enjoy the Muzik!"},
-                {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
+                {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
         ]
     },
@@ -32,7 +32,7 @@
               "screen": [
                 {"type": "image", "x": 52, "y": 20, "w": 920,"h": 516, "ref": 0, "path": "./assets/image/trap.png"},
                 {"type": "txttyper", "x": 52, "y": 550, "w": 920,"h": 200, "s": 30, "msg":  "They were waiting for you on the other side of the asteroids belt and now you have to face the entire Gov. division, prepare yourself for a fury battle!"},
-                {"type": "audio", "loop": true, "path": "./assets/audio/intro.mp3"}
+                {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
         ]
     },

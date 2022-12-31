@@ -85,7 +85,7 @@ class Engine {
         strokeWeight(1);
 
         // Sound notification 
-        soundSet["LEVEL_UP"].play();  // TODO: it depands from the conf...
+        // soundSet["LEVEL_UP"].play();  // TODO: it depands from the conf...
         this.gui.initFonts();
         this.game = new Game();
 

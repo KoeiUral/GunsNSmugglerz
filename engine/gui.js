@@ -4,7 +4,7 @@ const DEFAULT_FONT = 20;
 
 const SCROLL_LEFT = 0;
 const SCROLL_UP = 1;
-const SCROLL_VEL = -2;
+const SCROLL_VEL = -1.5;
 
 class ScrollingMsg {
     constructor (x, y, w, h, s, t, msg, font) {

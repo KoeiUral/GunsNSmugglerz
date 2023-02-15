@@ -24,6 +24,7 @@ class SpaceShip extends Item {
         this.posX = x;
         this.posY = y;
         this.immunity = 0;
+        this.invincible = false;
 
         this.shots = new ShipShots();
         this.ops = [OP_WORK, OP_WORK, OP_WORK, OP_WORK, OP_WORK];
@@ -49,7 +50,7 @@ class SpaceShip extends Item {
     }
 
     hit() {
-        if (this.immunity <= 0) { 
+        if ((this.invincible === false) && (this.immunity <= 0)) { 
             this.hp--;
             this.immunity = 20;  // TODO, remove MAGIC NBR
             let faultId = 0;

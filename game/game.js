@@ -118,6 +118,10 @@ class Game {
         if ((key === KEY_L) || (key === KEY_SPACE)) {
             this.ship.fire();
         }
+        else if (key === KEY_I) {
+            this.ship.invincible = (this.ship.invincible) ? false : true;
+            soundSet["YEAH"].play();
+        }
     }
 
     movePlayer() {

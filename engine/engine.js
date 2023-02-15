@@ -23,6 +23,7 @@ const KEY_S = 83;
 const KEY_D = 68;
 const KEY_L = 76;
 const KEY_J = 74;
+const KEY_I = 73;
 
 const fontSet = {};
 const soundSet = {};

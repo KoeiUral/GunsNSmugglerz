@@ -11,7 +11,8 @@
     "Sounds": {
         "LEVEL_UP": "assets/audio/round_end.wav",
         "HIT": "assets/audio/death.wav",
-        "ALARM": "assets/audio/alarm.wav"
+        "ALARM": "assets/audio/alarm.wav",
+        "YEAH": "assets/audio/oh_yeah.wav"
     },
 
     "Music": {

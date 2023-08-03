@@ -91,7 +91,14 @@ class Game {
         textSize(150 * engine.ch / DEFAULT_H);
         text("SpaceApes\nCONTINUUM", engine.cw / 2, engine.ch / 2 - engine.ch / 10);
 
+        // Display scrolling text at the bottom
         engine.gui.displayContinueMsg("SPACE", "start");
+
+        if (engine.gui.scrollBoxes.length === 0) {
+            engine.gui.consoleBox("---   Developed by *Koei Ural*   Music by *IL-TRITA-CARNE*   ---", engine.cw, engine.ch - 40, 1000, 25, SCROLL_LEFT, 25);
+        }
+
+        engine.gui.showScrollingBox();
     }
 
     // Custom function for the end of game, when dead 

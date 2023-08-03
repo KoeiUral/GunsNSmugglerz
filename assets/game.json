@@ -16,8 +16,9 @@
     },
 
     "Music": {
+        "SPLASH": "assets/audio/splash.mp3",
         "L1": "assets/audio/stage1.mp3",
-        "L2": "assets/audio/jungle.mp3",
+        "L2": "assets/audio/stage2.mp3",
         "BOSS": "assets/audio/mine.mp3",
         "DEAD": "assets/audio/guns_end_s.mp3"
     },

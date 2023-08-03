@@ -145,6 +145,9 @@ class Engine {
     processInput(key) {
         if (key === KEY_SPACE) {
             if (this.phase === SPLASH) {
+                // Clean the scrolling boxies
+                this.gui.scrollBoxes.length = 0;
+
                 // Show the story's beginning
                 this.storyChapter = this.story.getNextChapter();
                 this.phase = STORY_PLAY;

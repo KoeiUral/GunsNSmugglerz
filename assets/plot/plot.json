@@ -13,12 +13,12 @@
             ]},
             { "auto": true,
               "screen": [
-                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 600, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the anarcho movement.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the asteroids to escape the Gov's ships.\n   \nGood LUCK and ... enjoy the Muzik!"},
+                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 700, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the anarcho movement.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the asteroids to escape the Gov's ships.\n   \nGood LUCK and ... enjoy the Muzik by *IL-TRITA-CARNE*  !"},
                 {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
         ]
     },
-    "L2_INTRO": {
+    "L2_INTRO": {     
         "id" : 1,
         "frames": [
             {"auto": false,

@@ -13,7 +13,7 @@
             ]},
             { "auto": true,
               "screen": [
-                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 700, "s": 40, "msg":  "The galaxy is ruled by an evil government, you are smuggling goods all over the planets to support the anarcho movement.\n     \n     \n Unfortunately, you have been found and the Gov. is chasing you. Hide yourself behind the asteroids to escape the Gov's ships.\n   \nGood LUCK and ... enjoy the Muzik by *IL-TRITA-CARNE*  !"},
+                {"type": "txtscroll", "x": 100, "y": 768, "w": 824,"h": 1450, "s": 40, "msg":  "The galaxy is under the ruthless control of a tyrannical government.\n     \n     \nYou are the last hope, a fearless smuggler defying their grip, delivering vital goods to ignite the uprising across the stars.\n     \n     \nBut your cover is blown. The Government fleet is on your tail, hunting you down with relentless force.\n     \n     \nYour only chance? Dive into the asteroid belt, vanish into the shadows, and outsmart their pursuit.\n     \n     \nGear up, pilot. The fight for freedom begins now. Good luck...and let the beats of *IL-TRITA-CARNE* fuel your rebellion!"},
                 {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
         ]
@@ -31,7 +31,7 @@
             { "auto": false,
               "screen": [
                 {"type": "image", "x": 52, "y": 20, "w": 920,"h": 516, "ref": 0, "path": "./assets/image/trap.png"},
-                {"type": "txttyper", "x": 52, "y": 550, "w": 920,"h": 200, "s": 30, "msg":  "They were waiting for you on the other side of the asteroids belt and now you have to face the entire Gov. division, prepare yourself for a fury battle!"},
+                {"type": "txttyper", "x": 52, "y": 550, "w": 920,"h": 200, "s": 30, "msg":  "They have been lying in wait beyond the asteroid belt. Now, the entire Government division stands against you. Brace yourself for an all-out, furious battle!"},
                 {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
         ]
@@ -41,10 +41,10 @@
         "frames": [
             {"auto": true,
              "screen": [
-                {"type": "txtbox", "x": 20,  "y": 300, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
-                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 200, "s":40, "msg":  "You escaped Admirals fangs, you can now delivered the precious goods to people"},
-                {"type": "txtbox", "x": 100, "y": 600, "w": 824,"h": 100, "s":30, "msg":  "... new adventures coming soon ..."},
-                {"type": "audio", "loop": true, "path": "assets/audio/topgun.mp3"}
+                {"type": "txtbox", "x": 20,  "y": 10, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
+                {"type": "image", "x": 52, "y": 110, "w": 920,"h": 456, "ref": 0, "path": "./assets/image/end.png"},
+                {"type": "txtbox", "x": 52, "y": 580, "w": 920,"h": 200, "s":30, "msg":  "You have slipped through the Admirals grasp, you delivered the precious goods to people. Now it is time to celebrate!"},
+                {"type": "audio", "loop": true, "path": "assets/audio/end.mp3"}
             ]}   
         ]
     }

@@ -119,9 +119,16 @@ class Engine {
 
     show() {
         if (this.phase === SPLASH) {
+            if (musicSet["SPLASH"].isPlaying() === false) {
+                musicSet["SPLASH"].loop();
+            }
             this.game.displaySplash();
         }
         else if ((this.phase === STORY_PLAY) || (this.phase == STORY_WAIT)) {
+            if (musicSet["SPLASH"].isPlaying() === true) {
+                musicSet["SPLASH"].stop();
+            }
+
             this.game.displayBg();
             this.story.playCh(this.storyChapter);
         } 
@@ -142,8 +149,8 @@ class Engine {
         }
     }
 
-    processInput(key) {
-        if (key === KEY_SPACE) {
+    processInput(key, mButton) {
+        if ((key === KEY_SPACE) || (mButton === MOUSE_LEFT)) {
             if (this.phase === SPLASH) {
                 // Clean the scrolling boxies
                 this.gui.scrollBoxes.length = 0;
@@ -168,11 +175,12 @@ class Engine {
         else if (key === KEY_P) {
             // Enable / disable pause
             this.pause = (this.pause) ? false : true;
+
         }
 
         // If game is running, forward the key to the game custom behaviour 
         if (this.phase === RUN) {
-            this.game.processInput(key);
+            this.game.processInput(key, mButton);
         }
     }
 

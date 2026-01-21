@@ -27,11 +27,22 @@ function setup() {
 
     // Create the game engine, passing json conf for asset
     engine = new Engine(maxW, maxH, 'assets/game.json', 'assets/gui/gui.json', 'assets/plot/plot.json');
+
+    // Disable broswer context menu while right clicking
+    for (let element of document.getElementsByClassName("p5Canvas")) {
+        element.addEventListener("contextmenu", (e) => e.preventDefault());
+    }
 }
 
 function keyPressed() {
     if (isGameLoading === false) {
-        engine.processInput(keyCode);
+        engine.processInput(keyCode, null);
+    }
+}
+
+function mousePressed() {
+    if (isGameLoading === false) {
+        engine.processInput(null, mouseButton);
     }
 }
 

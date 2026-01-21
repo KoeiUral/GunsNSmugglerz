@@ -1,3 +1,6 @@
+const MOUSE_LEFT = "left";
+const MOUSE_RIGHT = "right";
+
 /**
  *  Abstarct class as interface for specific level implementation
  */
@@ -121,8 +124,8 @@ class Game {
         this.levelSet[0].bg.show();
     }
 
-    processInput(key) {
-        if ((key === KEY_L) || (key === KEY_SPACE)) {
+    processInput(key, mouseB) {
+        if ((key === KEY_SPACE) || (mouseB === MOUSE_LEFT)) {
             this.ship.fire();
         }
         else if (key === KEY_I) {
@@ -132,8 +135,10 @@ class Game {
     }
 
     movePlayer() {
-        // Checl CTRL is pressed for dash
-        this.ship.dashOn = (keyIsDown(KEY_J) || keyIsDown(CONTROL)) ? true : false;
+        let rightMouseBtnOn = (mouseIsPressed === true) && (mouseButton === MOUSE_RIGHT)  ? true : false;
+
+        // Check CTRL is pressed for dash
+        this.ship.dashOn = (keyIsDown(CONTROL) || rightMouseBtnOn) ? true : false;
 
         if (keyIsDown(KEY_A) || keyIsDown(LEFT_ARROW)) {
             this.ship.move(LEFT);

@@ -48,17 +48,10 @@ function mousePressed() {
 
 
 function draw() {
-    if (isGameLoading) {
-        engine.displayLoading();
-    } else if (startUp) {       
-        // Execute the game init once, when loading is over
-        engine.init();
-    } else {
-        // Nominal game loop, the engine is running
-        if (engine.pause === false) {
-            background(0);
-            engine.step();
-            engine.show();
-        }
+    // Nominal game loop, the engine is running
+    if (engine.pause === false) {
+        background(0);
+        engine.step();
+        engine.show();
     }
 }

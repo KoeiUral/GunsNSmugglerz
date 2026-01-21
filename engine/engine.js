@@ -49,7 +49,7 @@ class Engine {
         this.story = new StoryTeller(plotFile);
         this.storyChapter = "";
 
-        this.phase = SPLASH;
+        this.phase = LOAD;
         this.currentLevel = 0;
         this.pause = false;
     }
@@ -118,17 +118,13 @@ class Engine {
     }
 
     show() {
-        if (this.phase === SPLASH) {
-            if (musicSet["SPLASH"].isPlaying() === false) {
-                musicSet["SPLASH"].loop();
-            }
+        if (this.phase === LOAD) {
+            engine.displayLoading();
+        }
+        else if (this.phase === SPLASH) {
             this.game.displaySplash();
         }
         else if ((this.phase === STORY_PLAY) || (this.phase == STORY_WAIT)) {
-            if (musicSet["SPLASH"].isPlaying() === true) {
-                musicSet["SPLASH"].stop();
-            }
-
             this.game.displayBg();
             this.story.playCh(this.storyChapter);
         } 
@@ -151,9 +147,20 @@ class Engine {
 
     processInput(key, mButton) {
         if ((key === KEY_SPACE) || (mButton === MOUSE_LEFT)) {
-            if (this.phase === SPLASH) {
+            if (this.phase === LOAD) {
+                // Init the engine with loaded asset
+                engine.init();
+
+                // Move to next phase
+                this.phase = SPLASH;
+                musicSet["SPLASH"].loop();
+            }
+            else if (this.phase === SPLASH) {
                 // Clean the scrolling boxies
                 this.gui.scrollBoxes.length = 0;
+
+                // Stop splash music
+                musicSet["SPLASH"].stop();
 
                 // Show the story's beginning
                 this.storyChapter = this.story.getNextChapter();
@@ -204,9 +211,17 @@ class Engine {
         fill(200);
         rect(this.barX, this.barY, fileProgress / totalFileNbr * this.barW, this.barH);
     
-        if ((floor(frameCount / 20)) % 2 == 0) {
+        if (isGameLoading) {
+            if ((floor(frameCount / 20)) % 2 == 0) {
+                textStyle(BOLDITALIC);
+                text("LOADING", this.cw / 2, this.ch / 2 + 1.5 * this.barH);
+            }
+        } else {
             textStyle(BOLDITALIC);
-            text("LOADING", this.cw / 2, this.ch / 2 + 1.5 * this.barH);
+            text("LOADING COMPLETE!", this.cw / 2, this.ch / 2 + 1.5 * this.barH);
+            if ((floor(frameCount / 20)) % 2 == 0) {
+                text("... click to continue ...", this.cw / 2, this.ch / 2 + 2.3 * this.barH);
+            }
         }
     }
 

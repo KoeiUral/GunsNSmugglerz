@@ -2,7 +2,7 @@
 let  MET_FREQ_LIST = [60, 50, 40, 30, 20, 30, 40, 50];
 let  MET_NBR_LIST =  [ 1,  1,  1,  1,  1,  1,  1,  1];
 
-const END_STAGE = 7;
+const END_STAGE = 6;
 
 class Level1 extends BaseLevel {
     constructor(player) {
@@ -152,8 +152,12 @@ class Level1 extends BaseLevel {
                 this.maxEnemyNbr++;
                 this.stageId++;
 
-                engine.gui.consoleLine("STAGE " + (this.stageId + parseInt('1')));
-                soundSet["LEVEL_UP"].play();
+                // Display next stage message
+                if (this.stageId != END_STAGE) {
+                    engine.gui.consoleLine("STAGE " + (this.stageId + parseInt('1')));
+                    soundSet["LEVEL_UP"].play();
+                }
+
                 engine.addScore(100);
 
                 if (this.stageId === 1) { // TODO: REMOVE MAGIC
@@ -165,7 +169,7 @@ class Level1 extends BaseLevel {
                     this.enemyFreq = 0;
                     this.meteorFreq = 0;
                     this.coolDown = true;
-                    return;  // TODO: ugly solution to skip the freq. update at line 179, 180..
+                    return;  // TODO: ugly solution to skip the freq. update at line 181, 182..
                 } else {
                     this.ship.rearOn = true;
                     this.ship.rearFreq = this.ship.rearFreq - 10;

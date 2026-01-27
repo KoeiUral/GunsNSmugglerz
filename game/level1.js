@@ -112,6 +112,7 @@ class Level1 extends BaseLevel {
             this.levelUpdate(frameCount);
         } else {
             isLevelEnd = ((this.meteors.length === 0) && (this.enemies.length === 0)) ? true : false;
+            musicSet["L1"].stop();
         }
 
         return isLevelEnd;

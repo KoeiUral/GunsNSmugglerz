@@ -4,7 +4,7 @@
         "frames": [
             {"auto": false,
              "screen": [
-              {"type": "image", "x":  0, "y":  0, "w": 1024,"h": 768, "ref": 0, "path": "./assets/image/tutorial.png"},
+              {"type": "image", "x":  0, "y":  0, "w": 1024,"h": 768, "ref": 0, "fadein": false, "path": "./assets/image/tutorial.png"},
               {"type": "txtbox", "x": 17, "y": 40, "w": 150,"h": 80, "s": 20, "msg":  "BAKUNIN IV Hit Points"},
               {"type": "txtbox", "x": 200, "y": 40, "w": 500,"h": 500, "s": 20, "msg":  "Rep bar shows that a thruster is under recovery, once 100% you regain the functionality and HPs.\n\nDash bar shows how much hyper accelaration remains"},
               {"type": "txtbox", "x": 800, "y": 40, "w": 230,"h": 400, "s": 20, "msg":  "Thruster status, when an arrow is blinking the ship cannot move in that direction"},
@@ -30,7 +30,7 @@
             ]},
             { "auto": false,
               "screen": [
-                {"type": "image", "x": 52, "y": 20, "w": 920,"h": 516, "ref": 0, "path": "./assets/image/trap.png"},
+                {"type": "image", "x": 52, "y": 20, "w": 920,"h": 516, "ref": 0, "fadein": true, "path": "./assets/image/trap.png"},
                 {"type": "txttyper", "x": 52, "y": 550, "w": 920,"h": 200, "s": 30, "msg":  "They have been lying in wait beyond the asteroid belt. Now, the entire Government division stands against you. Brace yourself for an all-out, furious battle!"},
                 {"type": "audio", "loop": true, "path": "./assets/audio/pold1.mp3"}
             ]}
@@ -42,8 +42,8 @@
             {"auto": true,
              "screen": [
                 {"type": "txtbox", "x": 20,  "y": 10, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
-                {"type": "image", "x": 52, "y": 110, "w": 920,"h": 456, "ref": 0, "path": "./assets/image/end.png"},
-                {"type": "txtbox", "x": 52, "y": 580, "w": 920,"h": 200, "s":30, "msg":  "You have slipped through the Admirals grasp, you delivered the precious goods to people. Now it is time to celebrate!"},
+                {"type": "image", "x": 52, "y": 110, "w": 920,"h": 456, "ref": 0, "fadein": true, "path": "./assets/image/end.png"},
+                {"type": "txttyper", "x": 52, "y": 580, "w": 920,"h": 200, "s":30, "msg":  "You have slipped through the Admirals grasp, you delivered the precious goods to people. Now it is time to celebrate!"},
                 {"type": "audio", "loop": true, "path": "assets/audio/end.mp3"}
             ]}   
         ]

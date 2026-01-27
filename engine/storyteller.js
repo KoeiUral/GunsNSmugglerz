@@ -25,6 +25,7 @@ class StoryTeller {
         this.chapterEnd = false;
         this.frameEnd = true;
         this.audioPlaying = -1; // no audio is playing
+        this.fadeIn = 255;
 
         loadJSON(filePath, this.onJsonReady);
     }
@@ -91,6 +92,13 @@ class StoryTeller {
             else if (element['type'] === "image") {
                 // Display the image
                 image(imageSet[element['ref']], element['x'], element['y'], element['w'], element['h']);
+                
+                // Add image fade in, if enabled
+                if (element['fadein'] === true) {
+                    this.fadeIn = (this.fadeIn <= 0) ? 0 : this.fadeIn - 0.5;
+                    fill(0, this.fadeIn);
+                    rect(element['x'], element['y'], element['w'], element['h']);
+                }
             }
             else if ((element['type'] === "audio") && (this.audioPlaying === -1)) {
                 this.audioPlaying = element['ref'];
@@ -124,6 +132,8 @@ class StoryTeller {
 
     nextFrame(chapter) {
         this.frameEnd = true;
+        this.fadeIn  = 255;
+
         // Remove any typer msg
         engine.gui.removeTyper();
 
@@ -165,6 +175,7 @@ class StoryTeller {
         this.curFrame = 0;
         this.chapterEnd = false;
         this.frameEnd = true;
+        this.fadeIn = 255;
 
         // Stop the music
         if (this.audioPlaying != -1) {

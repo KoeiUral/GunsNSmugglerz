@@ -183,6 +183,14 @@ class Engine {
             // Enable / disable pause
             this.pause = (this.pause) ? false : true;
 
+            let currentSong = this.getCurrentSong(this.pause);
+
+            // Pause / Resume the music
+            if (this.pause) {
+                musicSet[currentSong].pause();
+            } else {
+                musicSet[currentSong].play();
+            }
         }
 
         // If game is running, forward the key to the game custom behaviour 
@@ -252,6 +260,20 @@ class Engine {
 
         this.currentLevel = 0;
         this.phase = SPLASH;
+
+        // Restart the splash song
+        musicSet["SPLASH"].loop();
+    }
+
+    getCurrentSong(isPlaying) {
+        for (let song of Object.keys(musicSet)) {
+            if ((isPlaying === true) && (musicSet[song].isLooping())) {
+                return song;
+            }
+            else if ((isPlaying === false) && (musicSet[song].isPaused())) {
+                return song;
+            } 
+        }
     }
 
 }

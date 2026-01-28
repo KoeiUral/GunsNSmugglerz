@@ -1,13 +1,12 @@
-
 const ENEMEY_STAGE = [
-    {f:  0,  k:   0, t:   0, d:  50, m: ""},                                         // Stage 0 intro
-    {f:  60, k:   0, t:   0, d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
-    {f: 200, k:  70, t:   0, d: 1000, m: "Ballistic missles coming!"},                // Stage 2
-    {f: 100, k:  50, t:   0, d:  800, m: "Enemy fire is increasing!"},                // Stage 3
-    {f: 200, k:   0, t: 100, d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
-    {f:   0, k:   0, t:  50, d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
-    {f: 250, k: 100, t: 100, d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
-    {f:   0, k:   0, t:   0, d: 3000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
+    {f:  0,  k:   0, t:   0, b:    0,  d:  100, m: ""},                                         // Stage 0 intro
+    {f:  60, k:   0, t:   0, b:    0,  d:  600, m: "A flock of followers is cheasing you!"},    // Stage 1
+    {f: 200, k:  70, t:   0, b:    0,  d: 1000, m: "Ballistic missles coming!"},                // Stage 2
+    {f: 100, k:  50, t:   0, b:    0,  d:  800, m: "Enemy fire is increasing!"},                // Stage 3
+    {f: 200, k:   0, t: 100, b:    0,  d: 1200, m: "You reach the space tank defense line!"},   // Stage 4
+    {f:   0, k:   0, t:  50, b:    0,  d: 1000, m: "You reach the hearth of tanks division!"},  // Stage 5
+    {f: 250, k: 100, t: 100, b:    0,  d: 1000, m: "Crazy mess is coming, please survive!"},    // Stage 6
+    {f:   0, k:   0, t:   0, b: 1100,  d: 4000, m: "Bloody Hell! you are in the middle of admiral's fleet"}   // Stage BOOSSS
 ];   
 
 class Level2 extends BaseLevel {
@@ -23,11 +22,13 @@ class Level2 extends BaseLevel {
 
         this.updateFreq = 400;
         this.stageId = 0;
-        this.stageFrCount = 0;
+        this.frameCnt = 0;
+        this.bossCount = 0;
 
         this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
         this.tankFreq = ENEMEY_STAGE[this.stageId].t;
         this.followFreq = ENEMEY_STAGE[this.stageId].f;
+        this.bossFreq = ENEMEY_STAGE[this.stageId].b;
 
         this.maxKamiNbr = 1;
         this.maxTankNbr = 1;
@@ -43,7 +44,6 @@ class Level2 extends BaseLevel {
             musicSet["L2"].loop();
         }
 
-        this.stageFrCount = frameCount;
         engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
         this.ship.rearOn = true;
         this.initialized = true;
@@ -57,12 +57,12 @@ class Level2 extends BaseLevel {
         engine.game.junks.splice(0, engine.game.junks.length);
 
         this.stageId = 0;
-        this.stageFrCount = 0;
+        this.bossCount = 0;
 
         this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
         this.tankFreq = ENEMEY_STAGE[this.stageId].t;
         this.followFreq = ENEMEY_STAGE[this.stageId].f;
-        this.bossFreq = 0;
+        this.bossFreq = ENEMEY_STAGE[this.stageId].b;
 
         this.maxKamiNbr = 1;
         this.maxTankNbr = 1;
@@ -122,17 +122,63 @@ class Level2 extends BaseLevel {
             musicSet["BOSS"].stop();
         } else if (this.coolDown === false) {
             // Increment level difficulty
-            this.levelUpdate(frameCount);
+            this.levelUpdate();
         } else {
             isLevelEnd = ((this.kamiz.length === 0) && (this.tanks.length === 0) && (this.bosses.length === 0) && (this.followers.length === 0)) ? true : false;
+            musicSet["BOSS"].stop();
         }
 
+        this.frameCnt++;
         return isLevelEnd;
     }
 
-    levelUpdate(counter) {
+    levelUpdate() {
+        // Increase difficulty
+        if ((this.frameCnt % this.updateFreq) === 0) {
+            // Increase number of enemies
+            this.maxKamiNbr = this.increaseNumber(this.kamiFreq, this.maxKamiNbr);
+            this.maxTankNbr = this.increaseNumber(this.tankFreq, this.maxTankNbr);
+            this.maxFollowNbr = this.increaseNumber(this.followFreq, this.maxFollowNbr);
+        }
+
+        // Check if stage is over
+        if ((this.frameCnt) >= ENEMEY_STAGE[this.stageId].d) {
+            this.stageId++;
+            this.frameCnt = 0;
+
+            // In case the boss is coming
+            if (this.stageId === ENEMEY_STAGE.length - 1) {
+                // Stop the level song and play the boss song.
+                musicSet["L2"].stop();
+                musicSet["BOSS"].loop();
+            } // Check if there are more stages or not
+            else if (this.stageId === ENEMEY_STAGE.length) {
+                // Level completed
+                musicSet["BOSS"].setVolume(0, 10);
+                this.bossFreq = 0;
+                this.kamiFreq = 0;
+                this.tankFreq = 0;
+                this.followFreq = 0;
+                this.coolDown = true;
+                return;  // TODO: ugly solution to skip the freq. update ...
+            }
+
+            // Set all the new frequencies (actually duty cycle)
+            this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
+            this.tankFreq = ENEMEY_STAGE[this.stageId].t;
+            this.followFreq = ENEMEY_STAGE[this.stageId].f;
+            this.bossFreq = ENEMEY_STAGE[this.stageId].b;
+
+            // Display the message for the new Stage
+            engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
+            engine.addScore(100);
+
+            // Play the Alarm sound
+            soundSet["ALARM"].play();
+        }
+
         // Add Kamikaze according to timer
-        if ((counter % this.kamiFreq) === 0) {
+        if ((this.frameCnt % this.kamiFreq) === 0) {
             let swarmNbr = floor(random (1, this.maxKamiNbr));
             for (let i = 0; i < swarmNbr; i++) {
                 this.kamiz.push(new Kamikaze(engine.cw, engine.ch, this.ship));
@@ -140,15 +186,16 @@ class Level2 extends BaseLevel {
         }
 
         // Add tanks according to timer
-        if ((counter % this.tankFreq) === 0) {
+        if ((this.frameCnt % this.tankFreq) === 0) {
             let swarmNbr = floor(random (1, this.maxTankNbr));
             for (let i = 0; i < swarmNbr; i++) {
-                this.tanks.push(new Tank(engine.cw, random(engine.ch), this.ship, this.enemyShots));
+                let yPos = floor(random(engine.ch / (TANK_S_H + 5))) * (TANK_S_H + 5);
+                this.tanks.push(new Tank(engine.cw + round(random(-5, +5)), yPos, this.ship, this.enemyShots));
             }
         }
 
         // Add Followers according to timer
-        if ((counter % this.followFreq) === 0) {
+        if ((this.frameCnt % this.followFreq) === 0) {
             let swarmNbr = floor(random (1, this.maxFollowNbr));
             for (let i = 0; i < swarmNbr; i++) {
                 this.followers.push(new FollowerNg(0, random(engine.ch), FOLLOW_SIZE, FOLLOW_VEL, this.ship, this.enemyShots));
@@ -156,52 +203,9 @@ class Level2 extends BaseLevel {
         }
 
         // Add Boss according to timer
-        if ((counter % this.bossFreq) === 0) {
-            this.bosses.push(new StarCruiser(engine.cw, random(0,2) * engine.ch / 4, spriteSet["STARD"], this.ship, this.enemyShots));
-        }
-
-        // Increase difficulty
-        if ((counter % this.updateFreq) === 0) {
-            // Increase number of enemies
-            this.maxKamiNbr = this.increaseNumber(this.kamiFreq, this.maxKamiNbr);
-            this.maxTankNbr = this.increaseNumber(this.tankFreq, this.maxTankNbr);
-            this.maxFollowNbr = this.increaseNumber(this.followFreq, this.maxFollowNbr);
-
-            // Check if stage is over
-            if ((counter - this.stageFrCount) >= ENEMEY_STAGE[this.stageId].d) {
-                this.stageId++;
-                this.stageFrCount = counter;
-
-                // In case the boss is coming
-                if (this.stageId === ENEMEY_STAGE.length - 1) {
-                    // Stop the level song and play the boss song.
-                    musicSet["L2"].stop();
-                    musicSet["BOSS"].loop();
-                    this.bossFreq = 1100;
-                } // Check if there are more stages or not
-                else if (this.stageId === ENEMEY_STAGE.length) {
-                    // Level completed
-                    musicSet["BOSS"].setVolume(0, 10);
-                    this.bossFreq = 0;
-                    this.kamiFreq = 0;
-                    this.tankFreq = 0;
-                    this.followFreq = 0;
-                    this.coolDown = true;
-                    return;  // TODO: ugly solution to skip the freq. update ...
-                }
-
-                // Set all the new frequencies (actually duty cycle)
-                this.kamiFreq = ENEMEY_STAGE[this.stageId].k;
-                this.tankFreq = ENEMEY_STAGE[this.stageId].t;
-                this.followFreq = ENEMEY_STAGE[this.stageId].f;
-
-                // Display the message for the new Stage
-                engine.gui.consoleLine(ENEMEY_STAGE[this.stageId].m);
-                engine.addScore(100);
-
-                // Play the Alarm sound
-                soundSet["ALARM"].play();
-            }
+        if (((this.frameCnt % this.bossFreq) === 0) && (this.bossCount < 3)) {
+            this.bosses.push(new StarCruiser(engine.cw, floor(random(0, 2)) * engine.ch / 4, spriteSet["STARD"], this.ship, this.enemyShots));
+            this.bossCount += 1;
         }
     }
 

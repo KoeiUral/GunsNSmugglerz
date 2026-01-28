@@ -177,6 +177,10 @@ class Engine {
                 // Check if it is the last frame and move to run
                 this.story.nextFrame(this.storyChapter);
             }
+        }
+        else if ((key === KEY_R) && (this.phase >= DEAD)) {
+            // If game ended, press r to reset
+            this.reset();
         } 
         else if (key === KEY_P) {
             // Enable / disable pause
@@ -195,10 +199,7 @@ class Engine {
         // If game is running, forward the key to the game custom behaviour 
         if (this.phase === RUN) {
             this.game.processInput(key, mButton);
-        }  else if (this.phase >= DEAD) {
-            // If game ended, press any key to reset
-            this.reset();
-        } 
+        }
     }
 
 

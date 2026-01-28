@@ -39,7 +39,13 @@
     "END": {
         "id" : 2,
         "frames": [
-            {"auto": true,
+            {"auto": false,
+             "screen": [
+                {"type": "txtbox", "x": 20, "y": 300,  "w": 984,"h": 100, "s":80, "msg":  "LEVEL COMPLETE"},
+                {"type": "txtbox", "x": 100, "y": 400, "w": 824,"h": 100, "s":40, "msg":  "Great! You managed to survive, people will be thankful :)"},
+                {"type": "audio", "loop": false, "path": "assets/audio/levelcompl.wav"}
+            ]},
+            {"auto": false,
              "screen": [
                 {"type": "txtbox", "x": 20,  "y": 10, "w": 984,"h": 100, "s":80, "msg":  "MISSION COMPLETE"},
                 {"type": "image", "x": 52, "y": 110, "w": 920,"h": 456, "ref": 0, "fadein": true, "path": "./assets/image/end.png"},

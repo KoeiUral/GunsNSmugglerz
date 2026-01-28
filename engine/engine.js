@@ -139,9 +139,12 @@ class Engine {
             this.game.displayGameOver();
         }
         else if (this.phase === WIN) {
-            this.game.displayBg();
-            this.story.playCh(this.storyChapter);
-            this.gui.displayContinueMsg("r", "restart");
+            // We can display credits - TODO
+            //
+            this.reset();
+            //this.game.displayBg();
+            //this.story.playCh(this.storyChapter);
+            //this.gui.displayContinueMsg("r", "restart");
         }
     }
 
@@ -175,15 +178,11 @@ class Engine {
                 this.story.nextFrame(this.storyChapter);
             }
         } 
-        else if ((key === KEY_R) && (this.phase >= DEAD)) {
-            // If game ended, press r to reset
-            this.reset();
-        } 
         else if (key === KEY_P) {
             // Enable / disable pause
             this.pause = (this.pause) ? false : true;
 
-            let currentSong = this.getCurrentSong(this.pause);
+            let currentSong = this.getCurrentSong(musicSet, this.pause);
 
             // Pause / Resume the music
             if (this.pause) {
@@ -196,7 +195,10 @@ class Engine {
         // If game is running, forward the key to the game custom behaviour 
         if (this.phase === RUN) {
             this.game.processInput(key, mButton);
-        }
+        }  else if (this.phase >= DEAD) {
+            // If game ended, press any key to reset
+            this.reset();
+        } 
     }
 
 
@@ -265,12 +267,12 @@ class Engine {
         musicSet["SPLASH"].loop();
     }
 
-    getCurrentSong(isPlaying) {
-        for (let song of Object.keys(musicSet)) {
-            if ((isPlaying === true) && (musicSet[song].isLooping())) {
+    getCurrentSong(mediaSet, isPlaying) {
+        for (let song of Object.keys(mediaSet)) {
+            if ((isPlaying === true) && (mediaSet[song].isLooping())) {
                 return song;
             }
-            else if ((isPlaying === false) && (musicSet[song].isPaused())) {
+            else if ((isPlaying === false) && (mediaSet[song].isPaused())) {
                 return song;
             } 
         }

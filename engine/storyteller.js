@@ -137,7 +137,6 @@ class StoryTeller {
         // Remove any typer msg
         engine.gui.removeTyper();
 
-
         // Stop audio if it is playing 
         if (this.audioPlaying > -1) {
             audioSet[this.audioPlaying].stop();

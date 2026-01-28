@@ -115,7 +115,7 @@ class Game {
         this.levelSet[0].bg.show();
         engine.gui.displayTextBox("GAME OVER", 80, 0, engine.ch / 2 - 40, engine.cw, engine.ch / 2);
         engine.gui.displayTextBox("Score: " + engine.gui.hk['Score'].val + " - Level: " + reachLevel, 40, 0, engine.ch / 2 + 80, engine.cw, engine.ch / 2);
-        engine.gui.displayContinueMsg("r", "restart");
+        engine.gui.displayContinueMsg("any key", "restart");
     }
 
     // Custom function to display the game back ground, used in story mode

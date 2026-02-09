@@ -123,9 +123,9 @@ class Level2 extends BaseLevel {
         } else if (this.coolDown === false) {
             // Increment level difficulty
             this.levelUpdate();
-        } else {
-            isLevelEnd = ((this.kamiz.length === 0) && (this.tanks.length === 0) && (this.bosses.length === 0) && (this.followers.length === 0)) ? true : false;
+        } else if ((this.kamiz.length === 0) && (this.tanks.length === 0) && (this.bosses.length === 0) && (this.followers.length === 0)) {
             musicSet["BOSS"].stop();
+            isLevelEnd = true;
         }
 
         this.frameCnt++;
@@ -154,7 +154,7 @@ class Level2 extends BaseLevel {
             } // Check if there are more stages or not
             else if (this.stageId === ENEMEY_STAGE.length) {
                 // Level completed
-                musicSet["BOSS"].setVolume(0, 10);
+                musicSet["BOSS"].setVolume(0.0, 10);
                 this.bossFreq = 0;
                 this.kamiFreq = 0;
                 this.tankFreq = 0;

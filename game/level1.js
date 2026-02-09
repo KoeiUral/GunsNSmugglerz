@@ -110,9 +110,10 @@ class Level1 extends BaseLevel {
         } else if (this.coolDown === false) {
             // Increment level difficulty
             this.levelUpdate(frameCount);
-        } else {
-            isLevelEnd = ((this.meteors.length === 0) && (this.enemies.length === 0)) ? true : false;
+        } else if ((this.meteors.length === 0) && (this.enemies.length === 0)) {
+            // End of the level, once all enemies are outside the screen
             musicSet["L1"].stop();
+            isLevelEnd = true;
         }
 
         return isLevelEnd;
@@ -165,7 +166,7 @@ class Level1 extends BaseLevel {
                     this.enemyFreq = 200;
                 } else if (this.stageId === END_STAGE) {
                     // Level completed, time to cool down...
-                    musicSet["L1"].setVolume(0, 5);
+                    musicSet["L1"].setVolume(0.0, 6);
 
                     this.enemyFreq = 0;
                     this.meteorFreq = 0;
